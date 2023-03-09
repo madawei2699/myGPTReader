@@ -6,6 +6,10 @@ kill_timeout = 5
 
 [build]
   builder = "paketobuildpacks/builder:base"
+  builtin = "python"
+
+[build.settings]
+  pythonbase = "3.10-slim-buster"
 
 [env]
   PORT = "8080"
