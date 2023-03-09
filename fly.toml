@@ -9,7 +9,7 @@ kill_timeout = 5
   builtin = "python"
 
 [build.settings]
-  pythonbase = "3.10-slim-buster"
+  pythonbase = "3.9-slim-buster"
 
 [env]
   PORT = "8080"
