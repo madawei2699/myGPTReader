@@ -41,8 +41,8 @@ def chat():
     if len(urls) > 0:
         llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
         documents = TrafilaturaWebReader().load_data(urls)
-        index = GPTSimpleVectorIndex(documents, llm_predictor=llm_predictor)
-        response = index.query(message_normalized)
+        index = GPTSimpleVectorIndex(documents)
+        response = index.query(message_normalized, llm_predictor=llm_predictor)
     else:
         completion = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
