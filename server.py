@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, request
 import re
 import os
 import openai
@@ -65,11 +65,6 @@ def get_answer_from_chatGPT(message):
         print(completion.usage)
         response = completion.choices[0].message.content
     return response
-
-@app.route('/chat', methods=['POST'])
-def chat():
-    response = {"response": f"{get_answer_from_chatGPT(request.json['message'])}"}
-    return jsonify(response)
 
 @slack_app.event("app_mention")
 def handle_mentions(event, say, logger):
