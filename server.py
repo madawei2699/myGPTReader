@@ -2,14 +2,21 @@ from flask import Flask, jsonify, request
 import re
 import os
 import openai
+import slack
+from slackeventsapi import SlackEventAdapter
 from llama_index import GPTSimpleVectorIndex, LLMPredictor, TrafilaturaWebReader
 from langchain.chat_models import ChatOpenAI
+
+app = Flask(__name__)
 
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 openai.api_key = OPENAI_API_KEY
 
-app = Flask(__name__)
+SLACK_TOKEN = os.environ.get('SLACK_TOKEN')
+SLACK_SIGNING_SECRET = os.environ.get('SLACK_SIGNING_SECRET')
+slack_event_adapter = SlackEventAdapter(SLACK_SIGNING_SECRET, '/slack/events', app)
 
+client = slack.WebClient(token=SLACK_TOKEN)
 
 def insert_space(text):
 
@@ -38,10 +45,7 @@ def extract_urls(text):
             urls.append(word)
     return urls
 
-
-@app.route('/chat', methods=['POST'])
-def chat():
-    message = request.json['message']
+def get_answer_from_chatGPT(message):
     message_normalized = insert_space(message)
     urls = extract_urls(message_normalized)
     if len(urls) > 0:
@@ -56,9 +60,21 @@ def chat():
         )
         print(completion.usage)
         response = completion.choices[0].message.content
+    return response
 
-    response = {"response": f"{response}"}
+@app.route('/chat', methods=['POST'])
+def chat():
+    response = {"response": f"{get_answer_from_chatGPT(request.json['message'])}"}
     return jsonify(response)
+
+@slack_event_adapter.on('app_mention')
+def handle_mentions(payload):
+    event = payload.get('event', {})
+    channel = event.get('channel')
+    user = event.get('user')
+    text = event.get('text')
+    user_message = text.replace('@my-gpt-reader-bot', '')
+    client.chat_postMessage(channel=channel, link_names=1, text=f'<@{user}>, ' + get_answer_from_chatGPT(user_message))
 
 
 if __name__ == '__main__':
