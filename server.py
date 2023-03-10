@@ -21,6 +21,12 @@ def insert_space(text):
     text = re.sub(r'(\d)([\u4e00-\u9fa5])', r'\1 \2', text)
     text = re.sub(r'([\u4e00-\u9fa5])(\d)', r'\1 \2', text)
 
+    # handling the special characters
+    text = re.sub(r'([\W_])([\u4e00-\u9fa5])', r'\1 \2', text)
+    text = re.sub(r'([\u4e00-\u9fa5])([\W_])', r'\1 \2', text)
+
+    text = text.replace('  ', ' ')
+
     return text
 
 
