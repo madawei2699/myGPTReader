@@ -5,7 +5,7 @@ kill_signal = "SIGINT"
 kill_timeout = 5
 
 [build]
-  builder = "paketobuildpacks/builder:base"
+  builder = "paketobuildpacks/builder:full"
   builtin = "python"
 
 [build.settings]

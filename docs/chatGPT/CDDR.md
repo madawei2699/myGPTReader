@@ -1070,3 +1070,52 @@ Note: Replace `xoxb-<your-bot-token>` with your Bot User OAuth Access Token valu
     
 
 That's it! You have successfully created a Slack bot and integrated it with Flask. You can modify the `handle_mentions()` function to do something according to your requirements.
+
+---
+
+You
+---
+
+ 
+
+why @slack\_event\_adapter.on('app\_mention') called many times when there is just one event?
+
+ChatGPT
+-------
+
+The reason why `@slack_event_adapter.on('app_mention')` may be called many times when there is just one event is due to the fact that Slack's Event API follows an acknowledgement-based system where your app has to acknowledge the receipt of the event.
+
+When your app receives an event with this method, it acknowledges immediately and then sends an HTTP 200 response back to Slack, letting it know that the event was received. After that, Slack tries to resend this event until it receives a 200 response, ensuring that your app has received and processed the event correctly.
+
+If your code takes a long time to process the event or for any reason you do not return the HTTP 200 response quickly enough, Slack’s delivery guarantee policy will kick in and start resending the event every 30 minutes up to 3 times. This could result in multiple calls being made to `@slack_event_adapter.on('app_mention')` for the same event.
+
+Therefore, you should ensure that you handle and respond to events as quickly as possible and always return a valid HTTP 200 response after processing the event to prevent duplicate event handling.
+
+You
+---
+
+ 
+
+@slack\_event\_adapter.on('app\_mention') def handle\_mentions(payload): event = payload.get('event', {}) channel = event.get('channel') user = event.get('user') text = event.get('text') user\_message = text.replace('@my-gpt-reader-bot', '') gpt\_response = get\_answer\_from\_chatGPT(user\_message) client.chat\_postMessage(channel=channel, text=f'<@{user}>, ' + gpt\_response) this code called many times when there is just one event, how to handle only once when there is one event?
+
+ChatGPT
+-------
+
+The reason why `@slack_event_adapter.on('app_mention')` handler is called multiple times when there is just one event is because the Slack API sends a verification request to the app, which the app needs to respond to within three seconds by returning a successful response. This verification request is sent every time the event subscription is added, so if the subscription was just recently added or refreshed, you will see several instances of this verification request.
+
+To handle one event only once and ignore other verification requests use the following code snippet:
+
+```
+@slack_event_adapter.on("app_mention")
+def handle_mention(event_data):
+    if "event" in event_data:
+        channel_id = event_data["event"]["channel"]
+        user_id = event_data["event"]["user"]
+        text = event_data["event"]["text"]
+        if "verification" not in text:  # Ignore verification requests
+            user_message = text.replace('@my-gpt-reader-bot', '')
+            gpt_response = get_answer_from_chatGPT(user_message)
+            client.chat_postMessage(channel=channel_id, text=f'<@{user_id}>, ' + gpt_response)
+```
+
+In this modified code block, we added an `if` statement that checks if the received message contains the word `"verification"`. If it does, the function stops processing without doing anything. If it doesn't contain `"verification"`, the code processes the event as usual, responding to the mention as expected.
