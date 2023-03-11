@@ -4,7 +4,8 @@ import os
 import openai
 from slack_bolt import App
 from slack_bolt.adapter.flask import SlackRequestHandler
-from llama_index import GPTSimpleVectorIndex, LLMPredictor, TrafilaturaWebReader
+from llama_index import GPTListIndex, LLMPredictor, TrafilaturaWebReader
+from llama_index.prompts.default_prompts import DEFAULT_REFINE_PROMPT
 from langchain.chat_models import ChatOpenAI
 
 app = Flask(__name__)
@@ -40,7 +41,6 @@ def insert_space(text):
 
     return text
 
-
 def extract_urls(text):
     urls = []
     words = text.split()
@@ -49,20 +49,23 @@ def extract_urls(text):
             urls.append(word)
     return urls
 
-def get_answer_from_chatGPT(message):
+def get_answer_from_chatGPT(message, logger):
     message_normalized = insert_space(message)
     urls = extract_urls(message_normalized)
     if len(urls) > 0:
+        logger.info('=====> Use llama with chatGPT to answer!')
         llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
         documents = TrafilaturaWebReader().load_data(urls)
-        index = GPTSimpleVectorIndex(documents)
-        response = index.query(message_normalized, llm_predictor=llm_predictor)
+        logger.info(documents)
+        index = GPTListIndex(documents)
+        response = index.query(message_normalized, llm_predictor=llm_predictor, refine_template=DEFAULT_REFINE_PROMPT, similarity_top_k=5)
     else:
+        logger.info('=====> Use chatGPT to answer!')
         completion = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": message_normalized}]
         )
-        print(completion.usage)
+        logger.info(completion.usage)
         response = completion.choices[0].message.content
     return response
 
@@ -72,7 +75,7 @@ def handle_mentions(event, say, logger):
     user = event["user"]
     text = event["text"]
     user_message = text.replace('<@U04TCNR9MNF>', '')
-    gpt_response =  get_answer_from_chatGPT(user_message)
+    gpt_response =  get_answer_from_chatGPT(user_message, logger)
     say(f'<@{user}>, ' + gpt_response)
 
 if __name__ == '__main__':
