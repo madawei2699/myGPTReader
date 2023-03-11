@@ -6,3 +6,8 @@ requests==2.28.2
 openai==0.27.1
 trafilatura==1.4.1
 slack-bolt==1.16.4
+urllib3==1.26.14
+bs4==0.0.1
+requests==2.28.2
+html2text==2020.1.16
+feedparser==6.0.10

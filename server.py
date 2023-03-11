@@ -1,10 +1,11 @@
+from urllib.parse import urlparse
 from flask import Flask, request
 import re
 import os
 import openai
 from slack_bolt import App
 from slack_bolt.adapter.flask import SlackRequestHandler
-from llama_index import GPTListIndex, LLMPredictor, TrafilaturaWebReader
+from llama_index import GPTListIndex, LLMPredictor, BeautifulSoupWebReader
 from llama_index.prompts.default_prompts import DEFAULT_REFINE_PROMPT
 from langchain.chat_models import ChatOpenAI
 
@@ -41,33 +42,34 @@ def insert_space(text):
 
     return text
 
-def extract_urls(text):
-    urls = []
-    words = text.split()
-    for word in words:
-        if word.startswith("http://") or word.startswith("https://"):
-            urls.append(word)
-    return urls
+def extract_urls_from_event(event):
+    urls = set()
+    for block in event['blocks']:
+        for element in block['elements']:
+            for e in element['elements']:
+                if e['type'] == 'link':
+                    url = urlparse(e['url']).geturl()
+                    urls.add(url)
+    return list(urls)
 
 def get_answer_from_chatGPT(message, logger):
-    message_normalized = insert_space(message)
-    urls = extract_urls(message_normalized)
-    if len(urls) > 0:
-        logger.info('=====> Use llama with chatGPT to answer!')
-        llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
-        documents = TrafilaturaWebReader().load_data(urls)
-        logger.info(documents)
-        index = GPTListIndex(documents)
-        response = index.query(message_normalized, llm_predictor=llm_predictor, refine_template=DEFAULT_REFINE_PROMPT, similarity_top_k=5)
-    else:
-        logger.info('=====> Use chatGPT to answer!')
-        completion = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": message_normalized}]
-        )
-        logger.info(completion.usage)
-        response = completion.choices[0].message.content
-    return response
+    logger.info('=====> Use chatGPT to answer!')
+    completion = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": message}]
+    )
+    logger.info(completion.usage)
+    return completion.choices[0].message.content
+
+def get_answer_from_llama_web(message, urls, logger):
+    logger.info('=====> Use llama with chatGPT to answer!')
+    logger.info(urls)
+    llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
+    documents = BeautifulSoupWebReader().load_data(urls)
+    logger.info(documents)
+    index = GPTListIndex(documents)
+    return index.query(message, llm_predictor=llm_predictor,
+                       refine_template=DEFAULT_REFINE_PROMPT)
 
 @slack_app.event("app_mention")
 def handle_mentions(event, say, logger):
@@ -75,8 +77,18 @@ def handle_mentions(event, say, logger):
     user = event["user"]
     text = event["text"]
     user_message = text.replace('<@U04TCNR9MNF>', '')
-    gpt_response =  get_answer_from_chatGPT(user_message, logger)
-    say(f'<@{user}>, ' + gpt_response)
+
+    message_normalized = insert_space(user_message)
+    urls = extract_urls_from_event(event)
+
+    if len(urls) > 0:
+        gpt_response = get_answer_from_llama_web(message_normalized, urls, logger)
+    else:
+        gpt_response = get_answer_from_chatGPT(message_normalized, logger)
+
+    logger.info(gpt_response)
+
+    say(f'<@{user}>, {gpt_response}')
 
 if __name__ == '__main__':
     app.run(debug=True)
