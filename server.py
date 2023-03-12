@@ -5,6 +5,7 @@ import os
 import openai
 import feedparser
 import validators
+import html2text
 from slack_bolt import App
 import requests
 from slack_bolt.adapter.flask import SlackRequestHandler
@@ -71,8 +72,13 @@ def get_urls(urls):
                 page_urls.append(url)
     return {'rss_urls': rss_urls, 'page_urls': page_urls}
 
+def format_text(text):
+    text_without_html_tag = html2text.html2text(text)
+    fix_chinese_split_chunk_size_error = text_without_html_tag.replace('，', '， ')
+    return fix_chinese_split_chunk_size_error
+
 def scrape_website(url: str) -> str:
-    endpoint_url = f"https://web-scraper.i365.tech/?url={url}&selector=html"
+    endpoint_url = f"https://web-scraper.i365.tech/?url={url}&selector=div"
     headers = {
         'CF-Access-Client-Id': CF_ACCESS_CLIENT_ID,
         'CF-Access-Client-Secret': CF_ACCESS_CLIENT_SECRET,
@@ -81,9 +87,9 @@ def scrape_website(url: str) -> str:
     if response.status_code == 200:
         try:
             json_response = response.json()
-            html_array = json_response['result']['html']
-            html_str = ''.join(html_array)
-            return html_str
+            tag_array = json_response['result']['div']
+            text = ''.join(tag_array)
+            return format_text(text)
         except:
             return "Error: Unable to parse JSON response"
     else:
