@@ -1645,3 +1645,37 @@ if __name__ == "__main__":
 In this example, whenever the bot receives a message event, it extracts the text, timestamp, and channel ID of the original message using the `event` object. It then replies to the original message in the same thread by passing the `thread_ts` parameter to the `say` function.
 
 Make sure the app has the correct permissions to send messages & participate in the channels where the thread exists.
+
+---
+
+You
+---
+
+ 
+
+how to restrict to access the cloudflare worker by firewall rule, like I have a server and the IP is 1.2.3.4 and only allow this server to access the cloudflare worker
+
+ChatGPT
+-------
+
+To restrict access to the Cloudflare Worker to only your server's IP address, you can use the Cloudflare Firewall Rules feature.
+
+Here are the steps you can follow:
+
+1.  Go to Cloudflare Dashboard and select the domain for which you have created a worker.
+2.  Click on the "Firewall" tab in the top navigation menu.
+3.  Click "Create a Firewall Rule"
+4.  In the "Choose a field" dropdown, select "IP Address."
+5.  In the action tab, select "Block."
+6.  Leave the filter expression as it is (this means that any request will match this rule) and click "Add another Filter Expression" at the bottom.
+7.  From the second filter expression dropdown, select "Source".
+8.  Select “equals,” paste your server’s IP address into the textbox.
+
+Your firewall rule should look like below in the end,
+
+![image](https://user-images.githubusercontent.com/73152901/133398392-084097c0-23f9-458e-a527-bcb69aa2c47f.png)
+
+9.  Give the new rule a name e.g., "Only allow my server", and click Save.
+
+With these steps, you can now restrict access to your Cloudflare Workers app, allowing only the specified IP to be allowed to access.
+

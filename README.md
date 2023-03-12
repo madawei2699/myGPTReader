@@ -12,7 +12,8 @@ For now it is in development, but you can try it out by join this [channel](http
   - [x] Bot replies messages in the same thread
 - [x] Support web page reading with chatGPT
   - [x] Consider to use cloudflare worker to scrape the html content
-    - https://web.scraper.workers.dev/
+    - [x] Self-hosting [Web Scraper](https://github.com/adamschwartz/web.scraper.workers.dev)
+    - [x] Restrict to access the web scraper, only allow the API server to access it by [Cloudflare Access](https://www.cloudflare.com/products/zero-trust/access/)
   - [ ] Consider to use a headless browser to scrape the web page content like twitter thread
     - https://www.browserless.io/
 - [x] Support RSS reading with chatGPT

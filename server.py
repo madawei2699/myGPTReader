@@ -18,6 +18,9 @@ app = Flask(__name__)
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 openai.api_key = OPENAI_API_KEY
 
+CF_ACCESS_CLIENT_ID = os.environ.get('CF_ACCESS_CLIENT_ID')
+CF_ACCESS_CLIENT_SECRET = os.environ.get('CF_ACCESS_CLIENT_SECRET')
+
 slack_app = App(
     token=os.environ.get("SLACK_TOKEN"),
     signing_secret=os.environ.get("SLACK_SIGNING_SECRET")
@@ -69,8 +72,12 @@ def get_urls(urls):
     return {'rss_urls': rss_urls, 'page_urls': page_urls}
 
 def scrape_website(url: str) -> str:
-    endpoint_url = f"https://web.scraper.workers.dev/?url={url}&selector=html"
-    response = requests.get(endpoint_url)
+    endpoint_url = f"https://web-scraper.i365.tech/?url={url}&selector=html"
+    headers = {
+        'CF-Access-Client-Id': CF_ACCESS_CLIENT_ID,
+        'CF-Access-Client-Secret': CF_ACCESS_CLIENT_SECRET,
+    }
+    response = requests.get(endpoint_url, headers=headers)
     if response.status_code == 200:
         try:
             json_response = response.json()
