@@ -3,10 +3,12 @@ from flask import Flask, request
 import re
 import os
 import openai
+import feedparser
+import validators
 from slack_bolt import App
 import requests
 from slack_bolt.adapter.flask import SlackRequestHandler
-from llama_index import GPTListIndex, LLMPredictor
+from llama_index import GPTListIndex, LLMPredictor, RssReader
 from llama_index.prompts.default_prompts import DEFAULT_REFINE_PROMPT
 from llama_index.readers.schema.base import Document
 from langchain.chat_models import ChatOpenAI
@@ -54,6 +56,18 @@ def extract_urls_from_event(event):
                     urls.add(url)
     return list(urls)
 
+def get_urls(urls):
+    rss_urls = []
+    page_urls = []
+    for url in urls:
+        if validators.url(url):
+            feed = feedparser.parse(url)
+            if feed.version:
+                rss_urls.append(url)
+            else:
+                page_urls.append(url)
+    return {'rss_urls': rss_urls, 'page_urls': page_urls}
+
 def scrape_website(url: str) -> str:
     endpoint_url = f"https://web.scraper.workers.dev/?url={url}&selector=body"
     response = requests.get(endpoint_url)
@@ -70,9 +84,12 @@ def scrape_website(url: str) -> str:
     
 def get_documents_from_urls(urls):
     documents = []
-    for url in urls:
+    for url in urls['page_urls']:
         document = Document(scrape_website(url))
         documents.append(document)
+    if len(urls['rss_urls']) > 0:
+        rss_documents = RssReader().load_data(urls['rss_urls'])
+        documents = documents + rss_documents
     return documents
 
 def get_answer_from_chatGPT(message, logger):
@@ -86,9 +103,10 @@ def get_answer_from_chatGPT(message, logger):
 
 def get_answer_from_llama_web(message, urls, logger):
     logger.info('=====> Use llama with chatGPT to answer!')
-    logger.info(urls)
+    combained_urls = get_urls(urls)
+    logger.info(combained_urls)
+    documents = get_documents_from_urls(combained_urls)
     llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
-    documents = get_documents_from_urls(urls)
     logger.info(documents)
     index = GPTListIndex(documents)
     return index.query(message, llm_predictor=llm_predictor,
