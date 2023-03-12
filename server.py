@@ -6,6 +6,7 @@ import openai
 import feedparser
 import validators
 import html2text
+import json
 from slack_bolt import App
 import requests
 from slack_bolt.adapter.flask import SlackRequestHandler
@@ -21,6 +22,9 @@ openai.api_key = OPENAI_API_KEY
 
 CF_ACCESS_CLIENT_ID = os.environ.get('CF_ACCESS_CLIENT_ID')
 CF_ACCESS_CLIENT_SECRET = os.environ.get('CF_ACCESS_CLIENT_SECRET')
+
+PHANTOMJSCLOUD_API_KEY = os.environ.get('PHANTOMJSCLOUD_API_KEY')
+PHANTOMJSCLOUD_WEBSITES = ['https://twitter.com/', 'https://t.co/']
 
 slack_app = App(
     token=os.environ.get("SLACK_TOKEN"),
@@ -60,17 +64,23 @@ def extract_urls_from_event(event):
                     urls.add(url)
     return list(urls)
 
+def check_if_need_use_phantomjscloud(url):
+    return any(url.startswith(site) for site in PHANTOMJSCLOUD_WEBSITES)
+
 def get_urls(urls):
     rss_urls = []
     page_urls = []
+    phantomjscloud_urls = []
     for url in urls:
         if validators.url(url):
             feed = feedparser.parse(url)
             if feed.version:
                 rss_urls.append(url)
+            elif check_if_need_use_phantomjscloud(url):
+                phantomjscloud_urls.append(url)
             else:
                 page_urls.append(url)
-    return {'rss_urls': rss_urls, 'page_urls': page_urls}
+    return {'rss_urls': rss_urls, 'page_urls': page_urls, 'phantomjscloud_urls': phantomjscloud_urls}
 
 def format_text(text):
     text_without_html_tag = html2text.html2text(text)
@@ -95,6 +105,21 @@ def scrape_website(url: str) -> str:
     else:
         return f"Error: {response.status_code} - {response.reason}"
     
+def scrape_website_by_phantomjscloud(url: str) -> str:
+    endpoint_url = f"https://PhantomJsCloud.com/api/browser/v2/{PHANTOMJSCLOUD_API_KEY}/"
+    data ={
+        "url": url,
+        "renderType" : "plainText"
+    }
+    response = requests.post(endpoint_url, data=json.dumps(data))
+    if response.status_code == 200:
+        try:
+            return response.content.decode('utf-8')
+        except:
+            return "Error: Unable to fetch content"
+    else:
+        return f"Error: {response.status_code} - {response.reason}"
+    
 def get_documents_from_urls(urls):
     documents = []
     for url in urls['page_urls']:
@@ -103,6 +128,10 @@ def get_documents_from_urls(urls):
     if len(urls['rss_urls']) > 0:
         rss_documents = RssReader().load_data(urls['rss_urls'])
         documents = documents + rss_documents
+    if len(urls['phantomjscloud_urls']) > 0:
+        for url in urls['phantomjscloud_urls']:
+            document = Document(scrape_website_by_phantomjscloud(url))
+            documents.append(document)
     return documents
 
 def get_answer_from_chatGPT(message, logger):

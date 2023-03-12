@@ -14,8 +14,9 @@ For now it is in development, but you can try it out by join this [channel](http
   - [x] Consider to use cloudflare worker to scrape the html content
     - [x] Self-hosting [Web Scraper](https://github.com/adamschwartz/web.scraper.workers.dev)
     - [x] Restrict to access the web scraper, only allow the API server to access it by [Cloudflare Access](https://www.cloudflare.com/products/zero-trust/access/)
-  - [ ] Consider to use a headless browser to scrape the web page content like twitter thread
-    - https://www.browserless.io/
+  - [x] Consider to use a headless browser to scrape the web page content like twitter thread
+    - ~~https://www.browserless.io/~~
+    - https://phantomjscloud.com/
 - [x] Support RSS reading with chatGPT
   - RSS is a bunch of links, so it is equivalent to reading a web page to get the content.
 - [x] ~~Support newsletter reading with chatGPT~~
