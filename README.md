@@ -8,7 +8,10 @@ For now it is in development, but you can try it out by join this [channel](http
 
 - [x] Integrate with slack bot
 - [x] Support web page reading with chatGPT
-  - [ ] Consider to use a headless browser to scrape the web page content
+  - [ ] Consider to use cloudflare worker to scrape the html content
+    - https://web.scraper.workers.dev/
+  - [ ] Consider to use a headless browser to scrape the web page content like twitter thread
+    - https://www.browserless.io/
 - [ ] Support RSS reading with chatGPT
 - [ ] Support newsletter reading with chatGPT
-- [ ] Bot regularly summarizes news in the channel
+- [ ] Bot regularly summarizes news in the chann
