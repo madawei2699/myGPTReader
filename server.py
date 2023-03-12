@@ -4,9 +4,11 @@ import re
 import os
 import openai
 from slack_bolt import App
+import requests
 from slack_bolt.adapter.flask import SlackRequestHandler
-from llama_index import GPTListIndex, LLMPredictor, BeautifulSoupWebReader
+from llama_index import GPTListIndex, LLMPredictor
 from llama_index.prompts.default_prompts import DEFAULT_REFINE_PROMPT
+from llama_index.readers.schema.base import Document
 from langchain.chat_models import ChatOpenAI
 
 app = Flask(__name__)
@@ -52,6 +54,27 @@ def extract_urls_from_event(event):
                     urls.add(url)
     return list(urls)
 
+def scrape_website(url: str) -> str:
+    endpoint_url = f"https://web.scraper.workers.dev/?url={url}&selector=body"
+    response = requests.get(endpoint_url)
+    if response.status_code == 200:
+        try:
+            json_response = response.json()
+            body_array = json_response['result']['body']
+            body_str = ''.join(body_array)
+            return body_str
+        except:
+            return "Error: Unable to parse JSON response"
+    else:
+        return f"Error: {response.status_code} - {response.reason}"
+    
+def get_documents_from_urls(urls):
+    documents = []
+    for url in urls:
+        document = Document(scrape_website(url))
+        documents.append(document)
+    return documents
+
 def get_answer_from_chatGPT(message, logger):
     logger.info('=====> Use chatGPT to answer!')
     completion = openai.ChatCompletion.create(
@@ -65,7 +88,7 @@ def get_answer_from_llama_web(message, urls, logger):
     logger.info('=====> Use llama with chatGPT to answer!')
     logger.info(urls)
     llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
-    documents = BeautifulSoupWebReader().load_data(urls)
+    documents = get_documents_from_urls(urls)
     logger.info(documents)
     index = GPTListIndex(documents)
     return index.query(message, llm_predictor=llm_predictor,

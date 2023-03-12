@@ -1303,3 +1303,93 @@ if __name__ == "__main__":
 ```
 
 In this example, we're adding a signal handler to the `SIGTERM` signal, which is commonly used to terminate processes. We're also initializing the Slack Bolt app in the main thread of the script using the `init_app()` function. This ensures that the "signal" module is only used in the main thread and should avoid the error message you're seeing.
+
+---
+
+## 2023-03-12
+
+---
+
+ChatGPT
+-------
+
+You
+---
+
+ 
+
+use python to write a function that receive a url parameter and it use requests to call a API, this API endipoint is https://web.scraper.workers.dev/?url={url}&selector=body and return the response text content
+
+ChatGPT
+-------
+
+Here's a Python function that meets your requirements:
+
+```python
+import requests
+
+def scrape_website(url: str) -> str:
+    """
+    Calls an API endpoint with the given url and selector parameters and returns the response text content
+    
+    Args:
+    url (str): The URL of the API endpoint to call
+    
+    Returns:
+    str: The response text content of the API call
+    """
+    endpoint_url = f"https://web.scraper.workers.dev/?url={url}&selector=body"
+    response = requests.get(endpoint_url)
+    return response.text
+```
+
+The `scrape_website` function takes in a string parameter called `url` which is the URL of the website you want to scrape using the given API endpoint.
+
+We then create a variable called `endpoint_url` which is the URL of the API endpoint with the `url` parameter concatenated into it. We then use the `requests.get()` method to make a GET request to this endpoint and store the response in the `response` variable.
+
+Finally, we simply return the `text` attribute of the response object to get the text content of the API call.
+
+Note: Make sure to import the `requests` module before running the function, as it is used to make the API call.
+
+You
+---
+
+ 
+
+in this case the API endpoint will return a json with struct as blow: { result: { body: \["xxxx"\] } } and we want to get the body array and turn the appand the str in the list
+
+ChatGPT
+-------
+
+Sure, here's a Python function that meets your requirements:
+
+```python
+import requests
+
+def get_body_from_url(url):
+    api_endpoint = f"https://web.scraper.workers.dev/?url={url}&selector=body"
+    response = requests.get(api_endpoint)
+    if response.status_code == 200:
+        try:
+            json_response = response.json()
+            body_array = json_response['result']['body']
+            body_str = ''.join(body_array)
+            return body_str
+        except:
+            return "Error: Unable to parse JSON response"
+    else:
+        return f"Error: {response.status_code} - {response.reason}"
+```
+
+Here's a brief explanation of how it works:
+
+1.  The `requests` library is imported so we can make an HTTP GET request to the API endpoint.
+2.  The `get_body_from_url()` function takes a `url` parameter which should be a string containing the URL of the page we want to retrieve the `body` content from.
+3.  The API endpoint URL is constructed by inserting the `url` parameter into the appropriate location in the string.
+4.  An HTTP GET request is sent to the API endpoint using `requests.get()`, and the response is stored in the `response` variable.
+5.  We check the response status code to make sure that the request was successful (status code 200). If it was not successful, an error message is returned containing the status code and reason.
+6.  If the request was successful, we attempt to parse the JSON response by calling `response.json()`. If this call fails for any reason (e.g. if the response is not valid JSON), an error message is returned.
+7.  Assuming the JSON response was parsed successfully, we extract the `body` array from the response and join all of its elements together into a single string using the `join()` method of Python strings.
+8.  This resulting string is returned by the function.
+
+I hope this helps! Let me know if you have any questions or issues with running the code.
