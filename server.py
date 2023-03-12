@@ -81,9 +81,9 @@ def scrape_website(url: str) -> str:
     if response.status_code == 200:
         try:
             json_response = response.json()
-            body_array = json_response['result']['body']
-            body_str = ''.join(body_array)
-            return body_str
+            html_array = json_response['result']['html']
+            html_str = ''.join(html_array)
+            return html_str
         except:
             return "Error: Unable to parse JSON response"
     else:
