@@ -69,7 +69,7 @@ def get_urls(urls):
     return {'rss_urls': rss_urls, 'page_urls': page_urls}
 
 def scrape_website(url: str) -> str:
-    endpoint_url = f"https://web.scraper.workers.dev/?url={url}&selector=body"
+    endpoint_url = f"https://web.scraper.workers.dev/?url={url}&selector=html"
     response = requests.get(endpoint_url)
     if response.status_code == 200:
         try:
@@ -117,6 +117,7 @@ def handle_mentions(event, say, logger):
     logger.info(event)
     user = event["user"]
     text = event["text"]
+    thread_ts = event["ts"]
     user_message = text.replace('<@U04TCNR9MNF>', '')
 
     message_normalized = insert_space(user_message)
@@ -129,7 +130,7 @@ def handle_mentions(event, say, logger):
 
     logger.info(gpt_response)
 
-    say(f'<@{user}>, {gpt_response}')
+    say(f'<@{user}>, {gpt_response}', thread_ts=thread_ts)
 
 if __name__ == '__main__':
     app.run(debug=True)
