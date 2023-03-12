@@ -13,5 +13,7 @@ For now it is in development, but you can try it out by join this [channel](http
   - [ ] Consider to use a headless browser to scrape the web page content like twitter thread
     - https://www.browserless.io/
 - [ ] Support RSS reading with chatGPT
-- [ ] Support newsletter reading with chatGPT
-- [ ] Bot regularly summarizes news in the chann
+  - RSS is a bunch of links, so it is equivalent to reading a web page to get the content.
+- [x] ~~Support newsletter reading with chatGPT~~
+  - Most newsletters are public and can be accessed online, so we can just give the url to the slack bot.
+- [ ] Bot regularly summarizes news in the slack channel
