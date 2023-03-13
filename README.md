@@ -24,6 +24,7 @@ For now it is in development, but you can try it out by join this [channel](http
 - [ ] Bot regularly summarizes news in the slack channel
 - Prompt fine-tue
   - [ ] Support for custom `prompt`
+  - [ ] Auto collect the good `prompt` from the slack channel by emoji reactions
 - Cost saving
   - [ ] by caching the web page llama index
 - [ ] Support voice reading with self-hosting [whisper](https://github.com/aarnphm/whispercpp)❓
