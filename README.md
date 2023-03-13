@@ -22,5 +22,9 @@ For now it is in development, but you can try it out by join this [channel](http
 - [x] ~~Support newsletter reading with chatGPT~~
   - Most newsletters are public and can be accessed online, so we can just give the url to the slack bot.
 - [ ] Bot regularly summarizes news in the slack channel
-- [ ] Support for `prompt` templates to fine-tune the summary
+- Prompt fine-tue
+  - [ ] Support for custom `prompt`
+- Cost saving
+  - [ ] by caching the web page llama index
 - [ ] Support voice reading with self-hosting [whisper](https://github.com/aarnphm/whispercpp)❓
+- [ ] Documentation
