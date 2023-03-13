@@ -14,6 +14,9 @@ from llama_index import GPTListIndex, LLMPredictor, RssReader
 from llama_index.prompts.default_prompts import DEFAULT_REFINE_PROMPT
 from llama_index.readers.schema.base import Document
 from langchain.chat_models import ChatOpenAI
+import concurrent.futures
+
+executor = concurrent.futures.ThreadPoolExecutor(max_workers=10)
 
 app = Flask(__name__)
 
@@ -24,7 +27,7 @@ CF_ACCESS_CLIENT_ID = os.environ.get('CF_ACCESS_CLIENT_ID')
 CF_ACCESS_CLIENT_SECRET = os.environ.get('CF_ACCESS_CLIENT_SECRET')
 
 PHANTOMJSCLOUD_API_KEY = os.environ.get('PHANTOMJSCLOUD_API_KEY')
-PHANTOMJSCLOUD_WEBSITES = ['https://twitter.com/', 'https://t.co/']
+PHANTOMJSCLOUD_WEBSITES = ['https://twitter.com/', 'https://t.co/', 'https://medium.com/']
 
 slack_app = App(
     token=os.environ.get("SLACK_TOKEN"),
@@ -166,13 +169,18 @@ def handle_mentions(event, say, logger):
     urls = extract_urls_from_event(event)
 
     if len(urls) > 0:
-        gpt_response = get_answer_from_llama_web(message_normalized, urls, logger)
+        future = executor.submit(get_answer_from_llama_web, message_normalized, urls, logger)
     else:
-        gpt_response = get_answer_from_chatGPT(message_normalized, logger)
+        future = executor.submit(get_answer_from_chatGPT, message_normalized, logger)
 
-    logger.info(gpt_response)
-
-    say(f'<@{user}>, {gpt_response}', thread_ts=thread_ts)
+    try:
+        gpt_response = future.result(timeout=60)
+        logger.info(gpt_response)
+        say(f'<@{user}>, {gpt_response}', thread_ts=thread_ts)
+    except concurrent.futures.TimeoutError:
+        future.cancel()
+        logger.warning("Task timed out and was canceled.")
+        say(f'<@{user}>, task timed out (60s) and was canceled.', thread_ts=thread_ts)
 
 if __name__ == '__main__':
     app.run(debug=True)
