@@ -10,13 +10,13 @@ import json
 from slack_bolt import App
 import requests
 from slack_bolt.adapter.flask import SlackRequestHandler
-from llama_index import GPTListIndex, LLMPredictor, RssReader
-from llama_index.prompts.default_prompts import DEFAULT_REFINE_PROMPT
+from llama_index import GPTSimpleVectorIndex, LLMPredictor, RssReader
 from llama_index.readers.schema.base import Document
+from llama_index.prompts.prompts import QuestionAnswerPrompt
 from langchain.chat_models import ChatOpenAI
 import concurrent.futures
 
-executor = concurrent.futures.ThreadPoolExecutor(max_workers=10)
+executor = concurrent.futures.ThreadPoolExecutor(max_workers=20)
 
 app = Flask(__name__)
 
@@ -27,7 +27,7 @@ CF_ACCESS_CLIENT_ID = os.environ.get('CF_ACCESS_CLIENT_ID')
 CF_ACCESS_CLIENT_SECRET = os.environ.get('CF_ACCESS_CLIENT_SECRET')
 
 PHANTOMJSCLOUD_API_KEY = os.environ.get('PHANTOMJSCLOUD_API_KEY')
-PHANTOMJSCLOUD_WEBSITES = ['https://twitter.com/', 'https://t.co/', 'https://medium.com/', 'https://app.mailbrew.com/', 'https://us12.campaign-archive.com', 'https://news.ycombinator.com']
+PHANTOMJSCLOUD_WEBSITES = ['https://twitter.com/', 'https://t.co/', 'https://medium.com/', 'https://app.mailbrew.com/', 'https://us12.campaign-archive.com', 'https://news.ycombinator.com', 'https://www.bloomberg.com']
 
 slack_app = App(
     token=os.environ.get("SLACK_TOKEN"),
@@ -112,7 +112,14 @@ def scrape_website_by_phantomjscloud(url: str) -> str:
     endpoint_url = f"https://PhantomJsCloud.com/api/browser/v2/{PHANTOMJSCLOUD_API_KEY}/"
     data ={
         "url": url,
-        "renderType" : "plainText"
+        "renderType" : "plainText",
+        "requestSettings":{
+            "doneWhen":[
+                {
+                    "event": "domReady"
+                },
+            ],
+        }
     }
     response = requests.post(endpoint_url, data=json.dumps(data))
     if response.status_code == 200:
@@ -146,6 +153,16 @@ def get_answer_from_chatGPT(message, logger):
     logger.info(completion.usage)
     return completion.choices[0].message.content
 
+QUESTION_ANSWER_PROMPT_TMPL = (
+    "Context information is below. \n"
+    "---------------------\n"
+    "{context_str}"
+    "\n---------------------\n"
+    "Given the context information and not prior knowledge, "
+    "Please answer this question line by line using the same language as the question: {query_str}\n"
+)
+QUESTION_ANSWER_PROMPT = QuestionAnswerPrompt(QUESTION_ANSWER_PROMPT_TMPL)
+
 def get_answer_from_llama_web(message, urls, logger):
     logger.info('=====> Use llama with chatGPT to answer!')
     combained_urls = get_urls(urls)
@@ -153,9 +170,8 @@ def get_answer_from_llama_web(message, urls, logger):
     documents = get_documents_from_urls(combained_urls)
     llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
     logger.info(documents)
-    index = GPTListIndex(documents)
-    return index.query(message, llm_predictor=llm_predictor,
-                       refine_template=DEFAULT_REFINE_PROMPT)
+    index = GPTSimpleVectorIndex(documents, text_qa_template=QUESTION_ANSWER_PROMPT)
+    return index.query(message, llm_predictor=llm_predictor)
 
 @slack_app.event("app_mention")
 def handle_mentions(event, say, logger):
@@ -174,13 +190,14 @@ def handle_mentions(event, say, logger):
         future = executor.submit(get_answer_from_chatGPT, message_normalized, logger)
 
     try:
-        gpt_response = future.result(timeout=60)
+        gpt_response = future.result(timeout=300)
         logger.info(gpt_response)
         say(f'<@{user}>, {gpt_response}', thread_ts=thread_ts)
     except concurrent.futures.TimeoutError:
         future.cancel()
-        logger.warning("Task timed out and was canceled.")
-        say(f'<@{user}>, task timed out (60s) and was canceled.', thread_ts=thread_ts)
+        err_msg = 'Task timedout(5m) and was canceled.'
+        logger.warning(err_msg)
+        say(f'<@{user}>, {err_msg}', thread_ts=thread_ts)
 
 if __name__ == '__main__':
     app.run(debug=True)
