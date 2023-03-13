@@ -27,7 +27,7 @@ CF_ACCESS_CLIENT_ID = os.environ.get('CF_ACCESS_CLIENT_ID')
 CF_ACCESS_CLIENT_SECRET = os.environ.get('CF_ACCESS_CLIENT_SECRET')
 
 PHANTOMJSCLOUD_API_KEY = os.environ.get('PHANTOMJSCLOUD_API_KEY')
-PHANTOMJSCLOUD_WEBSITES = ['https://twitter.com/', 'https://t.co/', 'https://medium.com/']
+PHANTOMJSCLOUD_WEBSITES = ['https://twitter.com/', 'https://t.co/', 'https://medium.com/', 'https://app.mailbrew.com/', 'https://us12.campaign-archive.com', 'https://news.ycombinator.com']
 
 slack_app = App(
     token=os.environ.get("SLACK_TOKEN"),
