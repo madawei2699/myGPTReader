@@ -38,4 +38,5 @@ For now it is in development, but you can try it out by join this [channel](http
 - [ ] Support voice reading with self-hosting [whisper](https://github.com/aarnphm/whispercpp)❓
 - [ ] Support discord bot ❓
 - [ ] Rewrite the code in Typescript ❓
+- [ ] Upgrade chat model (gpt-3.5-turbo) to GPT4 (gpt-4-0314) 💥
 - [ ] Documentation
