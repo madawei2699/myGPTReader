@@ -21,13 +21,18 @@ For now it is in development, but you can try it out by join this [channel](http
   - RSS is a bunch of links, so it is equivalent to reading a web page to get the content.
 - [x] ~~Support newsletter reading with chatGPT~~
   - Most newsletters are public and can be accessed online, so we can just give the url to the slack bot.
-- [ ] Bot regularly summarizes news in the slack channel
 - Prompt fine-tue
   - [ ] Support for custom `prompt`
   - [ ] Auto collect the good `prompt` from the slack channel by emoji reactions
+- [ ] Bot regularly summarizes news in the slack channel
 - Cost saving
   - [ ] by caching the web page llama index
-- [ ] Support image reading and analysis
+- [ ] Bot can read historical messages from the same thread, thus providing context to chatGPT
+- Support file reading and analysis
+  - [ ] PDF
+  - [ ] epub
+  - [ ] image
 - [ ] Support voice reading with self-hosting [whisper](https://github.com/aarnphm/whispercpp)❓
 - [ ] Support discord bot ❓
+- [ ] Rewrite the code in Typescript ❓
 - [ ] Documentation
