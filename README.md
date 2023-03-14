@@ -35,6 +35,8 @@ For now it is in development, but you can try it out by join this [channel](http
   - [ ] PDF
   - [ ] epub
   - [ ] image
+  - [ ] docx
+  - [ ] txt
 - [ ] Support voice reading with self-hosting [whisper](https://github.com/aarnphm/whispercpp)❓
 - [ ] Support discord bot ❓
 - [ ] Rewrite the code in Typescript ❓
