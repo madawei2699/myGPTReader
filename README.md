@@ -19,7 +19,8 @@ For now it is in development, but you can try it out by join this [channel](http
     - https://phantomjscloud.com/
     - https://scrapfly.io/
   - [ ] Consider to use OCR to scrape the web page content (Web crawler to get the screenshot, then OCR to get the text)
-    - [Azure OCR](https://learn.microsoft.com/en-us/azure/cognitive-services/computer-vision/overview-ocr)
+    - ~~[Azure OCR](https://learn.microsoft.com/en-us/azure/cognitive-services/computer-vision/overview-ocr)~~
+    - [Google Vision](https://cloud.google.com/vision)
     - may use GPT4
 - [x] Support RSS reading with chatGPT
   - RSS is a bunch of links, so it is equivalent to reading a web page to get the content.
