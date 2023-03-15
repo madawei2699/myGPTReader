@@ -20,6 +20,7 @@ For now it is in development, but you can try it out by join this [channel](http
     - https://scrapfly.io/
   - [ ] Consider to use OCR to scrape the web page content (Web crawler to get the screenshot, then OCR to get the text)
     - [Azure OCR](https://learn.microsoft.com/en-us/azure/cognitive-services/computer-vision/overview-ocr)
+    - may use GPT4
 - [x] Support RSS reading with chatGPT
   - RSS is a bunch of links, so it is equivalent to reading a web page to get the content.
 - [x] ~~Support newsletter reading with chatGPT~~
@@ -35,6 +36,7 @@ For now it is in development, but you can try it out by join this [channel](http
   - [ ] PDF
   - [ ] epub
   - [ ] image
+    - may use GPT4
   - [ ] docx
   - [ ] txt
 - [ ] Support voice reading with self-hosting [whisper](https://github.com/aarnphm/whispercpp)❓
