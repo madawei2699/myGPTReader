@@ -45,3 +45,5 @@ For now it is in development, but you can try it out by join this [channel](http
 - [ ] Rewrite the code in Typescript ❓
 - [ ] Upgrade chat model (gpt-3.5-turbo) to GPT4 (gpt-4-0314) 💥
 - [ ] Documentation
+- Publish bot to make it can be used in other workspaces
+  - [ ] Slack marketplace
