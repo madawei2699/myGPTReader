@@ -8,7 +8,7 @@ For now it is in development, but you can try it out by join this [channel](http
 
 ## Features
 
-- [x] Integrate with slack bot
+- [x] Integrated with slack bot
   - [x] Bot replies messages in the same thread
 - [x] Support web page reading with chatGPT
   - [x] Consider to use cloudflare worker to scrape the html content
@@ -43,6 +43,7 @@ For now it is in development, but you can try it out by join this [channel](http
     - may use GPT4
   - [ ] docx
   - [ ] txt
+- [ ] Integrated with Azure OpenAI Service
 - [ ] Support voice reading with self-hosting [whisper](https://github.com/aarnphm/whispercpp)❓
 - [ ] Support discord bot ❓
 - [ ] Rewrite the code in Typescript ❓
