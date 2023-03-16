@@ -31,8 +31,11 @@ For now it is in development, but you can try it out by join this [channel](http
   - [ ] Auto collect the good `prompt` from the slack channel by emoji reactions
 - Cost saving 🚩
   - [ ] by caching the web page llama index
+    - Consider to use [sqlite-vss](https://github.com/asg017/sqlite-vss) to store and search the text embeddings
+  - [ ] Consider to use [sentence-transformers](https://github.com/UKPLab/sentence-transformers) to generate [embeddings](https://github.com/asg017/sqlite-vss/blob/main/examples/headlines/build/add_embeddings.py) (vectors)
 - [ ] Bot can read historical messages from the same thread, thus providing context to chatGPT 🚩
 - [ ] Bot regularly summarizes news in the slack channel 🚩
+  - Refer to [this](https://github.com/SkywalkerDarren/chatWeb/blob/c2ad05a97aecbe1bc0c846476ea003640f2a0f2e/main.py#L144-L175) approach
 - Support file reading and analysis
   - [ ] PDF
   - [ ] epub
