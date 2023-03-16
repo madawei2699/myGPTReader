@@ -26,6 +26,8 @@ For now it is in development, but you can try it out by join this [channel](http
   - RSS is a bunch of links, so it is equivalent to reading a web page to get the content.
 - [x] ~~Support newsletter reading with chatGPT~~
   - Most newsletters are public and can be accessed online, so we can just give the url to the slack bot.
+- Index fine-tune 🚩
+  - [ ] Use the GPTListIndex to summarize multiple URLs
 - Prompt fine-tue 🚩
   - [ ] Support for custom `prompt`
   - [ ] Auto collect the good `prompt` from the slack channel by emoji reactions
