@@ -15,6 +15,7 @@ from llama_index.readers.schema.base import Document
 from llama_index.prompts.prompts import QuestionAnswerPrompt
 from langchain.chat_models import ChatOpenAI
 import concurrent.futures
+import fnmatch
 
 executor = concurrent.futures.ThreadPoolExecutor(max_workers=20)
 
@@ -27,7 +28,7 @@ CF_ACCESS_CLIENT_ID = os.environ.get('CF_ACCESS_CLIENT_ID')
 CF_ACCESS_CLIENT_SECRET = os.environ.get('CF_ACCESS_CLIENT_SECRET')
 
 PHANTOMJSCLOUD_API_KEY = os.environ.get('PHANTOMJSCLOUD_API_KEY')
-PHANTOMJSCLOUD_WEBSITES = ['https://twitter.com/', 'https://t.co/', 'https://medium.com/', 'https://app.mailbrew.com/', 'https://us12.campaign-archive.com', 'https://news.ycombinator.com', 'https://www.bloomberg.com']
+PHANTOMJSCLOUD_WEBSITES = ['https://twitter.com/', 'https://t.co/', 'https://medium.com/', 'https://app.mailbrew.com/', 'https://us12.campaign-archive.com', 'https://news.ycombinator.com', 'https://www.bloomberg.com', 'https://*.substack.com/']
 
 slack_app = App(
     token=os.environ.get("SLACK_TOKEN"),
@@ -68,7 +69,13 @@ def extract_urls_from_event(event):
     return list(urls)
 
 def check_if_need_use_phantomjscloud(url):
-    return any(url.startswith(site) for site in PHANTOMJSCLOUD_WEBSITES)
+    for site in PHANTOMJSCLOUD_WEBSITES:
+        if '*' in site:
+            if fnmatch.fnmatch(url, site):
+                return True
+        elif url.startswith(site):
+            return True
+    return False
 
 def get_urls(urls):
     rss_urls = []
