@@ -10,7 +10,7 @@ import json
 from slack_bolt import App
 import requests
 from slack_bolt.adapter.flask import SlackRequestHandler
-from llama_index import GPTSimpleVectorIndex, LLMPredictor, RssReader
+from llama_index import GPTListIndex, GPTSimpleVectorIndex, LLMPredictor, RssReader
 from llama_index.readers.schema.base import Document
 from llama_index.prompts.prompts import QuestionAnswerPrompt
 from langchain.chat_models import ChatOpenAI
@@ -57,16 +57,6 @@ def insert_space(text):
     text = text.replace('  ', ' ')
 
     return text
-
-def extract_urls_from_event(event):
-    urls = set()
-    for block in event['blocks']:
-        for element in block['elements']:
-            for e in element['elements']:
-                if e['type'] == 'link':
-                    url = urlparse(e['url']).geturl()
-                    urls.add(url)
-    return list(urls)
 
 def check_if_need_use_phantomjscloud(url):
     for site in PHANTOMJSCLOUD_WEBSITES:
@@ -151,11 +141,16 @@ def get_documents_from_urls(urls):
             documents.append(document)
     return documents
 
-def get_answer_from_chatGPT(message, logger):
+def format_dialog_messages(messages):
+    return "\n".join(messages)
+
+def get_answer_from_chatGPT(messages, logger):
+    dialog_messages = format_dialog_messages(messages)
     logger.info('=====> Use chatGPT to answer!')
+    logger.info(dialog_messages)
     completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": message}]
+        messages=[{"role": "user", "content": dialog_messages}]
     )
     logger.info(completion.usage)
     return completion.choices[0].message.content
@@ -165,39 +160,77 @@ QUESTION_ANSWER_PROMPT_TMPL = (
     "---------------------\n"
     "{context_str}"
     "\n---------------------\n"
-    "Given the context information and not prior knowledge, "
-    "Please answer this question line by line using the same language as the question: {query_str}\n"
+    "{query_str}\n"
 )
 QUESTION_ANSWER_PROMPT = QuestionAnswerPrompt(QUESTION_ANSWER_PROMPT_TMPL)
 
-def get_answer_from_llama_web(message, urls, logger):
+def get_answer_from_llama_web(messages, urls, logger):
+    dialog_messages = format_dialog_messages(messages)
     logger.info('=====> Use llama with chatGPT to answer!')
+    logger.info(dialog_messages)
     combained_urls = get_urls(urls)
     logger.info(combained_urls)
     documents = get_documents_from_urls(combained_urls)
-    llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo"))
+    llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0.2, model_name="gpt-3.5-turbo"))
     logger.info(documents)
-    index = GPTSimpleVectorIndex(documents, text_qa_template=QUESTION_ANSWER_PROMPT)
-    return index.query(message, llm_predictor=llm_predictor)
+    if len(documents) > 1:
+        index = GPTListIndex(documents)
+    else:
+        index = GPTSimpleVectorIndex(documents)
+    return index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=QUESTION_ANSWER_PROMPT)
+
+thread_message_history = {}
+MAX_THREAD_MESSAGE_HISTORY = 10
+
+def update_thread_history(thread_ts, message_str, urls=None):
+    if urls is not None:
+        thread_message_history[thread_ts]['context_urls'].update(urls)
+    if thread_ts in thread_message_history:
+        dialog_texts = thread_message_history[thread_ts]['dialog_texts']
+        dialog_texts.append(message_str)
+        if len(dialog_texts) > MAX_THREAD_MESSAGE_HISTORY:
+            dialog_texts = dialog_texts[-MAX_THREAD_MESSAGE_HISTORY:]
+        thread_message_history[thread_ts]['dialog_texts'] = dialog_texts
+    else:
+        thread_message_history[thread_ts]['dialog_texts'] = [message_str]
+
+def extract_urls_from_event(event):
+    urls = set()
+    for block in event['blocks']:
+        for element in block['elements']:
+            for e in element['elements']:
+                if e['type'] == 'link':
+                    url = urlparse(e['url']).geturl()
+                    urls.add(url)
+    return list(urls)
 
 @slack_app.event("app_mention")
 def handle_mentions(event, say, logger):
-    logger.info(event)
     user = event["user"]
-    text = event["text"]
     thread_ts = event["ts"]
-    user_message = text.replace('<@U04TCNR9MNF>', '')
 
-    message_normalized = insert_space(user_message)
-    urls = extract_urls_from_event(event)
+    parent_thread_ts = event["thread_ts"] if "thread_ts" in event else thread_ts
+    if parent_thread_ts not in thread_message_history:
+        thread_message_history[parent_thread_ts] = { 'dialog_texts': [], 'context_urls': set()}
 
-    if len(urls) > 0:
-        future = executor.submit(get_answer_from_llama_web, message_normalized, urls, logger)
+    if "text" in event:
+        update_thread_history(parent_thread_ts, 'User: %s' % insert_space(event["text"].replace('<@U04TCNR9MNF>', '')), extract_urls_from_event(event))
+    
+    urls = thread_message_history[parent_thread_ts]['context_urls']
+
+    logger.info('=====> Current thread conversation messages are:')
+    logger.info(thread_message_history[parent_thread_ts])
+
+    # TODO: https://github.com/jerryjliu/llama_index/issues/778
+    # if it can get the context_str, then put this prompt into the thread_message_history to provide more context to the chatGPT
+    if len(extract_urls_from_event(event)) > 0: # if this conversation has urls, use llama with all urls in this thread
+        future = executor.submit(get_answer_from_llama_web, thread_message_history[parent_thread_ts]['dialog_texts'], list(urls), logger)
     else:
-        future = executor.submit(get_answer_from_chatGPT, message_normalized, logger)
+        future = executor.submit(get_answer_from_chatGPT, thread_message_history[parent_thread_ts]['dialog_texts'], logger)
 
     try:
         gpt_response = future.result(timeout=300)
+        update_thread_history(parent_thread_ts, 'AI: %s' % insert_space(f'{gpt_response}'))
         logger.info(gpt_response)
         say(f'<@{user}>, {gpt_response}', thread_ts=thread_ts)
     except concurrent.futures.TimeoutError:
