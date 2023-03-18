@@ -26,16 +26,18 @@ For now it is in development, but you can try it out by join this [channel](http
   - RSS is a bunch of links, so it is equivalent to reading a web page to get the content.
 - [x] ~~Support newsletter reading with chatGPT~~
   - Most newsletters are public and can be accessed online, so we can just give the url to the slack bot.
-- Index fine-tune 🚩
-  - [ ] Use the [GPTListIndex](https://github.com/jerryjliu/llama_index/issues/753#issuecomment-1472387421) to summarize multiple URLs
 - Prompt fine-tue 🚩
   - [ ] Support for custom `prompt`
   - [ ] Auto collect the good `prompt` from the slack channel by emoji reactions
 - Cost saving 🚩
   - [ ] by caching the web page llama index
-    - Consider to use [sqlite-vss](https://github.com/asg017/sqlite-vss) to store and search the text embeddings
+    - ~~Consider to use [sqlite-vss](https://github.com/asg017/sqlite-vss) to store and search the text embeddings~~
+    - Use [chromadb](https://github.com/chroma-core/chroma) to store and search the text embeddings
   - [ ] Consider to use [sentence-transformers](https://github.com/UKPLab/sentence-transformers) or [txtai](https://github.com/neuml/txtai) to generate [embeddings](https://github.com/asg017/sqlite-vss/blob/main/examples/headlines/build/add_embeddings.py) (vectors)
 - [ ] Bot can read historical messages from the same thread, thus providing context to chatGPT 🚩
+- Index fine-tune 🚩
+  - [ ] Use the [GPTListIndex](https://github.com/jerryjliu/llama_index/issues/753#issuecomment-1472387421) to summarize multiple URLs
+  - [ ] Use the `GPTTreeIndex` with `summarize` mode to summarize a single web page
 - [ ] Bot regularly summarizes news in the slack channel 🚩
   - Refer to [this](https://github.com/SkywalkerDarren/chatWeb/blob/c2ad05a97aecbe1bc0c846476ea003640f2a0f2e/main.py#L144-L175) approach
 - Support file reading and analysis
