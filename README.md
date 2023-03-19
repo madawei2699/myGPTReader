@@ -26,14 +26,15 @@ For now it is in development, but you can try it out by join this [channel](http
   - RSS is a bunch of links, so it is equivalent to reading a web page to get the content.
 - [x] ~~Support newsletter reading with chatGPT~~
   - Most newsletters are public and can be accessed online, so we can just give the url to the slack bot.
-- Prompt fine-tue 🚩
-  - [ ] Support for custom `prompt`
+- Prompt fine-tue
+  - [x] Support for custom `prompt`
+  - [ ] Show `prompt` templates by bot slash command 🚩
   - [ ] Auto collect the good `prompt` from the slack channel by emoji reactions
-- Cost saving 🚩
-  - [ ] by caching the web page llama index
+- Cost saving
+  - [x] by caching the web page llama index
     - ~~Consider to use [sqlite-vss](https://github.com/asg017/sqlite-vss) to store and search the text embeddings~~
     - Use [chromadb](https://github.com/chroma-core/chroma) to store and search the text embeddings
-  - [ ] Consider to use [sentence-transformers](https://github.com/UKPLab/sentence-transformers) or [txtai](https://github.com/neuml/txtai) to generate [embeddings](https://github.com/asg017/sqlite-vss/blob/main/examples/headlines/build/add_embeddings.py) (vectors)
+  - [x] Consider to use [sentence-transformers](https://github.com/UKPLab/sentence-transformers) or [txtai](https://github.com/neuml/txtai) to generate [embeddings](https://github.com/asg017/sqlite-vss/blob/main/examples/headlines/build/add_embeddings.py) (vectors)
 - [x] Bot can read historical messages from the same thread, thus providing context to chatGPT
 - Index fine-tune
   - [x] Use the [GPTListIndex](https://github.com/jerryjliu/llama_index/issues/753#issuecomment-1472387421) to summarize multiple URLs
@@ -47,9 +48,9 @@ For now it is in development, but you can try it out by join this [channel](http
     - may use GPT4
   - [ ] docx
   - [ ] txt
-- [ ] Integrated with Azure OpenAI Service
-- [ ] Support voice reading with self-hosting [whisper](https://github.com/aarnphm/whispercpp)❓
+- [ ] Support voice reading with self-hosting [whisper](https://github.com/aarnphm/whispercpp)
   - (whisper -> chatGPT -> azure text2speech) to play language speaking practices 💥
+- [ ] Integrated with Azure OpenAI Service
 - [ ] Support discord bot ❓
 - [ ] Rewrite the code in Typescript ❓
 - [ ] Upgrade chat model (gpt-3.5-turbo) to GPT4 (gpt-4-0314) 💥

@@ -2,6 +2,7 @@ from urllib.parse import urlparse
 from flask import Flask, request
 import re
 import os
+import hashlib
 import openai
 import feedparser
 import validators
@@ -10,12 +11,16 @@ import json
 from slack_bolt import App
 import requests
 from slack_bolt.adapter.flask import SlackRequestHandler
-from llama_index import GPTListIndex, GPTSimpleVectorIndex, LLMPredictor, RssReader
+from llama_index import GPTChromaIndex, LLMPredictor, RssReader
 from llama_index.readers.schema.base import Document
 from llama_index.prompts.prompts import QuestionAnswerPrompt
+from llama_index import LangchainEmbedding
+from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain.chat_models import ChatOpenAI
+from chromadb.config import Settings
 import concurrent.futures
 import fnmatch
+import chromadb
 
 executor = concurrent.futures.ThreadPoolExecutor(max_workers=20)
 
@@ -29,6 +34,13 @@ CF_ACCESS_CLIENT_SECRET = os.environ.get('CF_ACCESS_CLIENT_SECRET')
 
 PHANTOMJSCLOUD_API_KEY = os.environ.get('PHANTOMJSCLOUD_API_KEY')
 PHANTOMJSCLOUD_WEBSITES = ['https://twitter.com/', 'https://t.co/', 'https://medium.com/', 'https://app.mailbrew.com/', 'https://us12.campaign-archive.com', 'https://news.ycombinator.com', 'https://www.bloomberg.com', 'https://*.substack.com/']
+
+chroma_client = chromadb.Client(Settings(
+    chroma_db_impl="duckdb+parquet",
+    persist_directory="/data/myGPTReader/chroma_db",
+))
+
+embed_model = LangchainEmbedding(HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2"))
 
 slack_app = App(
     token=os.environ.get("SLACK_TOKEN"),
@@ -141,6 +153,11 @@ def get_documents_from_urls(urls):
             documents.append(document)
     return documents
 
+def get_unique_md5(urls):
+    urls_str = ''.join(sorted(urls))
+    hashed_str = hashlib.md5(urls_str.encode('utf-8')).hexdigest()
+    return hashed_str
+
 def format_dialog_messages(messages):
     return "\n".join(messages)
 
@@ -173,10 +190,8 @@ def get_answer_from_llama_web(messages, urls, logger):
     documents = get_documents_from_urls(combained_urls)
     llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0.2, model_name="gpt-3.5-turbo"))
     logger.info(documents)
-    if len(documents) > 1:
-        index = GPTListIndex(documents)
-    else:
-        index = GPTSimpleVectorIndex(documents)
+    chroma_collection = chroma_client.get_or_create_collection(get_unique_md5(urls))
+    index = GPTChromaIndex(documents, chroma_collection=chroma_collection, embed_model=embed_model)
     return index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=QUESTION_ANSWER_PROMPT)
 
 thread_message_history = {}
