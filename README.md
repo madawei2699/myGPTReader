@@ -28,8 +28,8 @@ For now it is in development, but you can try it out by join this [channel](http
   - Most newsletters are public and can be accessed online, so we can just give the url to the slack bot.
 - Prompt fine-tue
   - [x] Support for custom `prompt`
-  - [ ] Show `prompt` templates by bot shortcut 🚩
-  - [ ] Auto collect the good `prompt` from the slack channel by emoji reactions
+  - [ ] Show `prompt` templates by slack app shortcut 🚩
+  - [ ] Auto collect the good `prompt` to `#gpt-prompt` channel by message shortcut
 - Cost saving
   - [x] by caching the web page llama index
     - ~~Consider to use [sqlite-vss](https://github.com/asg017/sqlite-vss) to store and search the text embeddings~~
