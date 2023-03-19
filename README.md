@@ -47,6 +47,7 @@ For now it is in development, but you can try it out by join this [channel](http
   - [ ] DOCX
   - [ ] TEXT
   - [ ] PDF
+    - Use [Google Vision](https://cloud.google.com/vision/docs/pdf) to handle the PDF reading
   - [ ] Image
     - may use GPT4
 - [ ] Support voice reading with self-hosting [whisper](https://github.com/aarnphm/whispercpp)
