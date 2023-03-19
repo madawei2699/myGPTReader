@@ -35,6 +35,8 @@ For now it is in development, but you can try it out by join this [channel](http
     - ~~Consider to use [sqlite-vss](https://github.com/asg017/sqlite-vss) to store and search the text embeddings~~
     - Use [chromadb](https://github.com/chroma-core/chroma) to store and search the text embeddings
   - [x] Consider to use [sentence-transformers](https://github.com/UKPLab/sentence-transformers) or [txtai](https://github.com/neuml/txtai) to generate [embeddings](https://github.com/asg017/sqlite-vss/blob/main/examples/headlines/build/add_embeddings.py) (vectors)
+  - [ ] Consider to fine-tue the chunk size of index node and prompt to save the cost
+    - If the chunk size is too big, it will cause the index node to be too large and the cost will be high.
 - [x] Bot can read historical messages from the same thread, thus providing context to chatGPT
 - Index fine-tune
   - [x] Use the [GPTListIndex](https://github.com/jerryjliu/llama_index/issues/753#issuecomment-1472387421) to summarize multiple URLs
