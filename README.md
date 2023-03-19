@@ -43,6 +43,7 @@ For now it is in development, but you can try it out by join this [channel](http
   - Refer to [this](https://github.com/SkywalkerDarren/chatWeb/blob/c2ad05a97aecbe1bc0c846476ea003640f2a0f2e/main.py#L144-L175) approach
 - Support file reading and analysis 💥
   - Considering the expensive billing, it needs to use the slack userID whitelist to restrict the access this feature
+  - Need to cache the file Documents to save extract cost
   - [ ] EPUB
   - [ ] DOCX
   - [ ] TEXT
