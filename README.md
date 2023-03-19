@@ -28,7 +28,7 @@ For now it is in development, but you can try it out by join this [channel](http
   - Most newsletters are public and can be accessed online, so we can just give the url to the slack bot.
 - Prompt fine-tue
   - [x] Support for custom `prompt`
-  - [ ] Show `prompt` templates by slack app shortcut 🚩
+  - [x] Show `prompt` templates by slack app slash commands
   - [ ] Auto collect the good `prompt` to `#gpt-prompt` channel by message shortcut
 - Cost saving
   - [x] by caching the web page llama index
@@ -39,7 +39,7 @@ For now it is in development, but you can try it out by join this [channel](http
 - Index fine-tune
   - [x] Use the [GPTListIndex](https://github.com/jerryjliu/llama_index/issues/753#issuecomment-1472387421) to summarize multiple URLs
   - [ ] Use the `GPTTreeIndex` with `summarize` mode to summarize a single web page
-- [ ] Bot regularly summarizes news in the slack channel 🚩
+- [ ] Bot regularly summarizes news in the slack channel (`#daily-news`) 🚩
   - Refer to [this](https://github.com/SkywalkerDarren/chatWeb/blob/c2ad05a97aecbe1bc0c846476ea003640f2a0f2e/main.py#L144-L175) approach
 - Support file reading and analysis 💥
   - [ ] EPUB

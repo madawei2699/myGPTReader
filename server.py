@@ -48,6 +48,9 @@ slack_app = App(
 )
 slack_handler = SlackRequestHandler(slack_app)
 
+with open("prompt.json", "r") as f:
+    prompt_data = json.load(f)
+
 @app.route("/slack/events", methods=["POST"])
 def slack_events():
     return slack_handler.handle(request)
@@ -253,6 +256,256 @@ def handle_mentions(event, say, logger):
         err_msg = 'Task timedout(5m) and was canceled.'
         logger.warning(err_msg)
         say(f'<@{user}>, {err_msg}', thread_ts=thread_ts)
+
+def buld_prompt_blocks(prompt_key):
+    return [
+        {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": f"{prompt_data[prompt_key]['name']['cn']}"
+            }
+        },
+        {
+            "type": "section",
+            "fields": [
+                {
+                    "type": "mrkdwn",
+                    "text": f"{prompt_data[prompt_key]['prompt']['cn']}"
+                },
+            ]
+        },
+        {
+            "type": "section",
+            "fields": [
+                {
+                    "type": "mrkdwn",
+                    "text": "---\nPlease copy the prompt to reply to me."
+                }
+            ]
+        },
+    ]
+
+@slack_app.command("/gpt-as-novelist")
+def handle_command_gpt_as_novelist(ack, say, command):
+    ack()
+    channel_id = command["channel_id"]
+    user_id = command["user_id"]
+    blocks = buld_prompt_blocks('gpt-as-novelist')
+
+    say(channel=channel_id,
+        text=f"<@{user_id}>, let's talk!",
+        blocks=blocks,
+        reply_broadcast=True
+    )
+
+@slack_app.command("/gpt-as-terminal")
+def handle_command_gpt_as_novelist(ack, say, command):
+    ack()
+    channel_id = command["channel_id"]
+    user_id = command["user_id"]
+    blocks = buld_prompt_blocks('gpt-as-terminal')
+
+    say(channel=channel_id,
+        text=f"<@{user_id}>, let's talk!",
+        blocks=blocks,
+        reply_broadcast=True
+    )
+
+@slack_app.command("/gpt-as-en-translator")
+def handle_command_gpt_as_novelist(ack, say, command):
+    ack()
+    channel_id = command["channel_id"]
+    user_id = command["user_id"]
+    blocks = buld_prompt_blocks('gpt-as-en-translator')
+
+    say(channel=channel_id,
+        text=f"<@{user_id}>, let's talk!",
+        blocks=blocks,
+        reply_broadcast=True
+    )
+
+@slack_app.command("/gpt-as-en-dict")
+def handle_command_gpt_as_novelist(ack, say, command):
+    ack()
+    channel_id = command["channel_id"]
+    user_id = command["user_id"]
+    blocks = buld_prompt_blocks('gpt-as-en-dict')
+
+    say(channel=channel_id,
+        text=f"<@{user_id}>, let's talk!",
+        blocks=blocks,
+        reply_broadcast=True
+    )
+
+@slack_app.command("/gpt-as-interviewer")
+def handle_command_gpt_as_novelist(ack, say, command):
+    ack()
+    channel_id = command["channel_id"]
+    user_id = command["user_id"]
+    blocks = buld_prompt_blocks('gpt-as-interviewer')
+
+    say(channel=channel_id,
+        text=f"<@{user_id}>, let's talk!",
+        blocks=blocks,
+        reply_broadcast=True
+    )
+
+@slack_app.command("/gpt-as-js-console")
+def handle_command_gpt_as_novelist(ack, say, command):
+    ack()
+    channel_id = command["channel_id"]
+    user_id = command["user_id"]
+    blocks = buld_prompt_blocks('gpt-as-js-console')
+
+    say(channel=channel_id,
+        text=f"<@{user_id}>, let's talk!",
+        blocks=blocks,
+        reply_broadcast=True
+    )
+
+@slack_app.command("/gpt-as-travel-guide")
+def handle_command_gpt_as_novelist(ack, say, command):
+    ack()
+    channel_id = command["channel_id"]
+    user_id = command["user_id"]
+    blocks = buld_prompt_blocks('gpt-as-travel-guide')
+
+    say(channel=channel_id,
+        text=f"<@{user_id}>, let's talk!",
+        blocks=blocks,
+        reply_broadcast=True
+    )
+
+@slack_app.command("/gpt-as-story-teller")
+def handle_command_gpt_as_novelist(ack, say, command):
+    ack()
+    channel_id = command["channel_id"]
+    user_id = command["user_id"]
+    blocks = buld_prompt_blocks('gpt-as-story-teller')
+
+    say(channel=channel_id,
+        text=f"<@{user_id}>, let's talk!",
+        blocks=blocks,
+        reply_broadcast=True
+    )
+
+@slack_app.command("/gpt-as-math-teacher")
+def handle_command_gpt_as_novelist(ack, say, command):
+    ack()
+    channel_id = command["channel_id"]
+    user_id = command["user_id"]
+    blocks = buld_prompt_blocks('gpt-as-math-teacher')
+
+    say(channel=channel_id,
+        text=f"<@{user_id}>, let's talk!",
+        blocks=blocks,
+        reply_broadcast=True
+    )
+
+@slack_app.command("/gpt-as-ai-doctor")
+def handle_command_gpt_as_novelist(ack, say, command):
+    ack()
+    channel_id = command["channel_id"]
+    user_id = command["user_id"]
+    blocks = buld_prompt_blocks('gpt-as-ai-doctor')
+
+    say(channel=channel_id,
+        text=f"<@{user_id}>, let's talk!",
+        blocks=blocks,
+        reply_broadcast=True
+    )
+
+@slack_app.command("/gpt-as-financer")
+def handle_command_gpt_as_novelist(ack, say, command):
+    ack()
+    channel_id = command["channel_id"]
+    user_id = command["user_id"]
+    blocks = buld_prompt_blocks('gpt-as-financer')
+
+    say(channel=channel_id,
+        text=f"<@{user_id}>, let's talk!",
+        blocks=blocks,
+        reply_broadcast=True
+    )
+
+@slack_app.command("/gpt-as-investor")
+def handle_command_gpt_as_novelist(ack, say, command):
+    ack()
+    channel_id = command["channel_id"]
+    user_id = command["user_id"]
+    blocks = buld_prompt_blocks('gpt-as-investor')
+
+    say(channel=channel_id,
+        text=f"<@{user_id}>, let's talk!",
+        blocks=blocks,
+        reply_broadcast=True
+    )
+
+@slack_app.command("/gpt-as-encoverage-book")
+def handle_command_gpt_as_novelist(ack, say, command):
+    ack()
+    channel_id = command["channel_id"]
+    user_id = command["user_id"]
+    blocks = buld_prompt_blocks('gpt-as-encoverage-book')
+
+    say(channel=channel_id,
+        text=f"<@{user_id}>, let's talk!",
+        blocks=blocks,
+        reply_broadcast=True
+    )
+
+@slack_app.command("/gpt-as-text-gamer")
+def handle_command_gpt_as_novelist(ack, say, command):
+    ack()
+    channel_id = command["channel_id"]
+    user_id = command["user_id"]
+    blocks = buld_prompt_blocks('gpt-as-text-gamer')
+
+    say(channel=channel_id,
+        text=f"<@{user_id}>, let's talk!",
+        blocks=blocks,
+        reply_broadcast=True
+    )
+
+@slack_app.command("/gpt-as-it-architect")
+def handle_command_gpt_as_novelist(ack, say, command):
+    ack()
+    channel_id = command["channel_id"]
+    user_id = command["user_id"]
+    blocks = buld_prompt_blocks('gpt-as-it-architect')
+
+    say(channel=channel_id,
+        text=f"<@{user_id}>, let's talk!",
+        blocks=blocks,
+        reply_broadcast=True
+    )
+
+@slack_app.command("/gpt-as-fullstack-dev")
+def handle_command_gpt_as_novelist(ack, say, command):
+    ack()
+    channel_id = command["channel_id"]
+    user_id = command["user_id"]
+    blocks = buld_prompt_blocks('gpt-as-fullstack-dev')
+
+    say(channel=channel_id,
+        text=f"<@{user_id}>, let's talk!",
+        blocks=blocks,
+        reply_broadcast=True
+    )
+
+@slack_app.command("/gpt-as-regex-master")
+def handle_command_gpt_as_novelist(ack, say, command):
+    ack()
+    channel_id = command["channel_id"]
+    user_id = command["user_id"]
+    blocks = buld_prompt_blocks('gpt-as-regex-master')
+
+    say(channel=channel_id,
+        text=f"<@{user_id}>, let's talk!",
+        blocks=blocks,
+        reply_broadcast=True
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)
