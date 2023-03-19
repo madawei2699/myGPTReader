@@ -42,11 +42,11 @@ For now it is in development, but you can try it out by join this [channel](http
 - [ ] Bot regularly summarizes news in the slack channel 🚩
   - Refer to [this](https://github.com/SkywalkerDarren/chatWeb/blob/c2ad05a97aecbe1bc0c846476ea003640f2a0f2e/main.py#L144-L175) approach
 - Support file reading and analysis 💥
+  - [ ] EPUB
+  - [ ] DOCX
+  - [ ] TEXT
   - [ ] PDF
-  - [ ] epub
-  - [ ] docx
-  - [ ] txt
-  - [ ] image
+  - [ ] Image
     - may use GPT4
 - [ ] Support voice reading with self-hosting [whisper](https://github.com/aarnphm/whispercpp)
   - (whisper -> chatGPT -> azure text2speech) to play language speaking practices 💥
