@@ -11,6 +11,10 @@ kill_timeout = 5
 [build.settings]
   pythonbase = "3.9-slim-buster"
 
+[mount]
+  source = "data"
+  destination = "/data/myGPTReader"
+
 [env]
   PORT = "8080"
 
