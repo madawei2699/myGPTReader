@@ -44,10 +44,10 @@ For now it is in development, but you can try it out by join this [channel](http
 - Support file reading and analysis 💥
   - [ ] PDF
   - [ ] epub
-  - [ ] image
-    - may use GPT4
   - [ ] docx
   - [ ] txt
+  - [ ] image
+    - may use GPT4
 - [ ] Support voice reading with self-hosting [whisper](https://github.com/aarnphm/whispercpp)
   - (whisper -> chatGPT -> azure text2speech) to play language speaking practices 💥
 - [ ] Integrated with Azure OpenAI Service
