@@ -68,6 +68,8 @@ For now it is in development, but you can try it out by join this [channel](http
 - [ ] Support voice reading with self-hosting [whisper](https://github.com/aarnphm/whispercpp)
   - (whisper -> chatGPT -> azure text2speech) to play language speaking practices 💥
 - [ ] Integrated with Azure OpenAI Service
+- [ ] User access limit
+  - Limit the number of requests to bot per user per day to save the cost
 - [ ] Support discord bot ❓
 - [ ] Rewrite the code in Typescript ❓
 - [ ] Upgrade chat model (gpt-3.5-turbo) to GPT4 (gpt-4-0314) 💥
