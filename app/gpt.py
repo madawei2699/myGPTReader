@@ -1,27 +1,24 @@
 
 import os
+import logging
 import hashlib
 import openai
-from llama_index import GPTChromaIndex, LLMPredictor, RssReader
+from llama_index import GPTSimpleVectorIndex, LLMPredictor, RssReader
 from llama_index.prompts.prompts import QuestionAnswerPrompt
 from llama_index.readers.schema.base import Document
-# from llama_index import LangchainEmbedding
-# from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain.chat_models import ChatOpenAI
-from chromadb.config import Settings
-import chromadb
 
 from app.fetch_web_post import get_urls, scrape_website, scrape_website_by_phantomjscloud
 
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 openai.api_key = OPENAI_API_KEY
 
-chroma_client = chromadb.Client(Settings(
-    chroma_db_impl="duckdb+parquet",
-    persist_directory="/data/myGPTReader/chroma_db",
-))
+llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0.2, model_name="gpt-3.5-turbo"))
 
-# embed_model = LangchainEmbedding(HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2"))
+index_cache_web_dir = '/tmp/myGPTReader/cache_web/'
+
+if not os.path.exists(index_cache_web_dir):
+    os.makedirs(index_cache_web_dir)
 
 def get_unique_md5(urls):
     urls_str = ''.join(sorted(urls))
@@ -45,15 +42,15 @@ def get_documents_from_urls(urls):
             documents.append(document)
     return documents
 
-def get_answer_from_chatGPT(messages, logger):
+def get_answer_from_chatGPT(messages):
     dialog_messages = format_dialog_messages(messages)
-    logger.info('=====> Use chatGPT to answer!')
-    logger.info(dialog_messages)
+    logging.info('=====> Use chatGPT to answer!')
+    logging.info(dialog_messages)
     completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": dialog_messages}]
     )
-    logger.info(completion.usage)
+    logging.info(completion.usage)
     return completion.choices[0].message.content
 
 QUESTION_ANSWER_PROMPT_TMPL = (
@@ -65,16 +62,26 @@ QUESTION_ANSWER_PROMPT_TMPL = (
 )
 QUESTION_ANSWER_PROMPT = QuestionAnswerPrompt(QUESTION_ANSWER_PROMPT_TMPL)
 
-def get_answer_from_llama_web(messages, urls, logger):
+def get_index_from_web_cache(name):
+    if not os.path.exists(index_cache_web_dir + name):
+        return None
+    index = GPTSimpleVectorIndex.load_from_disk(index_cache_web_dir + name)
+    logging.info(f"=====> Get index from cache: {index_cache_web_dir + name}")
+    return index
+
+def get_answer_from_llama_web(messages, urls):
     dialog_messages = format_dialog_messages(messages)
-    logger.info('=====> Use llama with chatGPT to answer!')
-    logger.info(dialog_messages)
+    logging.info('=====> Use llama with chatGPT to answer!')
+    logging.info(dialog_messages)
     combained_urls = get_urls(urls)
-    logger.info(combained_urls)
-    documents = get_documents_from_urls(combained_urls)
-    llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0.2, model_name="gpt-3.5-turbo"))
-    logger.info(documents)
-    chroma_collection = chroma_client.get_or_create_collection(get_unique_md5(urls))
-    index = GPTChromaIndex(documents, chroma_collection=chroma_collection)
-    # index = GPTChromaIndex(documents, chroma_collection=chroma_collection, embed_model=embed_model) # Not good, rollback to OpenAI
+    logging.info(combained_urls)
+    index_file_name = get_unique_md5(urls)
+    index = get_index_from_web_cache(index_file_name)
+    if index is None:
+        logging.info(f"=====> Build index from web!")
+        documents = get_documents_from_urls(combained_urls)
+        logging.info(documents)
+        index = GPTSimpleVectorIndex(documents)
+        logging.info(f"=====> Save index to disk path: {index_cache_web_dir + index_file_name}")
+        index.save_to_disk(index_cache_web_dir + index_file_name)
     return index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=QUESTION_ANSWER_PROMPT)

@@ -33,7 +33,8 @@ For now it is in development, but you can try it out by join this [channel](http
 - Cost saving
   - [x] by caching the web page llama index
     - ~~Consider to use [sqlite-vss](https://github.com/asg017/sqlite-vss) to store and search the text embeddings~~
-    - Use [chromadb](https://github.com/chroma-core/chroma) to store and search the text embeddings
+    - ~~Use [chromadb](https://github.com/chroma-core/chroma) to store and search the text embeddings~~
+    - Use the llama index file to restore the index
   - [x] Consider to use [sentence-transformers](https://github.com/UKPLab/sentence-transformers) or [txtai](https://github.com/neuml/txtai) to generate [embeddings](https://github.com/asg017/sqlite-vss/blob/main/examples/headlines/build/add_embeddings.py) (vectors)
     - Not good as the embeddings of OpenAI, rollback to use the OpenAI embeddings, and if enable to use the custom embeddings, the minimum of server's memory is 2GB which still increase the cost.
   - [ ] Consider to fine-tue the chunk size of index node and prompt to save the cost

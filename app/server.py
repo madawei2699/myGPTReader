@@ -116,10 +116,10 @@ def handle_mentions(event, say, logger):
 
     # TODO: https://github.com/jerryjliu/llama_index/issues/778
     # if it can get the context_str, then put this prompt into the thread_message_history to provide more context to the chatGPT
-    if len(extract_urls_from_event(event)) > 0: # if this conversation has urls, use llama with all urls in this thread
-        future = executor.submit(get_answer_from_llama_web, thread_message_history[parent_thread_ts]['dialog_texts'], list(urls), logger)
+    if len(urls) > 0: # if this conversation has urls, use llama with all urls in this thread
+        future = executor.submit(get_answer_from_llama_web, thread_message_history[parent_thread_ts]['dialog_texts'], list(urls))
     else:
-        future = executor.submit(get_answer_from_chatGPT, thread_message_history[parent_thread_ts]['dialog_texts'], logger)
+        future = executor.submit(get_answer_from_chatGPT, thread_message_history[parent_thread_ts]['dialog_texts'])
 
     try:
         gpt_response = future.result(timeout=300)

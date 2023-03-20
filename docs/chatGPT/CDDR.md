@@ -2710,3 +2710,61 @@ print(html_content)
 In this example, we first parse the RSS feed using the `feedparser` library. Then, we get the link for the latest update by accessing the `.link` attribute of the first item in the `entries` list of the feed object.
 
 We then use the `requests` library to fetch the HTML content of the latest link. Finally, we can do whatever we need to with the HTML content (e.g., parse it using BeautifulSoup, extract data from it, etc.).
+
+---
+
+## 2023-03-20
+
+---
+
+You
+---
+
+ 
+
+. ├── LICENSE ├── Procfile ├── README.md ├── \_\_pycache\_\_ │ ├── server.cpython-310.pyc │ └── slash\_command.cpython-310.pyc ├── app │ ├── \_\_init\_\_.py │ ├── \_\_pycache\_\_ │ │ ├── \_\_init\_\_.cpython-310.pyc │ │ ├── fetch\_web\_post.cpython-310.pyc │ │ ├── server.cpython-310.pyc │ │ └── slash\_command.cpython-310.pyc │ ├── daily\_hot\_news.py │ ├── data │ │ ├── hot\_news\_rss.json │ │ └── prompt.json │ ├── fetch\_web\_post.py │ ├── gpt.py │ ├── server.py │ └── slash\_command.py ├── docs │ └── chatGPT │ └── CDDR.md ├── fly.toml └── requirements.txt this is my python project, but when I run \`python app/gpt.py\`, it show errors: File "/Users/dawei.ma/Workspace/personal/side\_project/myGPTReader/app/gpt.py", line 11, in <module> from app.fetch\_web\_post import get\_urls, scrape\_website, scrape\_website\_by\_phantomjscloud ModuleNotFoundError: No module named 'app'
+
+ChatGPT
+-------
+
+Based on the error message, it looks like Python is unable to find a module named 'app', which is where `fetch_web_post` resides. This might be due to the way you're running the `gpt.py` script.
+
+One solution is to add an empty file named `__init__.py` in the root directory and in the `app` directory. This file signals to Python that these directories represent packages, which may contain modules.
+
+Another solution could be to modify the import statements in your `gpt.py` file as follows:
+
+```
+from fetch_web_post import get_urls, scrape_website, scrape_website_by_phantomjscloud
+```
+
+This should work if you're running the `gpt.py` script from the root directory of your project using the command `python app/gpt.py`.
+
+You
+---
+
+ 
+
+but if I not use the app.xxx, when run gunicorn app.server:app, it shows can not find the daily\_hot\_news module
+
+ChatGPT
+-------
+
+It looks like you might have an issue with importing modules correctly in your Python project.
+
+Based on the error message that you see, it looks like `gpt.py` cannot find the `fetch_web_post` module because you're using a relative import from the `app` package instead of an absolute one.
+
+To resolve this issue, try changing the import statement in `gpt.py` to use an absolute import that references the root level of your project:
+
+```python
+from myGPTReader.app.fetch_web_post import get_urls, scrape_website, scrape_website_by_phantomjscloud
+```
+
+This way, Python will always look for the `myGPTReader` package at the root level and can find all the packages inside.
+
+Regarding the issue you're having when running `gunicorn app.server:app`, if you're receiving an error related to the `daily_hot_news` module not being found, make sure that the `daily_hot_news` module is actually in the `app` directory and that it has been imported correctly within the `server.py` module. If it's still not working, try adding the `app` directory to your Python path like so:
+
+```shell
+export PYTHONPATH="${PYTHONPATH}:/path/to/myGPTReader/app"
+```
+
+This should allow Python to find all the necessary modules even when you're running `gunicorn` from outside the `app` directory.
