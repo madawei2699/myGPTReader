@@ -13,3 +13,4 @@ html2text==2020.1.16
 feedparser==6.0.10
 validators==0.20.0
 chromadb==0.3.11
+Flask-APScheduler==1.12.4

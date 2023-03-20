@@ -41,9 +41,20 @@ For now it is in development, but you can try it out by join this [channel](http
 - Index fine-tune
   - [x] Use the [GPTListIndex](https://github.com/jerryjliu/llama_index/issues/753#issuecomment-1472387421) to summarize multiple URLs
   - [ ] Use the `GPTTreeIndex` with `summarize` mode to summarize a single web page
-- [ ] Bot regularly summarizes news in the slack channel (`#daily-news`) 🚩
-  - Refer to [this](https://github.com/SkywalkerDarren/chatWeb/blob/c2ad05a97aecbe1bc0c846476ea003640f2a0f2e/main.py#L144-L175) approach
-- Support file reading and analysis 💥
+- Bot regularly send hot ~~summarizes(expensive cost)~~ news in the slack channel (`#daily-news`)
+  - ~~Refer to [this](https://github.com/SkywalkerDarren/chatWeb/blob/c2ad05a97aecbe1bc0c846476ea003640f2a0f2e/main.py#L144-L175) approach~~
+    - World News
+      - [x] Zhihu daily hot answers
+      - [ ] V2EX daily hot topics
+      - [ ] 1point3acres daily hot topics
+      - [ ] Reddit world hot news
+    - Dev News
+      - [ ] Hacker News daily hot topics
+      - [ ] Product Hunt daily hot topics
+    - Invest News
+      - [ ] Xueqiu daily hot topics
+      - [ ] Jisilu daily hot topics
+- Support file reading and analysis 💥 🚩
   - Considering the expensive billing, it needs to use the slack userID whitelist to restrict the access this feature
   - Need to cache the file Documents to save extract cost
   - [ ] EPUB

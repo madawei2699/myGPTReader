@@ -2,13 +2,20 @@ import re
 import os
 from urllib.parse import urlparse
 from flask import Flask, request
+from flask_apscheduler import APScheduler
 from slack_bolt import App
 from slack_bolt.adapter.flask import SlackRequestHandler
 import concurrent.futures
+from app.daily_hot_news import build_zhihu_hot_news_blocks
 from app.gpt import get_answer_from_chatGPT, get_answer_from_llama_web
 from app.slash_command import register_slack_slash_commands
 
+class Config:
+    SCHEDULER_API_ENABLED = True
+
 executor = concurrent.futures.ThreadPoolExecutor(max_workers=20)
+
+schedule_channel = "#daily-news"
 
 app = Flask(__name__)
 
@@ -17,6 +24,20 @@ slack_app = App(
     signing_secret=os.environ.get("SLACK_SIGNING_SECRET")
 )
 slack_handler = SlackRequestHandler(slack_app)
+
+scheduler = APScheduler()
+scheduler.api_enabled = True
+scheduler.init_app(app)
+
+@scheduler.task('cron', id='daily_news_task', hour=0, minute=20)
+def schedule_news():
+   zhihu_news = build_zhihu_hot_news_blocks()
+   slack_app.client.chat_postMessage(
+        channel=schedule_channel,
+        text="",
+        blocks=zhihu_news,
+        reply_broadcast=True
+    )
 
 @app.route("/slack/events", methods=["POST"])
 def slack_events():
@@ -101,6 +122,7 @@ def handle_mentions(event, say, logger):
         say(f'<@{user}>, {err_msg}', thread_ts=thread_ts)
 
 register_slack_slash_commands(slack_app)
+scheduler.start()
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,11 @@
+{
+    "zhihu": {
+        "name": "知乎",
+        "rss": {
+            "hot": {
+                "name": "知乎热榜",
+                "url": "https://rsshub.app/zhihu/hotlist"
+            }
+        }
+    }
+}
