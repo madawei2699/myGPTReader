@@ -4,9 +4,9 @@ import hashlib
 import openai
 from llama_index import GPTChromaIndex, LLMPredictor, RssReader
 from llama_index.prompts.prompts import QuestionAnswerPrompt
-from llama_index import LangchainEmbedding
 from llama_index.readers.schema.base import Document
-from langchain.embeddings.huggingface import HuggingFaceEmbeddings
+# from llama_index import LangchainEmbedding
+# from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain.chat_models import ChatOpenAI
 from chromadb.config import Settings
 import chromadb
@@ -21,7 +21,7 @@ chroma_client = chromadb.Client(Settings(
     persist_directory="/data/myGPTReader/chroma_db",
 ))
 
-embed_model = LangchainEmbedding(HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2"))
+# embed_model = LangchainEmbedding(HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2"))
 
 def get_unique_md5(urls):
     urls_str = ''.join(sorted(urls))
@@ -75,5 +75,6 @@ def get_answer_from_llama_web(messages, urls, logger):
     llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0.2, model_name="gpt-3.5-turbo"))
     logger.info(documents)
     chroma_collection = chroma_client.get_or_create_collection(get_unique_md5(urls))
-    index = GPTChromaIndex(documents, chroma_collection=chroma_collection, embed_model=embed_model)
+    index = GPTChromaIndex(documents, chroma_collection=chroma_collection)
+    # index = GPTChromaIndex(documents, chroma_collection=chroma_collection, embed_model=embed_model) # Not good, rollback to OpenAI
     return index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=QUESTION_ANSWER_PROMPT)
