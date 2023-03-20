@@ -8,7 +8,7 @@ with open("app/data/hot_news_rss.json", "r") as f:
 
 TODAY = today = date.today()
 MAX_DESCRIPTION_LENGTH = 500
-MAX_POSTS = 15
+MAX_POSTS = 10
 
 
 def cut_string(text):
@@ -65,20 +65,17 @@ def build_slack_blocks(title, news):
 				"text": f"*{news_item['title']}*",
 				"type": "mrkdwn"
 			},
-            "accessory": {
-				"type": "button",
-				"text": {
-					"type": "plain_text",
-					"text": "原文链接",
-					"emoji": True
-				},
-				"url": f"{news_item['url']}"
-			}
         },{
             "type": "section",
             "text": {
 				"text": f"{news_item['summary']}",
 				"type": "plain_text"
+			},
+        },{
+            "type": "section",
+            "text": {
+				"text": f"原文链接：<{news_item['url']}>",
+				"type": "mrkdwn"
 			},
         },{
             "type": "divider"
@@ -92,3 +89,5 @@ def build_zhihu_hot_news_blocks():
     zhihu_hot_news_blocks = build_slack_blocks(
         zhihu_rss['name'], zhihu_hot_news)
     return zhihu_hot_news_blocks
+
+# print(json.dumps(build_zhihu_hot_news_blocks()))
