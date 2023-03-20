@@ -35,7 +35,7 @@ def get_post_urls_with_title(rss_url):
     updated_posts = []
     
     for entry in feed.entries:
-        published_time = entry.published_parsed
+        published_time = entry.published_parsed if 'published_parsed' in entry else None
         # published_date = date(published_time.tm_year,
         #                       published_time.tm_mon, published_time.tm_mday)
         updated_post = {}
@@ -82,12 +82,33 @@ def build_slack_blocks(title, news):
         }])
     return blocks
 
+def build_hot_news_blocks(news_key):
+    rss = rss_urls[news_key]['rss']['hot']
+    hot_news = get_post_urls_with_title(rss['url'])
+    hot_news_blocks = build_slack_blocks(
+        rss['name'], hot_news)
+    return hot_news_blocks
 
 def build_zhihu_hot_news_blocks():
-    zhihu_rss = rss_urls['zhihu']['rss']['hot']
-    zhihu_hot_news = get_post_urls_with_title(zhihu_rss['url'])
-    zhihu_hot_news_blocks = build_slack_blocks(
-        zhihu_rss['name'], zhihu_hot_news)
-    return zhihu_hot_news_blocks
+    return build_hot_news_blocks('zhihu')
 
-# print(json.dumps(build_zhihu_hot_news_blocks()))
+def build_v2ex_hot_news_blocks():
+    return build_hot_news_blocks('v2ex')
+
+def build_1point3acres_hot_news_blocks():
+    return build_hot_news_blocks('1point3acres')
+
+def build_reddit_news_hot_news_blocks():
+    return build_hot_news_blocks('reddit-news')
+
+def build_hackernews_news_hot_news_blocks():
+    return build_hot_news_blocks('hackernews')
+
+def build_producthunt_news_hot_news_blocks():
+    return build_hot_news_blocks('producthunt')
+
+def build_xueqiu_news_hot_news_blocks():
+    return build_hot_news_blocks('xueqiu')
+
+def build_jisilu_news_hot_news_blocks():
+    return build_hot_news_blocks('jisilu')

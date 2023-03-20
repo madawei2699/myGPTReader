@@ -45,15 +45,15 @@ For now it is in development, but you can try it out by join this [channel](http
   - ~~Refer to [this](https://github.com/SkywalkerDarren/chatWeb/blob/c2ad05a97aecbe1bc0c846476ea003640f2a0f2e/main.py#L144-L175) approach~~
     - World News
       - [x] Zhihu daily hot answers
-      - [ ] V2EX daily hot topics
-      - [ ] 1point3acres daily hot topics
-      - [ ] Reddit world hot news
+      - [x] V2EX daily hot topics
+      - [x] 1point3acres daily hot topics
+      - [x] Reddit world hot news
     - Dev News
-      - [ ] Hacker News daily hot topics
-      - [ ] Product Hunt daily hot topics
+      - [x] Hacker News daily hot topics
+      - [x] Product Hunt daily hot topics
     - Invest News
-      - [ ] Xueqiu daily hot topics
-      - [ ] Jisilu daily hot topics
+      - [x] Xueqiu daily hot topics
+      - [x] Jisilu daily hot topics
 - Support file reading and analysis 💥 🚩
   - Considering the expensive billing, it needs to use the slack userID whitelist to restrict the access this feature
   - Need to cache the file Documents to save extract cost

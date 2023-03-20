@@ -6,7 +6,7 @@ from flask_apscheduler import APScheduler
 from slack_bolt import App
 from slack_bolt.adapter.flask import SlackRequestHandler
 import concurrent.futures
-from app.daily_hot_news import build_zhihu_hot_news_blocks
+from app.daily_hot_news import *
 from app.gpt import get_answer_from_chatGPT, get_answer_from_llama_web
 from app.slash_command import register_slack_slash_commands
 
@@ -29,15 +29,26 @@ scheduler = APScheduler()
 scheduler.api_enabled = True
 scheduler.init_app(app)
 
-@scheduler.task('cron', id='daily_news_task', hour=0, minute=20)
+def send_daily_news(client, news):
+    for news_item in news:
+        client.chat_postMessage(
+            channel=schedule_channel,
+            text="",
+            blocks=news_item,
+            reply_broadcast=True
+        )
+
+@scheduler.task('cron', id='daily_news_task', hour=1, minute=30)
 def schedule_news():
    zhihu_news = build_zhihu_hot_news_blocks()
-   slack_app.client.chat_postMessage(
-        channel=schedule_channel,
-        text="",
-        blocks=zhihu_news,
-        reply_broadcast=True
-    )
+   v2ex_news = build_v2ex_hot_news_blocks()
+   onepoint3acres_news = build_1point3acres_hot_news_blocks()
+   reddit_news = build_reddit_news_hot_news_blocks()
+   hackernews_news = build_hackernews_news_hot_news_blocks()
+   producthunt_news = build_producthunt_news_hot_news_blocks()
+   xueqiu_news = build_xueqiu_news_hot_news_blocks()
+   jisilu_news = build_jisilu_news_hot_news_blocks()
+   send_daily_news(slack_app.client, [zhihu_news, v2ex_news, onepoint3acres_news, reddit_news, hackernews_news, producthunt_news, xueqiu_news, jisilu_news])
 
 @app.route("/slack/events", methods=["POST"])
 def slack_events():

@@ -7,5 +7,68 @@
                 "url": "https://rsshub.app/zhihu/hotlist"
             }
         }
+    },
+    "v2ex": {
+        "name": "V2EX",
+        "rss": {
+            "hot": {
+                "name": "V2EX 热榜",
+                "url": "https://rsshub.app/v2ex/topics/hot"
+            }
+        }
+    },
+    "1point3acres": {
+        "name": "一亩三分地",
+        "rss": {
+            "hot": {
+                "name": "一亩三分地热榜",
+                "url": "https://rsshub.app/1point3acres/post/hot"
+            }
+        }
+    },
+    "reddit-news": {
+        "name": "Reddit",
+        "rss": {
+            "hot": {
+                "name": "Reddit Hot News",
+                "url": "https://www.reddit.com/r/news+worldnews+geopolitics+China.hot.rss"
+            }
+        }
+    },
+    "hackernews": {
+        "name": "Hacker News",
+        "rss": {
+            "hot": {
+                "name": "Hacker News Hot",
+                "url": "https://rsshub.app/hackernews"
+            }
+        }
+    },
+    "producthunt": {
+        "name": "Product Hunt",
+        "rss": {
+            "hot": {
+                "name": "Product Hunt Hot",
+                "url": "https://rsshub.app/producthunt/today"
+            }
+        }
+    },
+    "xueqiu": {
+        "name": "雪球",
+        "rss": {
+            "hot": {
+                "name": "雪球热榜",
+                "url": "https://rsshub.app/xueqiu/hots"
+            }
+        }
+    },
+    "jisilu": {
+        "name": "集思录",
+        "rss": {
+            "hot": {
+                "name": "集思录热榜",
+                "url": "https://rsshub.app/jisilu/hot/7"
+            }
+        }
     }
 }
