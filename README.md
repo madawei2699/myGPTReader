@@ -67,7 +67,7 @@ For now it is in development, but you can try it out by join this [channel](http
     - Use [Google Vision](https://cloud.google.com/vision/docs/pdf) to handle the PDF reading
   - [ ] Image
     - may use GPT4
-- [ ] Support voice reading with self-hosting [whisper](https://github.com/aarnphm/whispercpp)
+- [ ] Support voice reading ~~with self-hosting [whisper](https://github.com/aarnphm/whispercpp)~~
   - (whisper -> chatGPT -> azure text2speech) to play language speaking practices 💥 🚩
 - [ ] Integrated with Azure OpenAI Service
 - [ ] User access limit
