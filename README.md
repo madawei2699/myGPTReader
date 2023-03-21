@@ -60,7 +60,7 @@ For now it is in development, but you can try it out by join this [channel](http
   - Considering the expensive billing, it needs to use the slack userID whitelist to restrict the access this feature
   - Need to cache the file Documents to save extract cost
   - [x] EPUB
-  - [] DOCX
+  - [x] DOCX
   - [x] TEXT
   - [x] PDF
     - Use [Google Vision](https://cloud.google.com/vision/docs/pdf) to handle the PDF reading
