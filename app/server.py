@@ -104,11 +104,16 @@ def extract_urls_from_event(event):
 
 whitelist_file = "app/data//vip_whitelist.txt"
 
-filetype_extension_allowed = ['epub', 'pdf', 'txt', 'docx', 'md']
+filetype_extension_allowed = ['epub', 'pdf', 'text', 'docx', 'markdown']
 
 def is_authorized(user_id: str) -> bool:
     with open(whitelist_file, "r") as f:
         return user_id in f.read().splitlines()
+    
+def dialog_context_keep_latest(dialog_texts, max_length=1):
+    if len(dialog_texts) > max_length:
+        dialog_texts = dialog_texts[-max_length:]
+    return dialog_texts
 
 @slack_app.event("app_mention")
 def handle_mentions(event, say, logger):
@@ -164,7 +169,7 @@ def handle_mentions(event, say, logger):
     # TODO: https://github.com/jerryjliu/llama_index/issues/778
     # if it can get the context_str, then put this prompt into the thread_message_history to provide more context to the chatGPT
     if file is not None:
-        future = executor.submit(get_answer_from_llama_file, thread_message_history[parent_thread_ts]['dialog_texts'], file)
+        future = executor.submit(get_answer_from_llama_file, dialog_context_keep_latest(thread_message_history[parent_thread_ts]['dialog_texts']), file)
     elif len(urls) > 0: # if this conversation has urls, use llama with all urls in this thread
         future = executor.submit(get_answer_from_llama_web, thread_message_history[parent_thread_ts]['dialog_texts'], list(urls))
     else:
