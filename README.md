@@ -61,6 +61,7 @@ For now it is in development, but you can try it out by join this [channel](http
   - Need to cache the file Documents to save extract cost
   - [x] EPUB
   - [x] DOCX
+  - [x] MD
   - [x] TEXT
   - [x] PDF
     - Use [Google Vision](https://cloud.google.com/vision/docs/pdf) to handle the PDF reading
