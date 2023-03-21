@@ -3,7 +3,7 @@ import os
 import logging
 import hashlib
 import openai
-from llama_index import GPTSimpleVectorIndex, LLMPredictor, RssReader
+from llama_index import GPTSimpleVectorIndex, LLMPredictor, RssReader, SimpleDirectoryReader
 from llama_index.prompts.prompts import QuestionAnswerPrompt
 from llama_index.readers.schema.base import Document
 from langchain.chat_models import ChatOpenAI
@@ -16,9 +16,13 @@ openai.api_key = OPENAI_API_KEY
 llm_predictor = LLMPredictor(llm=ChatOpenAI(temperature=0.2, model_name="gpt-3.5-turbo"))
 
 index_cache_web_dir = '/tmp/myGPTReader/cache_web/'
+index_cache_file_dir = '/data/myGPTReader/file/'
 
 if not os.path.exists(index_cache_web_dir):
     os.makedirs(index_cache_web_dir)
+
+if not os.path.exists(index_cache_file_dir):
+    os.makedirs(index_cache_file_dir)
 
 def get_unique_md5(urls):
     urls_str = ''.join(sorted(urls))
@@ -66,12 +70,19 @@ def get_index_from_web_cache(name):
     if not os.path.exists(index_cache_web_dir + name):
         return None
     index = GPTSimpleVectorIndex.load_from_disk(index_cache_web_dir + name)
-    logging.info(f"=====> Get index from cache: {index_cache_web_dir + name}")
+    logging.info(f"=====> Get index from web cache: {index_cache_web_dir + name}")
+    return index
+
+def get_index_from_file_cache(name):
+    if not os.path.exists(index_cache_file_dir + name):
+        return None
+    index = GPTSimpleVectorIndex.load_from_disk(index_cache_file_dir + name)
+    logging.info(f"=====> Get index from file cache: {index_cache_file_dir + name}")
     return index
 
 def get_answer_from_llama_web(messages, urls):
     dialog_messages = format_dialog_messages(messages)
-    logging.info('=====> Use llama with chatGPT to answer!')
+    logging.info('=====> Use llama web with chatGPT to answer!')
     logging.info(dialog_messages)
     combained_urls = get_urls(urls)
     logging.info(combained_urls)
@@ -84,4 +95,23 @@ def get_answer_from_llama_web(messages, urls):
         index = GPTSimpleVectorIndex(documents)
         logging.info(f"=====> Save index to disk path: {index_cache_web_dir + index_file_name}")
         index.save_to_disk(index_cache_web_dir + index_file_name)
+    return index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=QUESTION_ANSWER_PROMPT)
+
+def get_index_name_from_file(file: str):
+    file_md5_with_extension = file.replace(index_cache_file_dir, '')
+    file_md5 = file_md5_with_extension.split('.')[0]
+    return file_md5 + '.json'
+
+def get_answer_from_llama_file(messages, file):
+    dialog_messages = format_dialog_messages(messages)
+    logging.info('=====> Use llama file with chatGPT to answer!')
+    logging.info(dialog_messages)
+    index_name = get_index_name_from_file(file)
+    index = get_index_from_file_cache(index_name)
+    if index is None:
+        logging.info(f"=====> Build index from file!")
+        documents = SimpleDirectoryReader(input_files=[file]).load_data()
+        index = GPTSimpleVectorIndex(documents)
+        logging.info(f"=====> Save index to disk path: {index_cache_file_dir + index_name}")
+        index.save_to_disk(index_cache_file_dir + index_name)
     return index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=QUESTION_ANSWER_PROMPT)

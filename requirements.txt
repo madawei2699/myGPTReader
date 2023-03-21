@@ -13,3 +13,6 @@ html2text==2020.1.16
 feedparser==6.0.10
 validators==0.20.0
 Flask-APScheduler==1.12.4
+EbookLib==0.18
+PyPDF2==3.0.1
+docx2txt==0.8

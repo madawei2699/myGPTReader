@@ -56,18 +56,18 @@ For now it is in development, but you can try it out by join this [channel](http
     - Invest News
       - [x] Xueqiu daily hot topics
       - [x] Jisilu daily hot topics
-- Support file reading and analysis 💥 🚩
+- Support file reading and analysis 💥
   - Considering the expensive billing, it needs to use the slack userID whitelist to restrict the access this feature
   - Need to cache the file Documents to save extract cost
-  - [ ] EPUB
-  - [ ] DOCX
-  - [ ] TEXT
-  - [ ] PDF
+  - [x] EPUB
+  - [] DOCX
+  - [x] TEXT
+  - [x] PDF
     - Use [Google Vision](https://cloud.google.com/vision/docs/pdf) to handle the PDF reading
   - [ ] Image
     - may use GPT4
 - [ ] Support voice reading with self-hosting [whisper](https://github.com/aarnphm/whispercpp)
-  - (whisper -> chatGPT -> azure text2speech) to play language speaking practices 💥
+  - (whisper -> chatGPT -> azure text2speech) to play language speaking practices 💥 🚩
 - [ ] Integrated with Azure OpenAI Service
 - [ ] User access limit
   - Limit the number of requests to bot per user per day to save the cost
