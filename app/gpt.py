@@ -4,6 +4,7 @@ import logging
 import hashlib
 import uuid
 import openai
+from langdetect import detect
 from llama_index import GPTSimpleVectorIndex, LLMPredictor, RssReader, SimpleDirectoryReader
 from llama_index.prompts.prompts import QuestionAnswerPrompt
 from llama_index.readers.schema.base import Document
@@ -146,20 +147,17 @@ def get_text_from_whisper(voice_file_path):
         transcript = openai.Audio.transcribe("whisper-1", f)
     return transcript.text
 
-def convert_to_ssml(text):
-    chinese_text = ''
-    english_text = ''
-    for sentence in text.split('.'):
-        if '。' in sentence:
-            chinese_text += sentence.strip() + '。'
-        else: 
-            english_text += sentence.strip() + '. '
+def remove_prompt_from_text(text):
+    return text.replace('AI:', '').strip()
 
+def convert_to_ssml(text):
+    lang_code = detect(text)
+    text = remove_prompt_from_text(text)
     ssml = '<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="zh-CN">'
-    if chinese_text:
-        ssml += f'<voice name="zh-CN-XiaoxiaoNeural">{chinese_text}</voice>'
-    if english_text:
-        ssml += f'<voice name="en-US-JennyNeural">{english_text}</voice>'
+    if lang_code == 'zh-cn':
+        ssml += f'<voice name="zh-CN-XiaoxiaoNeural">{text}</voice>'
+    else:
+        ssml += f'<voice name="en-US-JennyNeural">{text}</voice>'
     ssml += '</speak>'
 
     return ssml

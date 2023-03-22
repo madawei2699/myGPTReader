@@ -17,3 +17,4 @@ EbookLib==0.18
 PyPDF2==3.0.1
 docx2txt==0.8
 azure-cognitiveservices-speech==1.26.0
+langdetect==1.0.9
