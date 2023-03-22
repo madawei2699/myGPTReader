@@ -2,6 +2,7 @@
 import os
 import logging
 import hashlib
+import random
 import uuid
 import openai
 from langdetect import detect
@@ -9,7 +10,7 @@ from llama_index import GPTSimpleVectorIndex, LLMPredictor, RssReader, SimpleDir
 from llama_index.prompts.prompts import QuestionAnswerPrompt
 from llama_index.readers.schema.base import Document
 from langchain.chat_models import ChatOpenAI
-from azure.cognitiveservices.speech import SpeechConfig, SpeechSynthesizer, ResultReason, CancellationReason, SpeechSynthesisOutputFormat, AudioDataStream
+from azure.cognitiveservices.speech import SpeechConfig, SpeechSynthesizer, ResultReason, CancellationReason, SpeechSynthesisOutputFormat
 from azure.cognitiveservices.speech.audio import AudioOutputConfig
 
 from app.fetch_web_post import get_urls, scrape_website, scrape_website_by_phantomjscloud
@@ -20,7 +21,7 @@ SPEECH_REGION = os.environ.get('SPEECH_REGION')
 openai.api_key = OPENAI_API_KEY
 
 llm_predictor = LLMPredictor(llm=ChatOpenAI(
-    temperature=0.2, model_name="gpt-3.5-turbo"))
+    temperature=0.2, model_name="gpt-3.5-turbo", max_tokens=4097))
 
 index_cache_web_dir = '/tmp/myGPTReader/cache_web/'
 index_cache_voice_dir = '/tmp/myGPTReader/voice/'
@@ -150,19 +151,28 @@ def get_text_from_whisper(voice_file_path):
 def remove_prompt_from_text(text):
     return text.replace('AI:', '').strip()
 
-def convert_to_ssml(text):
+lang_code_voice_map = {
+    'zh': ['zh-CN-XiaoxiaoNeural', 'zh-CN-XiaohanNeural', 'zh-CN-YunxiNeural', 'zh-CN-YunyangNeural'],
+    'en': ['en-US-JennyNeural', 'en-US-RogerNeural', 'en-IN-NeerjaNeural', 'en-IN-PrabhatNeural', 'en-AU-AnnetteNeural', 'en-AU-CarlyNeural', 'en-GB-AbbiNeural', 'en-GB-AlfieNeural'],
+    'ja': ['ja-JP-AoiNeural', 'ja-JP-DaichiNeural'],
+    'de': ['de-DE-AmalaNeural', 'de-DE-BerndNeural'],
+}
+
+def convert_to_ssml(text, voice_name=None):
     lang_code = detect(text)
     text = remove_prompt_from_text(text)
+    if voice_name is None:
+        try:
+            voice_name = random.choice(lang_code_voice_map[lang_code.split('-')[0]])
+        except KeyError:
+            voice_name = random.choice(lang_code_voice_map['en-us'])
     ssml = '<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="zh-CN">'
-    if lang_code == 'zh-cn':
-        ssml += f'<voice name="zh-CN-XiaoxiaoNeural">{text}</voice>'
-    else:
-        ssml += f'<voice name="en-US-JennyNeural">{text}</voice>'
+    ssml += f'<voice name="{voice_name}">{text}</voice>'
     ssml += '</speak>'
 
     return ssml
 
-def get_voice_file_from_text(text):
+def get_voice_file_from_text(text, voice_name=None):
     speech_config = SpeechConfig(subscription=SPEECH_KEY, region=SPEECH_REGION)
     speech_config.set_speech_synthesis_output_format(
         SpeechSynthesisOutputFormat.Audio16Khz32KBitRateMonoMp3)
@@ -171,7 +181,7 @@ def get_voice_file_from_text(text):
     file_config = AudioOutputConfig(filename=file_name)
     synthesizer = SpeechSynthesizer(
         speech_config=speech_config, audio_config=file_config)
-    ssml = convert_to_ssml(text)
+    ssml = convert_to_ssml(text, voice_name)
     result = synthesizer.speak_ssml_async(ssml).get()
     if result.reason == ResultReason.SynthesizingAudioCompleted:
         logging.info("Speech synthesized for text [{}], and the audio was saved to [{}]".format(

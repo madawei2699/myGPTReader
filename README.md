@@ -40,6 +40,7 @@ For now it is in development, but you can try it out by join this [channel](http
   - [ ] Consider to fine-tue the chunk size of index node and prompt to save the cost
     - If the chunk size is too big, it will cause the index node to be too large and the cost will be high.
 - [x] Bot can read historical messages from the same thread, thus providing context to chatGPT
+  - [x] [Changing the number of output tokens](https://github.com/jerryjliu/llama_index/issues/778#issuecomment-1478303173)
 - Index fine-tune
   - [x] Use the [GPTListIndex](https://github.com/jerryjliu/llama_index/issues/753#issuecomment-1472387421) to summarize multiple URLs
   - [ ] Use the `GPTTreeIndex` with `summarize` mode to summarize a single web page
@@ -69,6 +70,15 @@ For now it is in development, but you can try it out by join this [channel](http
     - may use GPT4
 - [x] Support voice reading ~~with self-hosting [whisper](https://github.com/aarnphm/whispercpp)~~
   - (whisper -> chatGPT -> azure text2speech) to play language speaking practices 💥
+  - Support language
+    - Chinese
+    - English
+      - 🇺🇸
+      - 🇬🇧
+      - 🇦🇺
+      - 🇮🇳
+    - Japanese
+    - German
 - [ ] Integrated with Azure OpenAI Service
 - [ ] User access limit
   - Limit the number of requests to bot per user per day to save the cost
