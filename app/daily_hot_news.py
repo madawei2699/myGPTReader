@@ -7,8 +7,8 @@ with open("app/data/hot_news_rss.json", "r") as f:
     rss_urls = json.load(f)
 
 TODAY = today = date.today()
-MAX_DESCRIPTION_LENGTH = 500
-MAX_POSTS = 10
+MAX_DESCRIPTION_LENGTH = 140
+MAX_POSTS = 3
 
 
 def cut_string(text):
