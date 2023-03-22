@@ -192,8 +192,8 @@ def handle_mentions(event, say, logger):
             say(f'<@{user}>, {gpt_response}', thread_ts=thread_ts)
         else:
             voice_file_path = get_voice_file_from_text(gpt_response)
-            say(f'<@{user}>', files=r['files'], thread_ts=thread_ts)
-            r = slack_app.client.files_upload_v2(file=voice_file_path, channel=channel, thread_ts=thread_ts)
+            slack_app.client.files_upload_v2(file=voice_file_path, channel=channel, thread_ts=thread_ts)
+            say(f'<@{user}>', thread_ts=thread_ts)
     except concurrent.futures.TimeoutError:
         future.cancel()
         err_msg = 'Task timedout(5m) and was canceled.'
