@@ -21,7 +21,7 @@ SPEECH_REGION = os.environ.get('SPEECH_REGION')
 openai.api_key = OPENAI_API_KEY
 
 llm_predictor = LLMPredictor(llm=ChatOpenAI(
-    temperature=0.2, model_name="gpt-3.5-turbo", max_tokens=4097))
+    temperature=0.2, model_name="gpt-3.5-turbo", max_tokens=50000))
 
 index_cache_web_dir = '/tmp/myGPTReader/cache_web/'
 index_cache_voice_dir = '/tmp/myGPTReader/voice/'
