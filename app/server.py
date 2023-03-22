@@ -104,7 +104,7 @@ def extract_urls_from_event(event):
 
 whitelist_file = "app/data//vip_whitelist.txt"
 
-filetype_extension_allowed = ['epub', 'pdf', 'text', 'docx', 'markdown', 'm4a']
+filetype_extension_allowed = ['epub', 'pdf', 'text', 'docx', 'markdown', 'm4a', 'webm']
 filetype_voice_extension_allowed = ['m4a']
 
 def is_authorized(user_id: str) -> bool:
