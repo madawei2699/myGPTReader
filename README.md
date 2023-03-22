@@ -2,7 +2,7 @@
 
 myGPTReader is a slack bot that can read any webpage, ebook or document and summarize it with chatGPT. It can also talk to you via voice using the content in the channel.
 
-For now it is in development, but you can try it out by join this [channel](https://join.slack.com/t/bmpidev/shared_invite/zt-1regrk2ie-NiHipq2gflLrycWcmVG7XQ).
+For now it is in development, but you can try it out by join this [channel](https://join.slack.com/t/bmpidev/shared_invite/zt-1rk3md1lz-Fy9Id7ZgmSsdIO2pZaPYxg).
 
 ![](https://img.bmpi.dev/my-gpt-reader-showcase.gif)
 
