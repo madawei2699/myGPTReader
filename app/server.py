@@ -8,7 +8,7 @@ from slack_bolt import App
 from slack_bolt.adapter.flask import SlackRequestHandler
 import concurrent.futures
 from app.daily_hot_news import *
-from app.gpt import get_answer_from_chatGPT, get_answer_from_llama_file, get_answer_from_llama_web, index_cache_file_dir
+from app.gpt import get_answer_from_chatGPT, get_answer_from_llama_file, get_answer_from_llama_web, get_text_from_whisper, get_voice_file_from_text, index_cache_file_dir
 from app.slash_command import register_slack_slash_commands
 from app.util import md5
 
@@ -104,7 +104,8 @@ def extract_urls_from_event(event):
 
 whitelist_file = "app/data//vip_whitelist.txt"
 
-filetype_extension_allowed = ['epub', 'pdf', 'text', 'docx', 'markdown']
+filetype_extension_allowed = ['epub', 'pdf', 'text', 'docx', 'markdown', 'm4a']
+filetype_voice_extension_allowed = ['m4a']
 
 def is_authorized(user_id: str) -> bool:
     with open(whitelist_file, "r") as f:
@@ -115,6 +116,9 @@ def dialog_context_keep_latest(dialog_texts, max_length=1):
         dialog_texts = dialog_texts[-max_length:]
     return dialog_texts
 
+def format_dialog_text(text, voicemessage=None):
+    return insert_space(text.replace("<@U04TCNR9MNF>", "")) + ('\n' + voicemessage if voicemessage else '')
+
 @slack_app.event("app_mention")
 def handle_mentions(event, say, logger):
     logger.info(event)
@@ -123,6 +127,7 @@ def handle_mentions(event, say, logger):
     thread_ts = event["ts"]
 
     file_md5_name = None
+    voicemessage = None
 
     if event.get('files'):
         if not is_authorized(event['user']):
@@ -149,16 +154,19 @@ def handle_mentions(event, say, logger):
             if not os.path.exists(file_md5_name):
                 logger.info(f'=====> Rename file to {file_md5_name}')
                 os.rename(temp_file_filename, file_md5_name)
+                if filetype in filetype_voice_extension_allowed:
+                    voicemessage = get_text_from_whisper(file_md5_name)
 
     parent_thread_ts = event["thread_ts"] if "thread_ts" in event else thread_ts
     if parent_thread_ts not in thread_message_history:
         thread_message_history[parent_thread_ts] = { 'dialog_texts': [], 'context_urls': set(), 'file': None}
 
     if "text" in event:
-        update_thread_history(parent_thread_ts, 'User: %s' % insert_space(event["text"].replace('<@U04TCNR9MNF>', '')), extract_urls_from_event(event))
+        update_thread_history(parent_thread_ts, f'User: {format_dialog_text(event["text"], voicemessage)}', extract_urls_from_event(event))
 
     if file_md5_name is not None:
-        update_thread_history(parent_thread_ts, None, None, file_md5_name)
+        if not voicemessage:
+            update_thread_history(parent_thread_ts, None, None, file_md5_name)
     
     urls = thread_message_history[parent_thread_ts]['context_urls']
     file = thread_message_history[parent_thread_ts]['file']
@@ -170,7 +178,7 @@ def handle_mentions(event, say, logger):
     # if it can get the context_str, then put this prompt into the thread_message_history to provide more context to the chatGPT
     if file is not None:
         future = executor.submit(get_answer_from_llama_file, dialog_context_keep_latest(thread_message_history[parent_thread_ts]['dialog_texts']), file)
-    elif len(urls) > 0: # if this conversation has urls, use llama with all urls in this thread
+    elif len(urls) > 0:
         future = executor.submit(get_answer_from_llama_web, thread_message_history[parent_thread_ts]['dialog_texts'], list(urls))
     else:
         future = executor.submit(get_answer_from_chatGPT, thread_message_history[parent_thread_ts]['dialog_texts'])
@@ -179,7 +187,17 @@ def handle_mentions(event, say, logger):
         gpt_response = future.result(timeout=300)
         update_thread_history(parent_thread_ts, 'AI: %s' % insert_space(f'{gpt_response}'))
         logger.info(gpt_response)
-        say(f'<@{user}>, {gpt_response}', thread_ts=thread_ts)
+        if voicemessage is None:
+            say(f'<@{user}>, {gpt_response}', thread_ts=thread_ts)
+        else:
+            voice_file_path = get_voice_file_from_text(gpt_response)
+            with open(voice_file_path, 'rb') as f:
+                contents = f.read()
+            say(f'<@{user}>', thread_ts=thread_ts, files=[{
+                "filename": f"gpt_response_{thread_ts}.mp3",
+                "content": contents.decode('utf-8'),
+                "type": "audio/mpeg"
+            }])
     except concurrent.futures.TimeoutError:
         future.cancel()
         err_msg = 'Task timedout(5m) and was canceled.'
