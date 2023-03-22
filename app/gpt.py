@@ -161,11 +161,12 @@ lang_code_voice_map = {
 def convert_to_ssml(text, voice_name=None):
     lang_code = detect(text)
     text = remove_prompt_from_text(text)
-    if voice_name is None:
-        try:
+    try:
+        if voice_name is None:
             voice_name = random.choice(lang_code_voice_map[lang_code.split('-')[0]])
-        except KeyError:
-            voice_name = random.choice(lang_code_voice_map['en-us'])
+    except Exception as e:
+        logging.warning(f"Error: {e}. Using default voice.")
+        voice_name = random.choice(lang_code_voice_map['en'])
     ssml = '<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="zh-CN">'
     ssml += f'<voice name="{voice_name}">{text}</voice>'
     ssml += '</speak>'
