@@ -2,7 +2,7 @@
 
 myGPTReader is a slack bot that can read any webpage, ebook or document and summarize it with chatGPT. It can also talk to you via voice using the content in the channel.
 
-For now it is in development, but you can try it out by join this [channel](https://join.slack.com/t/bmpidev/shared_invite/zt-1rrd2cfhf-JzPA0ViZ1iVxVfI6b~GcIg).
+For now it is in development, but you can try it out by join this [channel](https://slack-redirect.i365.tech/).
 
 ![](https://img.bmpi.dev/my-gpt-reader-showcase.gif)
 
@@ -47,6 +47,7 @@ For now it is in development, but you can try it out by join this [channel](http
   - [x] Use the [GPTListIndex](https://github.com/jerryjliu/llama_index/issues/753#issuecomment-1472387421) to summarize multiple URLs
   - [ ] Use the `GPTTreeIndex` with `summarize` mode to summarize a single web page
 - Bot regularly send hot ~~summarizes(expensive cost)~~ news in the slack channel (`#daily-news`)
+  - [ ] Auto summarize the hot news to set the post description 🚩
   - ~~Refer to [this](https://github.com/SkywalkerDarren/chatWeb/blob/c2ad05a97aecbe1bc0c846476ea003640f2a0f2e/main.py#L144-L175) approach~~
     - World News
       - [x] Zhihu daily hot answers
