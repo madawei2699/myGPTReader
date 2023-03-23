@@ -3854,3 +3854,120 @@ generate_audio_file(text, 'output.wav')
 ```
 
 This function splits the input text into separate Chinese and English sentences and generates the appropriate SSML markup to specify the voice for each language. It then sends a request to the Azure Text-to-Speech API with the SSML data and saves the resulting audio file to the specified output path. Note that to use this code you need to replace `YOUR_RESOURCE_NAME`, `YOUR_ENDPOINT_NAME` and `YOUR_API_KEY` with your own values.
+
+---
+
+## 2023-03-23
+
+---
+
+You
+---
+
+ 
+
+does python have a set with ttl? if the time is over, it will auto remove the item
+
+ChatGPT
+-------
+
+Python provides a built-in `set` data structure, but it does not have a time-to-live (TTL) feature that automatically removes elements after a specified time period. However, you can use third-party libraries like `ttl` or `expiringdict` to achieve this functionality.
+
+`ttl` is a simple Python library that provides a dictionary-like object with TTL functionality. Here's an example of how you can use it:
+
+```python
+from ttl import TTLDict
+
+# create a TTL dictionary with a TTL of 5 seconds
+my_dict = TTLDict(ttl=5)
+
+# add an item to the dictionary
+my_dict['key'] = 'value'
+
+# wait for 5 seconds
+time.sleep(5)
+
+# the item will be automatically removed from the dictionary
+print(my_dict.get('key'))  # prints None
+```
+
+`expiringdict` is another Python library that provides an efficient implementation of a dictionary that automatically deletes entries after a certain amount of time has passed. Here's an example of how you can use it:
+
+```python
+from expiringdict import ExpiringDict
+
+# create an ExpiringDict with an expiration time of 5 seconds
+my_dict = ExpiringDict(max_len=100, max_age_seconds=5)
+
+# add an item to the dictionary
+my_dict['key'] = 'value'
+
+# wait for 5 seconds
+time.sleep(5)
+
+# the item will be automatically removed from the dictionary
+print(my_dict.get('key'))  # prints None
+```
+
+Note that both `ttl` and `expiringdict` are third-party libraries that need to be installed separately using `pip`.
+
+I hope this helps! Let me know if you have any further questions.
+
+You
+---
+
+ 
+
+dose it have a set?
+
+ChatGPT
+-------
+
+Yes, Python has a built-in `set` data type that stores unique elements. However, it does not have a Time to Live (TTL) feature built-in.
+
+To achieve the behavior you described, you may need to build your own custom implementation of a `set` with TTL using the following:
+
+1.  Use a dictionary to store the value along with its expiry time as key-value pairs
+2.  Use a separate thread to continually check for expired elements and remove them from the dictionary.
+3.  Whenever new element is added update it's TTL if already present.
+
+Here is an example base code to get you started:
+
+```python
+from threading import Thread, Lock
+import time
+
+class TtlSet:
+    def __init__(self):
+        self.ttl = {}
+        self.lock = Lock()
+        # Start a background thread to periodically remove expired items
+        t = Thread(target=self._cleaner)
+        t.setDaemon(True)
+        t.start()
+
+    def __len__(self):
+        return len(self.ttl)
+
+    def __contains__(self, value):
+        return value in self.ttl
+
+    def add(self, value, ttl_seconds):
+        with self.lock:
+            self.ttl[value] = time.time() + ttl_seconds
+
+    def discard(self, value):
+        with self.lock:
+            self.ttl.pop(value, None)
+
+    def _cleaner(self):
+        while True:
+            with self.lock:
+                now = time.time()
+                for k, v in list(self.ttl.items()):
+                    if v < now:
+                        self.ttl.pop(k, None)
+            time.sleep(1)
+```
+
+You can use this `TtlSet` class by calling the `add()` method (with a TTL value in seconds), and the element will automatically be removed from the set after the specified duration.
