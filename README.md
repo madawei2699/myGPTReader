@@ -47,7 +47,7 @@ For now it is in development, but you can try it out by join this [channel](http
   - [x] Use the [GPTListIndex](https://github.com/jerryjliu/llama_index/issues/753#issuecomment-1472387421) to summarize multiple URLs
   - [ ] Use the `GPTTreeIndex` with `summarize` mode to summarize a single web page
 - Bot regularly send hot ~~summarizes(expensive cost)~~ news in the slack channel (`#daily-news`)
-  - [ ] Auto summarize the hot news to set the post description 🚩
+  - [x] Use chatGPT to summarize the hot news
   - ~~Refer to [this](https://github.com/SkywalkerDarren/chatWeb/blob/c2ad05a97aecbe1bc0c846476ea003640f2a0f2e/main.py#L144-L175) approach~~
     - World News
       - [x] Zhihu daily hot answers

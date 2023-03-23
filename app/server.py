@@ -1,3 +1,4 @@
+import logging
 import re
 import os
 import requests
@@ -7,7 +8,7 @@ from flask_apscheduler import APScheduler
 from slack_bolt import App
 from slack_bolt.adapter.flask import SlackRequestHandler
 import concurrent.futures
-from app.daily_hot_news import *
+from app.daily_hot_news import build_all_news_block
 from app.gpt import get_answer_from_chatGPT, get_answer_from_llama_file, get_answer_from_llama_web, get_text_from_whisper, get_voice_file_from_text, index_cache_file_dir
 from app.slash_command import register_slack_slash_commands
 from app.ttl_set import TtlSet
@@ -43,15 +44,9 @@ def send_daily_news(client, news):
 
 @scheduler.task('cron', id='daily_news_task', hour=1, minute=30)
 def schedule_news():
-   zhihu_news = build_zhihu_hot_news_blocks()
-   v2ex_news = build_v2ex_hot_news_blocks()
-   onepoint3acres_news = build_1point3acres_hot_news_blocks()
-   reddit_news = build_reddit_news_hot_news_blocks()
-   hackernews_news = build_hackernews_news_hot_news_blocks()
-   producthunt_news = build_producthunt_news_hot_news_blocks()
-   xueqiu_news = build_xueqiu_news_hot_news_blocks()
-   jisilu_news = build_jisilu_news_hot_news_blocks()
-   send_daily_news(slack_app.client, [zhihu_news, v2ex_news, onepoint3acres_news, reddit_news, hackernews_news, producthunt_news, xueqiu_news, jisilu_news])
+    logging.info("=====> Start to send daily news!")
+    all_news_blocks = build_all_news_block()
+    send_daily_news(slack_app.client, all_news_blocks)
 
 @app.route("/slack/events", methods=["POST"])
 def slack_events():

@@ -1,13 +1,17 @@
 import json
 from datetime import date
+import logging
 import feedparser
 import html2text
+import concurrent.futures
+
+from app.gpt import get_answer_from_llama_web
 
 with open("app/data/hot_news_rss.json", "r") as f:
     rss_urls = json.load(f)
 
 TODAY = today = date.today()
-MAX_DESCRIPTION_LENGTH = 140
+MAX_DESCRIPTION_LENGTH = 300
 MAX_POSTS = 3
 
 
@@ -22,6 +26,24 @@ def cut_string(text):
         count += 1
 
     return new_text.strip() + '...'
+
+def get_summary_from_gpt_thread(url):
+    news_summary_prompt = '请用中文简短概括这篇文章的内容。'
+    return 'AI: ' + str(get_answer_from_llama_web([news_summary_prompt], [url]))
+
+def get_summary_from_gpt(url):
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future = executor.submit(get_summary_from_gpt_thread, url)
+        return future.result(timeout=200)
+
+def get_description(entry):
+    summary = None
+    try:
+        summary = get_summary_from_gpt(entry.link)
+    except Exception as e:
+        logging.error(e)
+        summary = cut_string(get_text_from_html(entry.summary))
+    return summary
 
 def get_text_from_html(html):
     text_maker = html2text.HTML2Text()
@@ -40,7 +62,7 @@ def get_post_urls_with_title(rss_url):
         #                       published_time.tm_mon, published_time.tm_mday)
         updated_post = {}
         updated_post['title'] = entry.title
-        updated_post['summary'] = cut_string(get_text_from_html(entry.summary))
+        updated_post['summary'] = get_description(entry)
         updated_post['url'] = entry.link
         updated_post['publish_date'] = published_time
         updated_posts.append(updated_post)
@@ -112,3 +134,27 @@ def build_xueqiu_news_hot_news_blocks():
 
 def build_jisilu_news_hot_news_blocks():
     return build_hot_news_blocks('jisilu')
+
+def build_all_news_block():
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        zhihu_news = executor.submit(build_zhihu_hot_news_blocks)
+        v2ex_news = executor.submit(build_v2ex_hot_news_blocks)
+        onepoint3acres_news = executor.submit(build_1point3acres_hot_news_blocks)
+        reddit_news = executor.submit(build_reddit_news_hot_news_blocks)
+        hackernews_news = executor.submit(build_hackernews_news_hot_news_blocks)
+        producthunt_news = executor.submit(build_producthunt_news_hot_news_blocks)
+        xueqiu_news = executor.submit(build_xueqiu_news_hot_news_blocks)
+        jisilu_news = executor.submit(build_jisilu_news_hot_news_blocks)
+
+        zhihu_news_block = zhihu_news.result()
+        v2ex_news_block = v2ex_news.result()
+        onepoint3acres_news_block = onepoint3acres_news.result()
+        reddit_news_block = reddit_news.result()
+        hackernews_news_block = hackernews_news.result()
+        producthunt_news_block = producthunt_news.result()
+        xueqiu_news_block = xueqiu_news.result()
+        jisilu_news_block = jisilu_news.result()
+
+        return [zhihu_news_block, v2ex_news_block, onepoint3acres_news_block,
+                           reddit_news_block, hackernews_news_block, producthunt_news_block,
+                           xueqiu_news_block, jisilu_news_block]
