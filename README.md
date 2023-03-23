@@ -91,9 +91,7 @@ For now it is in development, but you can try it out by join this [channel](http
 - [ ] Documentation
 - Publish bot to make it can be used in other workspaces
   - [ ] Slack marketplace
-  
-  ---
-  
+
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=madawei2699/myGPTReader&type=Date)](https://star-history.com/#madawei2699/myGPTReader&Date)
