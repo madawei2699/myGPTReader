@@ -39,7 +39,9 @@ def send_daily_news(client, news):
             channel=schedule_channel,
             text="",
             blocks=news_item,
-            reply_broadcast=True
+            reply_broadcast=True,
+            unfurl_links=False,
+            unfurl_media=False
         )
 
 @scheduler.task('cron', id='daily_news_task', hour=1, minute=30)
