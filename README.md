@@ -89,10 +89,15 @@ Please join this [slack channel](https://slack-redirect.i365.tech/) to experienc
       - 🇮🇳
     - Japanese
     - German
-- [ ] Integrated with Azure OpenAI Service
 - [x] User access limit
   - Limit the number of requests to bot per user per day to save the cost
-- [ ] Support discord bot ❓
+- IM Support
+  - [x] Slack bot
+  - [ ] Discord bot
+  - [ ] Telegram bot
+- [ ] Bot landing page 🚩
+  - Use this [tool](https://earlybird.im/) to build
+- [ ] Integrated with Azure OpenAI Service
 - [ ] Rewrite the code in Typescript ❓
 - [ ] Upgrade chat model (gpt-3.5-turbo) to GPT4 (gpt-4-0314) 💥
 - [ ] Documentation
