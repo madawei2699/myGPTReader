@@ -109,8 +109,8 @@ max_file_size = 3 * 1024 * 1024
 temp_whitelist_users = TtlSet()
 temp_whitelist_channle_id = 'C04VARAS1S7'
 
-limiter_message_per_user = 10
-limiter_time_period = 2 * 3600
+limiter_message_per_user = 25
+limiter_time_period = 3 * 3600
 limiter = RateLimiter(limit=limiter_message_per_user, period=limiter_time_period)
 
 def is_authorized(user_id: str) -> bool:
