@@ -90,7 +90,7 @@ Please join this [slack channel](https://slack-redirect.i365.tech/) to experienc
     - Japanese
     - German
 - [ ] Integrated with Azure OpenAI Service
-- [ ] User access limit
+- [x] User access limit
   - Limit the number of requests to bot per user per day to save the cost
 - [ ] Support discord bot ❓
 - [ ] Rewrite the code in Typescript ❓

@@ -10,6 +10,7 @@ from slack_bolt.adapter.flask import SlackRequestHandler
 import concurrent.futures
 from app.daily_hot_news import build_all_news_block
 from app.gpt import get_answer_from_chatGPT, get_answer_from_llama_file, get_answer_from_llama_web, get_text_from_whisper, get_voice_file_from_text, index_cache_file_dir
+from app.rate_limiter import RateLimiter
 from app.slash_command import register_slack_slash_commands
 from app.ttl_set import TtlSet
 from app.util import md5
@@ -108,6 +109,10 @@ max_file_size = 3 * 1024 * 1024
 temp_whitelist_users = TtlSet()
 temp_whitelist_channle_id = 'C04VARAS1S7'
 
+limiter_message_per_user = 10
+limiter_time_period = 2 * 3600
+limiter = RateLimiter(limit=limiter_message_per_user, period=limiter_time_period)
+
 def is_authorized(user_id: str) -> bool:
     if user_id in temp_whitelist_users:
         return True
@@ -132,6 +137,11 @@ def handle_mentions(event, say, logger):
 
     file_md5_name = None
     voicemessage = None
+
+    if not limiter.allow_request(user):
+        if not is_authorized(user):
+            say(f'<@{user}>, you have reached the limit of {limiter_message_per_user} messages {limiter_time_period / 3600} hour, please try again later.', thread_ts=thread_ts)
+            return
 
     # temp whitelist handle
     if channel == temp_whitelist_channle_id:
