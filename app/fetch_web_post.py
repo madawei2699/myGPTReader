@@ -27,7 +27,7 @@ def get_urls(urls):
     for url in urls:
         if validators.url(url):
             feed = feedparser.parse(url)
-            if feed.version:
+            if hasattr(feed, 'version') and feed.version:
                 rss_urls.append(url)
             elif check_if_need_use_phantomjscloud(url):
                 phantomjscloud_urls.append(url)

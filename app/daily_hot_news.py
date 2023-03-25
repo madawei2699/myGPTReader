@@ -29,19 +29,22 @@ def cut_string(text):
 
 def get_summary_from_gpt_thread(url):
     news_summary_prompt = '请用中文简短概括这篇文章的内容。'
-    return 'AI: ' + str(get_answer_from_llama_web([news_summary_prompt], [url]))
+    return str(get_answer_from_llama_web([news_summary_prompt], [url]))
 
 def get_summary_from_gpt(url):
     with concurrent.futures.ThreadPoolExecutor() as executor:
         future = executor.submit(get_summary_from_gpt_thread, url)
-        return future.result(timeout=200)
+        return future.result(timeout=300)
 
 def get_description(entry):
-    summary = None
+    gpt_answer = None
     try:
-        summary = get_summary_from_gpt(entry.link)
+        gpt_answer = get_summary_from_gpt(entry.link)
     except Exception as e:
         logging.error(e)
+    if gpt_answer is not None:
+        summary = 'AI: ' + gpt_answer
+    else:
         summary = cut_string(get_text_from_html(entry.summary))
     return summary
 

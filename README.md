@@ -53,6 +53,7 @@ Please join this [slack channel](https://slack-redirect.i365.tech/) to experienc
 - Index fine-tune
   - [x] Use the [GPTListIndex](https://github.com/jerryjliu/llama_index/issues/753#issuecomment-1472387421) to summarize multiple URLs
   - [ ] Use the `GPTTreeIndex` with `summarize` mode to summarize a single web page
+    - Use [response_mode](https://gist.github.com/ninehills/ecf7107574c83016e8b68965bf9a51c4) to change the summary mode
 - Bot regularly send hot ~~summarizes(expensive cost)~~ news in the slack channel (`#daily-news`)
   - [x] Use chatGPT to summarize the hot news
   - ~~Refer to [this](https://github.com/SkywalkerDarren/chatWeb/blob/c2ad05a97aecbe1bc0c846476ea003640f2a0f2e/main.py#L144-L175) approach~~

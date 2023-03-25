@@ -36,14 +36,17 @@ scheduler.init_app(app)
 
 def send_daily_news(client, news):
     for news_item in news:
-        client.chat_postMessage(
-            channel=schedule_channel,
-            text="",
-            blocks=news_item,
-            reply_broadcast=True,
-            unfurl_links=False,
-            unfurl_media=False
-        )
+        try:
+            r = client.chat_postMessage(
+                channel=schedule_channel,
+                text="",
+                blocks=news_item,
+                reply_broadcast=True,
+                unfurl_links=False,
+            )
+            logging.info(r)
+        except Exception as e:
+            logging.error(e)
 
 @scheduler.task('cron', id='daily_news_task', hour=1, minute=30)
 def schedule_news():

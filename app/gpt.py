@@ -36,16 +36,13 @@ if not os.path.exists(index_cache_voice_dir):
 if not os.path.exists(index_cache_file_dir):
     os.makedirs(index_cache_file_dir)
 
-
 def get_unique_md5(urls):
     urls_str = ''.join(sorted(urls))
     hashed_str = hashlib.md5(urls_str.encode('utf-8')).hexdigest()
     return hashed_str
 
-
 def format_dialog_messages(messages):
     return "\n".join(messages)
-
 
 def get_documents_from_urls(urls):
     documents = []
@@ -60,7 +57,6 @@ def get_documents_from_urls(urls):
             document = Document(scrape_website_by_phantomjscloud(url))
             documents.append(document)
     return documents
-
 
 def get_answer_from_chatGPT(messages):
     dialog_messages = format_dialog_messages(messages)
@@ -101,7 +97,6 @@ def get_index_from_file_cache(name):
         f"=====> Get index from file cache: {index_cache_file_dir + name}")
     return index
 
-
 def get_answer_from_llama_web(messages, urls):
     dialog_messages = format_dialog_messages(messages)
     logging.info('=====> Use llama web with chatGPT to answer!')
@@ -120,12 +115,10 @@ def get_answer_from_llama_web(messages, urls):
         index.save_to_disk(index_cache_web_dir + index_file_name)
     return index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=QUESTION_ANSWER_PROMPT)
 
-
 def get_index_name_from_file(file: str):
     file_md5_with_extension = file.replace(index_cache_file_dir, '')
     file_md5 = file_md5_with_extension.split('.')[0]
     return file_md5 + '.json'
-
 
 def get_answer_from_llama_file(messages, file):
     dialog_messages = format_dialog_messages(messages)
@@ -141,7 +134,6 @@ def get_answer_from_llama_file(messages, file):
             f"=====> Save index to disk path: {index_cache_file_dir + index_name}")
         index.save_to_disk(index_cache_file_dir + index_name)
     return index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=QUESTION_ANSWER_PROMPT)
-
 
 def get_text_from_whisper(voice_file_path):
     with open(voice_file_path, "rb") as f:
