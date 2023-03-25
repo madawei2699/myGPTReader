@@ -72,6 +72,8 @@ def get_documents_from_urls(urls):
             document = get_document_from_youtube_id(video_id)
             if (document is not None):
                 documents.append(document)
+            else:
+                document.append(Document(f"Can't get transcript from youtube video: {url}"))
     return documents
 
 def get_answer_from_chatGPT(messages):
