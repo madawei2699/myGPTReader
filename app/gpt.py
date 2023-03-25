@@ -114,12 +114,12 @@ def get_answer_from_llama_web(messages, urls):
         logging.info(documents)
         index = GPTSimpleVectorIndex(documents)
         logging.info(
-            f"=====> Save index to disk path: {index_cache_web_dir + index_file_name}")
-        index.save_to_disk(index_cache_web_dir + index_file_name)
+            f"=====> Save index to disk path: {index_cache_web_dir / index_file_name}")
+        index.save_to_disk(index_cache_web_dir / index_file_name)
     return index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=QUESTION_ANSWER_PROMPT)
 
 def get_index_name_from_file(file: str):
-    file_md5_with_extension = file.replace(index_cache_file_dir, '')
+    file_md5_with_extension = str(Path(file).relative_to(index_cache_file_dir).name)
     file_md5 = file_md5_with_extension.split('.')[0]
     return file_md5 + '.json'
 
@@ -134,8 +134,8 @@ def get_answer_from_llama_file(messages, file):
         documents = SimpleDirectoryReader(input_files=[file]).load_data()
         index = GPTSimpleVectorIndex(documents)
         logging.info(
-            f"=====> Save index to disk path: {index_cache_file_dir + index_name}")
-        index.save_to_disk(index_cache_file_dir + index_name)
+            f"=====> Save index to disk path: {index_cache_file_dir / index_name}")
+        index.save_to_disk(index_cache_file_dir / index_name)
     return index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=QUESTION_ANSWER_PROMPT)
 
 def get_text_from_whisper(voice_file_path):
