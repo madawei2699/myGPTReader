@@ -112,6 +112,12 @@ Please join this [slack channel](https://slack-redirect.i365.tech/) to experienc
 - Publish bot to make it can be used in other workspaces
   - [ ] Slack marketplace
 
+## Documentation
+
+Currently, if you want to know this repo quickly, you can refer to the following YouTube video:
+
+[![myGPTReader Live Share](http://img.youtube.com/vi/XZIogwFU7jE/0.jpg)](https://www.youtube.com/live/XZIogwFU7jE?feature=share "myGPTReader Live Share")
+
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=madawei2699/myGPTReader&type=Date)](https://star-history.com/#madawei2699/myGPTReader&Date)
