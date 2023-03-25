@@ -1,13 +1,13 @@
 # myGPTReader
 
-myGPTReader is a slack bot that can read any webpage, ebook or document and summarize it with chatGPT. It can also talk to you via voice using the content in the channel.
+myGPTReader is a slack bot that can read any webpage, ebook, video(YouTube) or document and summarize it with chatGPT. It can also talk to you via voice using the content in the channel.
 
 > The exciting part is that the development of this project is also paired with chatGPT. I document the development process in this [CDDR](docs/chatGPT/CDDR.md) file.
 
 ## Main Features
 
 - Stay updated with the latest news summaries daily with chatGPT.
-- Use chatGPT to read and provide a summary of any webpage, ebook, or document.
+- Use chatGPT to read and provide a summary of any webpage, ebook, video(YouTube), or document.
 - Enjoy customizable prompt templates that use context from previous conversations with chatGPT.
 - Practice speaking languages by conversing with chatGPT using your voice.
 
@@ -91,7 +91,7 @@ Please join this [slack channel](https://slack-redirect.i365.tech/) to experienc
     - Japanese
     - German
 - Support video summarization
-  - [ ] YouTube 🚩
+  - [x] YouTube
 - [x] User access limit
   - Limit the number of requests to bot per user per day to save the cost
 - IM Support

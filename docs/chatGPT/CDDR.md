@@ -4284,3 +4284,157 @@ for i in range(5):
 ```
 
 This code will attempt to make 15 requests from `user123`. The first 10 should be allowed, but the last 5 should be denied. It will then attempt to make 5 requests from `user456`, all of which should be allowed since the user has not made any previous requests within the current period.
+
+---
+
+## 2023-03-25
+
+---
+
+You
+---
+
+ 
+
+return self.ack\_function( 2023-03-25T13:16:39.750 app\[d5fa1ad6\] sin \[info\] File "/workspace/app/server.py", line 212, in handle\_mentions 2023-03-25T13:16:39.750 app\[d5fa1ad6\] sin \[info\] gpt\_response = future.result(timeout=300) 2023-03-25T13:16:39.750 app\[d5fa1ad6\] sin \[info\] File "/layers/paketo-buildpacks\_cpython/cpython/lib/python3.10/concurrent/futures/\_base.py", line 458, in result 2023-03-25T13:16:39.750 app\[d5fa1ad6\] sin \[info\] return self.\_\_get\_result() 2023-03-25T13:16:39.750 app\[d5fa1ad6\] sin \[info\] File "/layers/paketo-buildpacks\_cpython/cpython/lib/python3.10/concurrent/futures/\_base.py", line 403, in \_\_get\_result 2023-03-25T13:16:39.750 app\[d5fa1ad6\] sin \[info\] raise self.\_exception 2023-03-25T13:16:39.750 app\[d5fa1ad6\] sin \[info\] File "/layers/paketo-buildpacks\_cpython/cpython/lib/python3.10/concurrent/futures/thread.py", line 58, in run 2023-03-25T13:16:39.750 app\[d5fa1ad6\] sin \[info\] result = self.fn(\*self.args, \*\*self.kwargs) 2023-03-25T13:16:39.750 app\[d5fa1ad6\] sin \[info\] File "/workspace/app/gpt.py", line 117, in get\_answer\_from\_llama\_web 2023-03-25T13:16:39.750 app\[d5fa1ad6\] sin \[info\] f"=====> Save index to disk path: {index\_cache\_web\_dir + index\_file\_name}") 2023-03-25T13:16:39.750 app\[d5fa1ad6\] sin \[info\] TypeError: unsupported operand type(s) for +: 'PosixPath' and 'str'
+
+ChatGPT
+-------
+
+The error message indicates that there is a TypeError occurring on line 117 of the gpt.py module. Specifically, it seems to be an issue with combining a `PosixPath` object and a string using the `+` operator.
+
+To resolve this error, we need to ensure that we are concatenating objects of compatible types. One way to accomplish this could be by converting the `PosixPath` object to a string using the `str()` function before performing concatenation.
+
+Here's how we can update the code on line 117 of gpt.py:
+
+```
+f"=====> Save index to disk path: {str(index_cache_web_dir) + index_file_name}"
+```
+
+This should properly concatenate the two objects and eliminate the TypeError.
+
+You
+---
+
+ 
+
+file\_md5\_with\_extension = file.replace(index\_cache\_file\_dir, '') , how to modify this?
+
+ChatGPT
+-------
+
+To modify `file_md5_with_extension = file.replace(index_cache_file_dir, '')` we can use the `os.path` module to split the path to get the filename with extension as shown below:
+
+```
+import os
+
+file_name_with_ext = os.path.basename(file)
+```
+
+This will return the `file_name_with_ext` variable which will only contain the name of the file with its extension.
+
+You
+---
+
+ 
+
+the index\_cache\_file\_dir is a pathlib path
+
+ChatGPT
+-------
+
+Assuming you want to modify `file_md5_with_extension` in a way that 'PosixPath' type is compatible for string concatenation, you can get the file name by using the `.name` attribute of the path object. Here's an example:
+
+```python
+# Importing Module required for Pathlib
+from pathlib import Path
+
+# Example index_cache_file_dir
+index_cache_file_dir = Path('/Users/user1/Documents/cache/dir/')
+
+# Example file path
+file = Path('/Users/user1/Documents/cache/dir/filename.txt')
+
+# Get relative area of file inside cache dir & Name of file - this should fix TypeError 
+file_relative_path = file.relative_to(index_cache_file_dir)
+file_md5_with_extension = str(file_relative_path.name)
+
+# Additional Usage Example
+print(file_md5_with_extension)           # Output: filename.txt
+```
+
+We first obtain the relative path of the file with respect to `index_cache_file_dir` (assuming the file is within that directory). This creates a new Path object that removes the leading part of the original file path that matched `index_cache_file_dir`.
+
+Then, we extract just the filename portion from this path by using the `.name` attribute.
+
+Finally, we convert the resulting Path object to a string with the `str()` function to make sure it's compatible with any string operations you might perform later on.
+
+Hope this helps!
+
+You
+---
+
+ 
+
+def get\_index\_name\_from\_file(file: str): file\_md5\_with\_extension = file.replace(index\_cache\_file\_dir, '') file\_md5 = file\_md5\_with\_extension.split('.')\[0\] return file\_md5 + '.json' the index\_cache\_file\_dir is pathlib path, how to fix it?
+
+ChatGPT
+-------
+
+If `index_cache_file_dir` is a `pathlib.Path` object, you should not pass it as a string to the `replace()` function. You can use the `as_posix()` method to convert the `Path` object to a string in POSIX format, which can be used with `replace()`.
+
+Here's how you can modify the `get_index_name_from_file` function to work with a `pathlib.Path` object for `index_cache_file_dir`:
+
+```python
+def get_index_name_from_file(file: str):
+    file_md5_with_extension = str(file).replace(index_cache_file_dir.as_posix(), '')
+    file_md5 = file_md5_with_extension.split('.')[0]
+    return file_md5 + '.json'
+```
+
+Here, `str(file)` converts the `Path` object to a string, and `as_posix()` returns the POSIX-style path of the `index_cache_file_dir`.
+
+---
+
+You
+---
+
+ 
+
+Write a python function, the input is a youtube video url, and the output is a text string, which is the video subtitle text
+
+ChatGPT
+-------
+
+To get the subtitle text from a YouTube video, we can use the `youtube_transcript_api` package. This package can fetch the auto-generated subtitles (if available) from the specified video and return them as a transcript.
+
+Firstly, the `youtube_transcript_api` package needs to be installed. You can install it via pip–the package manager for Python by running the following command in your terminal.
+
+```python
+pip install youtube_transcript_api
+```
+
+Once installed you can write a python function like this:
+
+```python
+from youtube_transcript_api import YouTubeTranscriptApi
+
+def fetch_youtube_subtitle_text(url):
+    """
+    Fetches the auto-generated subtitle text for the YouTube video specified by the given URL.
+    :param url: The URL of the YouTube video.
+    :return: The text content of the transcription.
+    """
+    vid = url.split("=")[-1]
+    try:
+        transcript_list = YouTubeTranscriptApi.list_transcripts(vid)
+        transcript = transcript_list.find_generated_transcript(['en', 'de']) # can add more languages if needed     
+    except Exception as e:
+        return "Error Occured - {}".format(str(e))
+    
+    return transcript.fetch().text
+```
+
+The above function takes a URL to a YouTube video as an input and returns the auto-generated subtitle text as output as a string. In case there is any error while fetching the text, the function will return an error message.
+
+Note: Some videos may not have auto-generated subtitles, in that case, the above function will throw an exception.

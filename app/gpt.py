@@ -14,7 +14,8 @@ from langchain.chat_models import ChatOpenAI
 from azure.cognitiveservices.speech import SpeechConfig, SpeechSynthesizer, ResultReason, CancellationReason, SpeechSynthesisOutputFormat
 from azure.cognitiveservices.speech.audio import AudioOutputConfig
 
-from app.fetch_web_post import get_urls, scrape_website, scrape_website_by_phantomjscloud
+from app.fetch_web_post import get_urls, get_youtube_transcript, scrape_website, scrape_website_by_phantomjscloud
+from app.util import get_youtube_video_id
 
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 SPEECH_KEY = os.environ.get('SPEECH_KEY')
@@ -45,6 +46,14 @@ def get_unique_md5(urls):
 def format_dialog_messages(messages):
     return "\n".join(messages)
 
+def get_document_from_youtube_id(video_id):
+    if video_id is None:
+        return None
+    transcript = get_youtube_transcript(video_id)
+    if transcript is None:
+        return None
+    return Document(transcript)
+
 def get_documents_from_urls(urls):
     documents = []
     for url in urls['page_urls']:
@@ -57,6 +66,12 @@ def get_documents_from_urls(urls):
         for url in urls['phantomjscloud_urls']:
             document = Document(scrape_website_by_phantomjscloud(url))
             documents.append(document)
+    if len(urls['youtube_urls']) > 0:
+        for url in urls['youtube_urls']:
+            video_id = get_youtube_video_id(url)
+            document = get_document_from_youtube_id(video_id)
+            if (document is not None):
+                documents.append(document)
     return documents
 
 def get_answer_from_chatGPT(messages):
