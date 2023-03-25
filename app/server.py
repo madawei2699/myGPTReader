@@ -39,7 +39,7 @@ def send_daily_news(client, news):
         try:
             r = client.chat_postMessage(
                 channel=schedule_channel,
-                text="",
+                text="🔥🔥🔥 Daily Hot News 🔥🔥🔥",
                 blocks=news_item,
                 reply_broadcast=True,
                 unfurl_links=False,
