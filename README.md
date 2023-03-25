@@ -89,14 +89,21 @@ Please join this [slack channel](https://slack-redirect.i365.tech/) to experienc
       - 🇮🇳
     - Japanese
     - German
+- Support video summarization
+  - [ ] YouTube 🚩
 - [x] User access limit
   - Limit the number of requests to bot per user per day to save the cost
 - IM Support
   - [x] Slack bot
   - [ ] Discord bot
   - [ ] Telegram bot
-- [ ] Bot landing page 🚩
-  - Use this [tool](https://earlybird.im/) to build
+- Bot landing page 🚩
+  - [ ] Use [earlybird](https://earlybird.im/) to build the landing page
+  - [ ] SEO optimization
+  - [ ] Traffic analysis
+    - [mixpanel](https://mixpanel.com/get-demo/free-plan/)
+    - [beamanalytics](https://beamanalytics.io/)
+  - [ ] [Screen recordings](https://www.screen.studio/) to show how to use the bot
 - [ ] Integrated with Azure OpenAI Service
 - [ ] Rewrite the code in Typescript ❓
 - [ ] Upgrade chat model (gpt-3.5-turbo) to GPT4 (gpt-4-0314) 💥
