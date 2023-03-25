@@ -5,6 +5,7 @@ import hashlib
 import random
 import uuid
 import openai
+from pathlib import Path
 from langdetect import detect
 from llama_index import GPTSimpleVectorIndex, LLMPredictor, RssReader, SimpleDirectoryReader
 from llama_index.prompts.prompts import QuestionAnswerPrompt
@@ -23,18 +24,18 @@ openai.api_key = OPENAI_API_KEY
 llm_predictor = LLMPredictor(llm=ChatOpenAI(
     temperature=0.2, model_name="gpt-3.5-turbo"))
 
-index_cache_web_dir = '/tmp/myGPTReader/cache_web/'
-index_cache_voice_dir = '/tmp/myGPTReader/voice/'
-index_cache_file_dir = '/data/myGPTReader/file/'
+index_cache_web_dir = Path('/tmp/myGPTReader/cache_web/')
+index_cache_voice_dir = Path('/tmp/myGPTReader/voice/')
+index_cache_file_dir = Path('/data/myGPTReader/file/')
 
-if not os.path.exists(index_cache_web_dir):
-    os.makedirs(index_cache_web_dir)
+if not index_cache_web_dir.is_dir():
+    index_cache_web_dir.mkdir(parents=True, exist_ok=True)
 
-if not os.path.exists(index_cache_voice_dir):
-    os.makedirs(index_cache_voice_dir)
+if not index_cache_voice_dir.is_dir():
+    index_cache_voice_dir.mkdir(parents=True, exist_ok=True)
 
-if not os.path.exists(index_cache_file_dir):
-    os.makedirs(index_cache_file_dir)
+if not index_cache_file_dir.is_dir():
+    index_cache_file_dir.mkdir(parents=True, exist_ok=True)
 
 def get_unique_md5(urls):
     urls_str = ''.join(sorted(urls))
@@ -81,20 +82,22 @@ QUESTION_ANSWER_PROMPT = QuestionAnswerPrompt(QUESTION_ANSWER_PROMPT_TMPL)
 
 
 def get_index_from_web_cache(name):
-    if not os.path.exists(index_cache_web_dir + name):
+    web_cache_file = index_cache_web_dir / name
+    if not web_cache_file.is_file():
         return None
-    index = GPTSimpleVectorIndex.load_from_disk(index_cache_web_dir + name)
+    index = GPTSimpleVectorIndex.load_from_disk(web_cache_file)
     logging.info(
-        f"=====> Get index from web cache: {index_cache_web_dir + name}")
+        f"=====> Get index from web cache: {web_cache_file}")
     return index
 
 
 def get_index_from_file_cache(name):
-    if not os.path.exists(index_cache_file_dir + name):
+    file_cache_file = index_cache_file_dir / name
+    if not file_cache_file.is_file():
         return None
-    index = GPTSimpleVectorIndex.load_from_disk(index_cache_file_dir + name)
+    index = GPTSimpleVectorIndex.load_from_disk(file_cache_file)
     logging.info(
-        f"=====> Get index from file cache: {index_cache_file_dir + name}")
+        f"=====> Get index from file cache: {file_cache_file}")
     return index
 
 def get_answer_from_llama_web(messages, urls):

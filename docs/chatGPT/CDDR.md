@@ -3178,7 +3178,7 @@ def get_file_extension(file_path):
 
 file_path = 'example.epub'
 extension = get_file_extension(file_path)
-print(extension) # Output: .epub
+print(extension) # Output: .epub+zip
 ```
 
 Here, we first use the `mimetypes.guess_type` method to get the MIME type of the file. We set the `strict` parameter to False so that the function tries to guess the type even when it doesn't match a known type exactly. If the function doesn't find a MIME type, it returns `(None, None)`.

@@ -2,6 +2,7 @@ import logging
 import re
 import os
 import requests
+from pathlib import Path
 from urllib.parse import urlparse
 from flask import Flask, request
 from flask_apscheduler import APScheduler
@@ -166,19 +167,18 @@ def handle_mentions(event, say, logger):
             say(f'<@{user}>, this file size is beyond max file size limit ({max_file_size / 1024 /1024}MB)', thread_ts=thread_ts)
             return
         url_private = file["url_private"]
-        temp_file_path = index_cache_file_dir + user
-        if not os.path.exists(temp_file_path):
-            os.makedirs(temp_file_path)
-        temp_file_filename = temp_file_path + '/' + file["name"]
+        temp_file_path = index_cache_file_dir / user
+        temp_file_path.mkdir(parents=True, exist_ok=True)
+        temp_file_filename = temp_file_path / file["name"]
         with open(temp_file_filename, "wb") as f:
             response = requests.get(url_private, headers={"Authorization": "Bearer " + slack_app.client.token})
             f.write(response.content)
             logger.info(f'=====> Downloaded file to save {temp_file_filename}')
             temp_file_md5 = md5(temp_file_filename)
-            file_md5_name = index_cache_file_dir + temp_file_md5 + '.' + filetype
-            if not os.path.exists(file_md5_name):
+            file_md5_name = index_cache_file_dir / (temp_file_md5 + '.' + filetype)
+            if not file_md5_name.exists():
                 logger.info(f'=====> Rename file to {file_md5_name}')
-                os.rename(temp_file_filename, file_md5_name)
+                temp_file_filename.rename(file_md5_name)
                 if filetype in filetype_voice_extension_allowed:
                     voicemessage = get_text_from_whisper(file_md5_name)
 
