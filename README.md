@@ -7,12 +7,12 @@ myGPTReader is a slack bot that can read any webpage, ebook, video(YouTube) or d
 ## Main Features
 
 - Stay updated with the latest news summaries daily with chatGPT.
-  ![](https://img.bmpi.dev/my-gpt-reader-read-hot-news-1-s.gif)
+  ![](https://img.bmpi.dev/my-gpt-reader-read-hot-news-1-s-min.gif)
 - Use chatGPT to read and provide a summary of any webpage include the video(YouTube).
   ![](https://img.bmpi.dev/my-gpt-reader-read-web-page-1.gif)
   ![](https://img.bmpi.dev/my-gpt-reader-read-web-page-2.gif)
 - Use chatGPT to read and provide a summary of any document include the eBook.
-  ![](https://img.bmpi.dev/my-gpt-reader-read-pdf-1-s.gif)
+  ![](https://img.bmpi.dev/my-gpt-reader-read-pdf-1-s-min.gif)
   ![](https://img.bmpi.dev/my-gpt-reader-read-epub-1.gif)
 - Enjoy customizable prompt templates that use context from previous conversations with chatGPT.
   ![](https://img.bmpi.dev/my-gpt-reader-prompt-template-1.gif)
