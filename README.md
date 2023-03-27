@@ -1,6 +1,6 @@
 # myGPTReader
 
-![](web/landing/logo/my-gpt-reader-logo-1.png)
+<img src="./web/landing/logo/my-gpt-reader-logo-1-removebg.png" data-canonical-src="./web/landing/logo/my-gpt-reader-logo-1-removebg.png" width="200" height="200" />
 
 myGPTReader is a slack bot that can read any webpage, ebook, video(YouTube) or document and summarize it with chatGPT. It can also talk to you via voice using the content in the channel.
 
