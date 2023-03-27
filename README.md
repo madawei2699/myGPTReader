@@ -105,6 +105,7 @@ Please join this [slack channel](https://slack-redirect.i365.tech/) to experienc
   - Limit the number of requests to bot per user per day to save the cost
 - IM Support
   - [x] Slack bot
+    - [ ] Bot for you 💥
   - [ ] Discord bot
   - [ ] Telegram bot
 - Bot landing page 🚩
