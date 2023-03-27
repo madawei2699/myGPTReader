@@ -6,6 +6,7 @@ app = Flask(__name__)
 def receive_message():
     received_data = request.get_json()
     challenge = received_data['challenge']
+    print(challenge)
     response_data = {'challenge': challenge}
     return jsonify(response_data), 200
 
