@@ -1,8 +1,23 @@
 # myGPTReader
 
-<img src="./web/landing/logo/my-gpt-reader-logo-1-removebg.png" data-canonical-src="./web/landing/logo/my-gpt-reader-logo-1-removebg.png" width="200" height="200" />
+<style>
+  td, th {
+    border: none !important
+  }
+</style>
 
-myGPTReader is a slack bot that can read any webpage, ebook, video(YouTube) or document and summarize it with chatGPT. It can also talk to you via voice using the content in the channel.
+<table>
+  <tbody>
+    <tr>
+        <td>
+          <img src="./web/landing/logo/my-gpt-reader-logo-1-removebg.png" data-canonical-src="./web/landing/logo/my-gpt-reader-logo-1-removebg.png"/>
+        </td>
+        <td>
+          myGPTReader is a slack bot that can read any webpage, ebook, video(YouTube) or document and summarize it with chatGPT. It can also talk to you via voice using the content in the channel.
+        </td>
+    </tr>
+  </tbody>
+</table>
 
 > The exciting part is that the development of this project is also paired with chatGPT. I document the development process in this [CDDR](docs/chatGPT/CDDR.md) file.
 
