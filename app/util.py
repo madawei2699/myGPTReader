@@ -1,4 +1,6 @@
 import hashlib
+import logging
+from langdetect import detect
 
 def md5(file_path):
     hash_md5 = hashlib.md5()
@@ -15,3 +17,10 @@ def get_youtube_video_id(url):
     if 'youtu.be' in url:
         return url.split('/')[-1]
     return None
+
+def get_language_code(text):
+    try:
+        return detect(text).split('-')[0]
+    except Exception as e:
+        logging.error(e)
+        return 'zh'

@@ -210,7 +210,7 @@ def handle_mentions(event, say, logger):
 
     try:
         gpt_response = future.result(timeout=300)
-        update_thread_history(parent_thread_ts, 'AI: %s' % insert_space(f'{gpt_response}'))
+        update_thread_history(parent_thread_ts, 'chatGPT: %s' % insert_space(f'{gpt_response}'))
         logger.info(gpt_response)
         if voicemessage is None:
             say(f'<@{user}>, {gpt_response}', thread_ts=thread_ts)

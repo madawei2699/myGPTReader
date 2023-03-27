@@ -6,16 +6,15 @@ import random
 import uuid
 import openai
 from pathlib import Path
-from langdetect import detect
 from llama_index import GPTSimpleVectorIndex, LLMPredictor, RssReader, SimpleDirectoryReader
-from llama_index.prompts.prompts import QuestionAnswerPrompt
 from llama_index.readers.schema.base import Document
 from langchain.chat_models import ChatOpenAI
 from azure.cognitiveservices.speech import SpeechConfig, SpeechSynthesizer, ResultReason, CancellationReason, SpeechSynthesisOutputFormat
 from azure.cognitiveservices.speech.audio import AudioOutputConfig
 
 from app.fetch_web_post import get_urls, get_youtube_transcript, scrape_website, scrape_website_by_phantomjscloud
-from app.util import get_youtube_video_id
+from app.prompt import get_prompt_template
+from app.util import get_language_code, get_youtube_video_id
 
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 SPEECH_KEY = os.environ.get('SPEECH_KEY')
@@ -54,6 +53,9 @@ def get_document_from_youtube_id(video_id):
         return None
     return Document(transcript)
 
+def remove_prompt_from_text(text):
+    return text.replace('chatGPT:', '').strip()
+
 def get_documents_from_urls(urls):
     documents = []
     for url in urls['page_urls']:
@@ -87,17 +89,6 @@ def get_answer_from_chatGPT(messages):
     logging.info(completion.usage)
     return completion.choices[0].message.content
 
-
-QUESTION_ANSWER_PROMPT_TMPL = (
-    "Context information is below. \n"
-    "---------------------\n"
-    "{context_str}"
-    "\n---------------------\n"
-    "{query_str}\n"
-)
-QUESTION_ANSWER_PROMPT = QuestionAnswerPrompt(QUESTION_ANSWER_PROMPT_TMPL)
-
-
 def get_index_from_web_cache(name):
     web_cache_file = index_cache_web_dir / name
     if not web_cache_file.is_file():
@@ -106,7 +97,6 @@ def get_index_from_web_cache(name):
     logging.info(
         f"=====> Get index from web cache: {web_cache_file}")
     return index
-
 
 def get_index_from_file_cache(name):
     file_cache_file = index_cache_file_dir / name
@@ -119,8 +109,7 @@ def get_index_from_file_cache(name):
 
 def get_answer_from_llama_web(messages, urls):
     dialog_messages = format_dialog_messages(messages)
-    logging.info('=====> Use llama web with chatGPT to answer!')
-    logging.info(dialog_messages)
+    lang_code = get_language_code(remove_prompt_from_text(messages[-1]))
     combained_urls = get_urls(urls)
     logging.info(combained_urls)
     index_file_name = get_unique_md5(urls)
@@ -133,7 +122,13 @@ def get_answer_from_llama_web(messages, urls):
         logging.info(
             f"=====> Save index to disk path: {index_cache_web_dir / index_file_name}")
         index.save_to_disk(index_cache_web_dir / index_file_name)
-    return index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=QUESTION_ANSWER_PROMPT)
+    prompt = get_prompt_template(lang_code)
+    logging.info('=====> Use llama web with chatGPT to answer!')
+    logging.info('=====> dialog_messages')
+    logging.info(dialog_messages)
+    logging.info('=====> text_qa_template')
+    logging.info(prompt)
+    return index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=prompt)
 
 def get_index_name_from_file(file: str):
     file_md5_with_extension = str(Path(file).relative_to(index_cache_file_dir).name)
@@ -142,8 +137,7 @@ def get_index_name_from_file(file: str):
 
 def get_answer_from_llama_file(messages, file):
     dialog_messages = format_dialog_messages(messages)
-    logging.info('=====> Use llama file with chatGPT to answer!')
-    logging.info(dialog_messages)
+    lang_code = get_language_code(remove_prompt_from_text(messages[-1]))
     index_name = get_index_name_from_file(file)
     index = get_index_from_file_cache(index_name)
     if index is None:
@@ -153,15 +147,18 @@ def get_answer_from_llama_file(messages, file):
         logging.info(
             f"=====> Save index to disk path: {index_cache_file_dir / index_name}")
         index.save_to_disk(index_cache_file_dir / index_name)
-    return index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=QUESTION_ANSWER_PROMPT)
+    prompt = get_prompt_template(lang_code)
+    logging.info('=====> Use llama file with chatGPT to answer!')
+    logging.info('=====> dialog_messages')
+    logging.info(dialog_messages)
+    logging.info('=====> text_qa_template')
+    logging.info(prompt)
+    return index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=prompt)
 
 def get_text_from_whisper(voice_file_path):
     with open(voice_file_path, "rb") as f:
         transcript = openai.Audio.transcribe("whisper-1", f)
     return transcript.text
-
-def remove_prompt_from_text(text):
-    return text.replace('AI:', '').strip()
 
 lang_code_voice_map = {
     'zh': ['zh-CN-XiaoxiaoNeural', 'zh-CN-XiaohanNeural', 'zh-CN-YunxiNeural', 'zh-CN-YunyangNeural'],
@@ -175,9 +172,9 @@ def convert_to_ssml(text, voice_name=None):
         logging.info("=====> Convert text to ssml!")
         logging.info(text)
         text = remove_prompt_from_text(text)
-        lang_code = detect(text)
+        lang_code = get_language_code(text)
         if voice_name is None:
-            voice_name = random.choice(lang_code_voice_map[lang_code.split('-')[0]])
+            voice_name = random.choice(lang_code_voice_map[lang_code])
     except Exception as e:
         logging.warning(f"Error: {e}. Using default voice.")
         voice_name = random.choice(lang_code_voice_map['zh'])
