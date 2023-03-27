@@ -26,6 +26,9 @@ Please join this [slack channel](https://slack-redirect.i365.tech/) to experienc
 
 ## TODO List
 
+<details>
+  <summary>Click me</summary>
+
 - [x] Integrated with slack bot
   - [x] Bot replies messages in the same thread
 - [x] Support web page reading with chatGPT
@@ -110,6 +113,8 @@ Please join this [slack channel](https://slack-redirect.i365.tech/) to experienc
   - [ ] Telegram bot
 - Bot landing page 🚩
   - [ ] Use [earlybird](https://earlybird.im/) to build the landing page
+    - [Landing Page Examples](https://landings.dev/)
+    - [Landingfolio](https://www.landingfolio.com/)
   - [ ] SEO optimization
   - [ ] Traffic analysis
     - [mixpanel](https://mixpanel.com/get-demo/free-plan/)
@@ -120,6 +125,8 @@ Please join this [slack channel](https://slack-redirect.i365.tech/) to experienc
 - [ ] Upgrade chat model (gpt-3.5-turbo) to GPT4 (gpt-4-0314) 💥
 - Publish bot to make it can be used in other workspaces
   - [ ] Slack marketplace
+
+</details>
 
 ## Documentation
 
