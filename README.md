@@ -31,7 +31,7 @@
   ![](https://img.bmpi.dev/my-gpt-reader-voice-1.gif)
   ![](https://img.bmpi.dev/my-gpt-reader-voice-2.gif)
 
-Please join this [slack channel](https://slack-redirect.i365.tech/) to experience all these features for free.
+Please join this [slack channel](https://slack-redirect.i365.tech/) with more than 3000+ members to experience all these features for free.
 
 ![](https://img.bmpi.dev/my-gpt-reader-showcase.gif)
 
