@@ -52,6 +52,9 @@ def message_receive_event_handler(req_data: MessageReceiveEvent):
         result = extract_link_and_text(text_content)
         text = result["text"]
         urls = result["link"]
+        # 检查 urls 是否为 None
+        if urls is None:
+            urls = []
         if len(urls) > 0:
             future = executor.submit(get_answer_from_llama_web, text, list(urls))
         else:
