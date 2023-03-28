@@ -138,6 +138,10 @@ Please join this [slack channel](https://slack-redirect.i365.tech/) with more th
     - [mixpanel](https://mixpanel.com/get-demo/free-plan/)
     - [beamanalytics](https://beamanalytics.io/)
   - [ ] [Screen recordings](https://www.screen.studio/) to show how to use the bot
+  - Promotion
+    - [ ] Hacker News
+    - [ ] Product Hunt
+    - [ ] Reddit
 - [ ] Integrated with Azure OpenAI Service
 - [ ] Rewrite the code in Typescript ❓
 - [ ] Upgrade chat model (gpt-3.5-turbo) to GPT4 (gpt-4-0314) 💥
