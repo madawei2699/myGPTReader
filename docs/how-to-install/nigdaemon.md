@@ -97,4 +97,4 @@ PS：在测试文章抓取功能时，每次都会报out of memey，最后把fly
 
 最后要非常感谢大伟老师：https://twitter.com/madawei2699
 
-![showgif](https://github.com/nigdaemon/myGPTReader/blob/main/docs/myGPTReader.gif)
+![showgif](https://raw.githubusercontent.com/nigdaemon/myGPTReader/main/docs/myGPTReader.gif)

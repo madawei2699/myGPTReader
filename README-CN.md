@@ -50,7 +50,7 @@
 
 ### 如何安装
 
-TODO: 未完成
+- 可参考 [@nigdaemon](./docs/how-to-install/nigdaemon.md) 的安装记录。
 
 ## 文章
 
