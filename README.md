@@ -1,12 +1,6 @@
 # myGPTReader
 
-<style>
-  td, th {
-    border: none !important
-  }
-</style>
-
-<table>
+<table style="border-collapse: collapse; border: none;">
   <tbody>
     <tr>
         <td>
