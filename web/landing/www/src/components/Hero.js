@@ -2,26 +2,25 @@ import React from "react";
 
 const Hero = () => {
   return (
-    <section className="bg-gray-100">
-      <div className="container mx-auto flex items-center justify-between py-20">
-        <div className="flex-1">
-          <h1 className="font-bold text-3xl md:text-5xl leading-tight mb-4">
-            The Best Productivity App In The Market
-          </h1>
-          <p className="text-gray-600 leading-normal mb-8">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-            cursus vehicula mattis.
-          </p>
-          <a
-            href="#slack-channel"
-            className="py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:bg-gray-700"
-          >
-            Join our Slack channel!
-          </a>
-        </div>
+    <section className="bg-white text-center">
+      <div className="container mx-auto py-20">
+        <h1 className="font-bold text-4xl mb-6">
+          A new way to read with AI bot
+        </h1>
+        <p className="text-gray-600 leading-normal mb-8 max-w-2xl mx-auto">
+          myGPTReader is a bot on Slack that can read and summarize any webpage,
+          documents including ebooks, or even videos from YouTube. It can even
+          communicate with you through voice by using the content in the channel.
+        </p>
+        <a
+          href="https://slack-redirect.i365.tech/"
+          className="py-3 px-6 bg-green-500 text-white font-semibold rounded-full shadow-md hover:bg-green-700 focus:outline-none focus:bg-gray-700"
+        >
+          Join Now
+        </a>
         <img
-          className="w-1/2"
-          src="https://images.unsplash.com/photo-1475274118587-6c9475b27252"
+          className="mt-12 mx-auto w-4/5"
+          src={process.env.PUBLIC_URL + "/hero.jpg"}
           alt="Hero"
         />
       </div>
