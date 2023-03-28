@@ -1,5 +1,12 @@
 # myGPTReader
 
+<p align="center">
+    <br> English | <a href="README-CN.md">中文</a>
+</p>
+<p align="center">
+    <em>A new way to read with AI bot - powered by chatGPT.</em>
+</p>
+
 <table style="border-collapse: collapse; border: none;">
   <tbody>
     <tr>
