@@ -49,21 +49,14 @@ def format_text(text):
     return fix_chinese_split_chunk_size_error
 
 def scrape_website(url: str) -> str:
-    endpoint_url = f"https://web-scraper.i365.tech/?url={url}&selector=div"
-    headers = {
-        'CF-Access-Client-Id': CF_ACCESS_CLIENT_ID,
-        'CF-Access-Client-Secret': CF_ACCESS_CLIENT_SECRET,
-    }
-    response = requests.get(endpoint_url, headers=headers)
+    data = {"url": url}
+    response = requests.post("http://127.0.0.1:4000/webhook", data=data)
     if response.status_code == 200:
-        try:
-            json_response = response.json()
-            tag_array = json_response['result']['div']
-            text = ''.join(tag_array)
-            return format_text(text)
-        except:
-            return "Error: Unable to parse JSON response"
+        html_content = response.text
+        text_content = html2text.html2text(html_content)
+        return text_content
     else:
+        print(f"请求失败，状态码：{response.status_code}")
         return f"Error: {response.status_code} - {response.reason}"
     
 def scrape_website_by_phantomjscloud(url: str) -> str:

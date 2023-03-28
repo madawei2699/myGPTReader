@@ -13,13 +13,16 @@ from llama_index.readers.schema.base import Document
 from langchain.chat_models import ChatOpenAI
 from azure.cognitiveservices.speech import SpeechConfig, SpeechSynthesizer, ResultReason, CancellationReason, SpeechSynthesisOutputFormat
 from azure.cognitiveservices.speech.audio import AudioOutputConfig
+from dotenv import load_dotenv, find_dotenv
 
-from app.fetch_web_post import get_urls, get_youtube_transcript, scrape_website, scrape_website_by_phantomjscloud
-from app.util import get_youtube_video_id
-
-OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
-SPEECH_KEY = os.environ.get('SPEECH_KEY')
-SPEECH_REGION = os.environ.get('SPEECH_REGION')
+from fetch_web_post import get_urls, get_youtube_transcript, scrape_website, scrape_website_by_phantomjscloud
+from utils import get_youtube_video_id
+# load env parameters form file named .env
+load_dotenv(find_dotenv())
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+print("OPENAI_API_KEY-{}", OPENAI_API_KEY)
+# SPEECH_KEY = os.environ.get('SPEECH_KEY')
+# SPEECH_REGION = os.environ.get('SPEECH_REGION')
 openai.api_key = OPENAI_API_KEY
 
 llm_predictor = LLMPredictor(llm=ChatOpenAI(
@@ -27,7 +30,9 @@ llm_predictor = LLMPredictor(llm=ChatOpenAI(
 
 index_cache_web_dir = Path('/tmp/myGPTReader/cache_web/')
 index_cache_voice_dir = Path('/tmp/myGPTReader/voice/')
-index_cache_file_dir = Path('/data/myGPTReader/file/')
+home_dir = os.path.expanduser("~")
+index_cache_file_dir = Path(home_dir, "myGPTReader", "file")
+# index_cache_file_dir = Path('/data/myGPTReader/file/')
 
 if not index_cache_web_dir.is_dir():
     index_cache_web_dir.mkdir(parents=True, exist_ok=True)
@@ -128,7 +133,7 @@ def get_answer_from_llama_web(messages, urls):
     if index is None:
         logging.info(f"=====> Build index from web!")
         documents = get_documents_from_urls(combained_urls)
-        logging.info(documents)
+        # logging.info(documents)
         index = GPTSimpleVectorIndex(documents)
         logging.info(
             f"=====> Save index to disk path: {index_cache_web_dir / index_file_name}")

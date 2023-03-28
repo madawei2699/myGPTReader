@@ -1,123 +1,140 @@
-# myGPTReader
+# Quickly develop a bot
 
-myGPTReader is a slack bot that can read any webpage, ebook, video(YouTube) or document and summarize it with chatGPT. It can also talk to you via voice using the content in the channel.
+> ⚠️ In order to facilitate the implementation of this tutorial, a reverse proxy tool (ngrok) is used. This tool is only suitable for the development and testing phase and cannot be used in the production environment. Before using it, you need to confirm whether it complies with the company's network security policy.
 
-> The exciting part is that the development of this project is also paired with chatGPT. I document the development process in this [CDDR](docs/chatGPT/CDDR.md) file.
+This example shows how to use the Open Platform's bot function to have a bot receive user messages and make replies. You
+can extend the event processing functions of bot based on this example.
 
-## Main Features
+## Runtime environment
 
-- Stay updated with the latest news summaries daily with chatGPT.
-- Use chatGPT to read and provide a summary of any webpage, ebook, video(YouTube), or document.
-- Enjoy customizable prompt templates that use context from previous conversations with chatGPT.
-- Practice speaking languages by conversing with chatGPT using your voice.
+- [Python 3](https://www.python.org/)
+- [ngrok](https://ngrok.com/download) (intranet penetration tool)
 
-Please join this [slack channel](https://slack-redirect.i365.tech/) to experience all these features for free.
+## Prep work
 
-![](https://img.bmpi.dev/my-gpt-reader-showcase.gif)
+1. In [Developer Console](https://open.feishu.cn/app/), click **Create custom app**, then click the app name to go to
+   the app details page.
+2. Go to **Credentials & Basic Info** to obtain the `App ID` and `App Secret`, and then go to **Event Subscriptions** to
+   obtain the
+   `Encrypt Key` and `Verification Token`.
+3. Pull the latest code to local and enter the corresponding directory.
+    ```
+    git clone https://github.com/larksuite/lark-samples.git
+    cd lark-samples/robot_quick_start/python
+    ```
 
-## TODO List
 
-- [x] Integrated with slack bot
-  - [x] Bot replies messages in the same thread
-- [x] Support web page reading with chatGPT
-  - [x] Consider to use cloudflare worker to scrape the html content
-    - [x] Self-hosting [Web Scraper](https://github.com/adamschwartz/web.scraper.workers.dev)
-    - [x] Restrict to access the web scraper, only allow the API server to access it by [Cloudflare Access](https://www.cloudflare.com/products/zero-trust/access/)
-  - [x] Consider to use a headless browser to scrape the web page content like twitter thread
-    - ~~https://www.browserless.io/~~
-    - https://phantomjscloud.com/
-    - https://scrapfly.io/
-  - [ ] Consider to use OCR to scrape the web page content (Web crawler to get the screenshot, then OCR to get the text)
-    - ~~[Azure OCR](https://learn.microsoft.com/en-us/azure/cognitive-services/computer-vision/overview-ocr)~~
-    - [Google Vision](https://cloud.google.com/vision)
-    - may use GPT4
-- [x] Support RSS reading with chatGPT
-  - RSS is a bunch of links, so it is equivalent to reading a web page to get the content.
-- [x] ~~Support newsletter reading with chatGPT~~
-  - Most newsletters are public and can be accessed online, so we can just give the url to the slack bot.
-- Prompt fine-tue
-  - [x] Support for custom `prompt`
-  - [x] Show `prompt` templates by slack app slash commands
-  - [ ] Auto collect the good `prompt` to `#gpt-prompt` channel by message shortcut
-- Cost saving
-  - [x] by caching the web page llama index
-    - ~~Consider to use [sqlite-vss](https://github.com/asg017/sqlite-vss) to store and search the text embeddings~~
-    - ~~Use [chromadb](https://github.com/chroma-core/chroma) to store and search the text embeddings~~
-    - Use the llama index file to restore the index
-  - [x] Consider to use [sentence-transformers](https://github.com/UKPLab/sentence-transformers) or [txtai](https://github.com/neuml/txtai) to generate [embeddings](https://github.com/asg017/sqlite-vss/blob/main/examples/headlines/build/add_embeddings.py) (vectors)
-    - Not good as the embeddings of OpenAI, rollback to use the OpenAI embeddings, and if enable to use the custom embeddings, the minimum of server's memory is 2GB which still increase the cost.
-  - [ ] Consider to fine-tue the chunk size of index node and prompt to save the cost
-    - If the chunk size is too big, it will cause the index node to be too large and the cost will be high.
-- [x] Bot can read historical messages from the same thread, thus providing context to chatGPT
-  - [x] [Changing the number of output tokens](https://github.com/jerryjliu/llama_index/issues/778#issuecomment-1478303173)
-- Index fine-tune
-  - [x] Use the [GPTListIndex](https://github.com/jerryjliu/llama_index/issues/753#issuecomment-1472387421) to summarize multiple URLs
-  - [ ] Use the `GPTTreeIndex` with `summarize` mode to summarize a single web page
-    - Use [response_mode](https://gist.github.com/ninehills/ecf7107574c83016e8b68965bf9a51c4) to change the summary mode
-- Bot regularly send hot ~~summarizes(expensive cost)~~ news in the slack channel (`#daily-news`)
-  - [x] Use chatGPT to summarize the hot news
-  - ~~Refer to [this](https://github.com/SkywalkerDarren/chatWeb/blob/c2ad05a97aecbe1bc0c846476ea003640f2a0f2e/main.py#L144-L175) approach~~
-    - World News
-      - [x] Zhihu daily hot answers
-      - [x] V2EX daily hot topics
-      - [x] 1point3acres daily hot topics
-      - [x] Reddit world hot news
-    - Dev News
-      - [x] Hacker News daily hot topics
-      - [x] Product Hunt daily hot topics
-    - Invest News
-      - [x] Xueqiu daily hot topics
-      - [x] Jisilu daily hot topics
-- Support file reading and analysis 💥
-  - Considering the expensive billing, it needs to use the slack userID whitelist to restrict the access this feature
-  - Need to cache the file Documents to save extract cost
-  - [x] EPUB
-  - [x] DOCX
-  - [x] MD
-  - [x] TEXT
-  - [x] PDF
-    - Use [Google Vision](https://cloud.google.com/vision/docs/pdf) to handle the PDF reading
-  - [ ] Image
-    - may use GPT4
-- [x] Support voice reading ~~with self-hosting [whisper](https://github.com/aarnphm/whispercpp)~~
-  - (whisper -> chatGPT -> azure text2speech) to play language speaking practices 💥
-  - Support language
-    - Chinese
-    - English
-      - 🇺🇸
-      - 🇬🇧
-      - 🇦🇺
-      - 🇮🇳
-    - Japanese
-    - German
-- Support video summarization
-  - [x] YouTube
-- [x] User access limit
-  - Limit the number of requests to bot per user per day to save the cost
-- IM Support
-  - [x] Slack bot
-  - [ ] Discord bot
-  - [ ] Telegram bot
-- Bot landing page 🚩
-  - [ ] Use [earlybird](https://earlybird.im/) to build the landing page
-  - [ ] SEO optimization
-  - [ ] Traffic analysis
-    - [mixpanel](https://mixpanel.com/get-demo/free-plan/)
-    - [beamanalytics](https://beamanalytics.io/)
-  - [ ] [Screen recordings](https://www.screen.studio/) to show how to use the bot
-- [ ] Integrated with Azure OpenAI Service
-- [ ] Rewrite the code in Typescript ❓
-- [ ] Upgrade chat model (gpt-3.5-turbo) to GPT4 (gpt-4-0314) 💥
-- [ ] Documentation
-- Publish bot to make it can be used in other workspaces
-  - [ ] Slack marketplace
+4. Edit environment variables
 
-## Documentation
+   Edit the app credential data in the `.env` file to real data.
+    ```
+    APP_ID=cli_9fxxxx00b
+    APP_SECRET=EX6xxxxOF
+    APP_VERIFICATION_TOKEN=cq3xxxxxxkUS 
+    ENCRYPT_KEY=
+    ```
+   The above parameters can be viewed in [Developer Console](https://open.feishu.cn/app/). Encrypt Key can be empty.
 
-Currently, if you want to know this repo quickly, you can refer to the following YouTube video:
+## Running with Docker
 
-[![myGPTReader Live Share](http://img.youtube.com/vi/XZIogwFU7jE/0.jpg)](https://www.youtube.com/live/XZIogwFU7jE?feature=share "myGPTReader Live Share")
+Ensure that [Docker](https://www.docker.com/) has been installed before running. You can choose to run your code either
+with Docker or locally.
 
-## Star History
+**Mac/Linux**
 
-[![Star History Chart](https://api.star-history.com/svg?repos=madawei2699/myGPTReader&type=Date)](https://star-history.com/#madawei2699/myGPTReader&Date)
+```
+sh exec.sh
+```
+
+**Windows**
+
+```
+.\exec.ps1
+```
+
+## Running Locally
+
+1. Create and activate a new virtual environment.
+
+   **Mac/Linux**
+   ```
+   python3 -m venv venv 
+   . venv/bin/activate
+   ```
+
+   **Windows**
+   ```
+   python3 -m venv venv 
+   venv\Scripts\activate
+   ```
+
+   Once activated, the terminal will display the virtual environment's name.
+   ```
+   (venv) **** python %
+   ```
+
+2. Install dependencies
+
+   ```
+   pip install -r requirements.txt
+   ```
+
+3. Run
+
+   ```
+   python3 server.py
+   ```
+
+## Complete the configuration and experience the bot
+
+The messages received by the bot are all in the format of callback event request. Using the POST request method, they
+are sent to the server for processing. Once the local server is started, the callback event can't make requests to the
+intranet. The public network request URL must be configured.
+
+Configuration involves the following two steps: Use the tool to penetrate the intranet, and go to the **Event
+Subscriptions** page to configure the public network request URL.
+
+1. Use the tool to expose the public network access portal for the local server. ngrok is used as an example here. If
+   the local has not been installed, you can access [ngrok](https://ngrok.com/download), and complete the installation
+   according to the guide.
+
+- Use the following commands to obtain the public network URL
+
+  **Note**: Before using a reverse proxy tool (ngrok), you need to determine whether it complies with the company's
+  network security policy.
+
+  **Note**: Need to get the token value in [ngrok](https://dashboard.ngrok.com/signup) in advance.
+   ```
+   ngrok authtoken <token> // <token> needs to be replaced
+   ngrok http 3000
+   ```
+
+
+2. Go to **Features** > **Bot** to enable **Using Bot**.
+3. Go to the **Event Subscriptions** page to configure the **Request URL**. Use the tool to generate the domain and fill
+   in the request URL, as shown in the figure below.
+   ![image.png](https://sf3-cn.feishucdn.com/obj/open-platform-opendoc/0ce38ea653e636accbd6d268b69360f9_Osy22NvNOK.png)
+   **Note**: Configuring the request URL and sending messages to the bot will both send requests to the backend server.
+   During the request period, the server should be kept in enabled status.
+
+4. Select the events listened to by the bot.
+
+   On the **Event Subscriptions** page, click **Add event** and select and subscribe to the `Message received` event.
+5. Add scopes to the bot
+
+   On the **Permissions & Scopes** page, search for the scopes you need, and add them to the bot.
+
+- Dependent scope list
+    - Read and send messages in private and group chats
+    - Read private messages sent to the bot
+
+  **Note**: The `Read private messages sent to the bot` scope is not displayed in **Added events**. You must switch to
+  the **Permissions & Scopes** page to add it to your bot.
+
+6. On the **Version Management & Release** page, click **Create a version** > **Submit for release**.
+
+   **Note**: The release involves scopes that need to be manually approved. You can use Test companies and users
+   function to generate a test version and complete the test. Note: After release, you can check whether users are
+   within the bot's availability range based on whether they can find the bot.
+
+8. Open **Feishu** and search for the **Bot name** to begin experiencing the bot's auto replies.
