@@ -1,0 +1,29 @@
+{
+    "plugins": ["jsx-a11y", "prettier", "jest"],
+    "extends": [
+      "react-app",
+      "plugin:jsx-a11y/recommended",
+      "plugin:prettier/recommended"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 12,
+        "sourceType": "module",
+        "ecmaFeatures": {
+          "jsx": true
+        }
+      },
+    "env": { "browser": true, "node": true, "jest/globals": true },
+    "rules": {
+        "prettier/prettier": [
+          "error",
+          {
+            "trailingComma": "es5",
+            "singleQuote": true,
+            "printWidth": 80,
+            "tabWidth": 2,
+            "endOfLine": "auto"
+          }
+        ]
+      }
+}
+  

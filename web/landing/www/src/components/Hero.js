@@ -10,7 +10,8 @@ const Hero = () => {
         <p className="text-gray-600 leading-normal mb-8 max-w-2xl mx-auto">
           myGPTReader is a bot on Slack that can read and summarize any webpage,
           documents including ebooks, or even videos from YouTube. It can even
-          communicate with you through voice by using the content in the channel.
+          communicate with you through voice by using the content in the
+          channel.
         </p>
         <a
           href="https://slack-redirect.i365.tech/"
@@ -18,11 +19,7 @@ const Hero = () => {
         >
           Join Now
         </a>
-        <img
-          className="mt-12 mx-auto w-4/5"
-          src={process.env.PUBLIC_URL + "/hero.jpg"}
-          alt="Hero"
-        />
+        <img className="mt-12 mx-auto w-4/5" src="/hero.jpg" alt="Hero" />
       </div>
     </section>
   );

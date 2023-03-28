@@ -1,40 +1,47 @@
-import React from 'react';
+import React from "react";
+import PropTypes from "prop-types";
 
-const Feature = ({ title, text, imageUrl, videoUrl }) => {
-    return (
-      <div className="mb-16">
-        <div
+const Feature = ({ title, text, videoUrl }) => {
+  return (
+    <div className="mb-16">
+      <div
+        style={{
+          paddingBottom: "56.25%",
+          position: "relative",
+          borderRadius: "0.5rem",
+          overflow: "hidden",
+        }}
+      >
+        <video
+          src={videoUrl}
           style={{
-            paddingBottom: '56.25%',
-            position: 'relative',
-            borderRadius: '0.5rem',
-            overflow: 'hidden'
+            position: "absolute",
+            top: 0,
+            left: 0,
+            height: "100%",
+            width: "100%",
+            objectFit: "cover",
+            borderRadius: "0.5rem",
           }}
-        >
-          <video
-            src={videoUrl}
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              height: '100%',
-              width: '100%',
-              objectFit: 'cover',
-              borderRadius: '0.5rem'
-            }}
-            autoPlay
-            loop
-            muted
-          ></video>
-        </div>
-        <div className="px-4 py-6 bg-white shadow-md -mt-12 relative z-10">
-          <h3 className="text-3xl font-bold mb-4">{title}</h3>
-          <p>{text}</p>
-        </div>
+          autoPlay
+          loop
+          muted
+        ></video>
       </div>
-    );
-  };
-  
+      <div className="px-4 py-6 bg-white shadow-md -mt-12 relative z-10">
+        <h3 className="text-3xl font-bold mb-4">{title}</h3>
+        <p>{text}</p>
+      </div>
+    </div>
+  );
+};
+
+Feature.propTypes = {
+  title: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string,
+  videoUrl: PropTypes.string,
+};
 
 const Features = () => {
   return (
