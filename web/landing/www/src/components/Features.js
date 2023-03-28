@@ -2,7 +2,7 @@ import React from 'react';
 
 const Feature = ({ title, text, imageUrl }) => {
   return (
-    <div className="flex items-center mb-16">
+    <div className="flex items-center mb-16" id="features">
       <div className="w-1/2">
         <h3 className="text-3xl font-bold mb-4">{title}</h3>
         <p>{text}</p>
