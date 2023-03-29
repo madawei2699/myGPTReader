@@ -133,7 +133,7 @@ Please join this [slack channel](https://slack-redirect.i365.tech/) with more th
   - [x] Use ~~[earlybird](https://earlybird.im/)~~chatGPT to build the landing page
     - [Landing Page Examples](https://landings.dev/)
     - [Landingfolio](https://www.landingfolio.com/)
-  - [ ] [Screen recordings](https://www.screen.studio/) to show how to use the bot
+  - [x] ~~[Screen recordings](https://www.screen.studio/)~~[CleanShot X](https://cleanshot.com/) to show how to use the bot
   - [ ] SEO optimization
   - [ ] Traffic analysis
     - [mixpanel](https://mixpanel.com/get-demo/free-plan/)

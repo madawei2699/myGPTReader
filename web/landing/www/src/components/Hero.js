@@ -4,8 +4,8 @@ const Hero = () => {
   return (
     <section className="bg-white text-center">
       <div className="container mx-auto py-20">
-        <h1 className="text-6xl mb-6 font-black">myGPTReader</h1>
-        <h2 className="text-5xl mb-6 font-black">
+        <h1 className="text-5xl mb-6 font-black">myGPTReader</h1>
+        <h2 className="text-4xl mb-6 font-black">
           A new way to read with AI bot
         </h2>
         <p className="text-gray-600 leading-normal mb-8 max-w-2xl mx-auto">

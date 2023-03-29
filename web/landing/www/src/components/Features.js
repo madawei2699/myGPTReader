@@ -26,6 +26,7 @@ const Feature = ({ title, text, videoUrl }) => {
           autoPlay
           loop
           muted
+          playsInline
         ></video>
       </div>
       <div className="px-4 py-6 bg-white shadow-md -mt-12 relative z-10">
