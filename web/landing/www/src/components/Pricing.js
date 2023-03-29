@@ -1,4 +1,5 @@
 import React from "react";
+import { umamiEvent } from "../util";
 
 const Pricing = () => {
   const referrer = document.referrer;
