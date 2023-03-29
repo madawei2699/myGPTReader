@@ -45,3 +45,21 @@ def get_youtube_video_id(url):
     if 'youtu.be' in url:
         return url.split('/')[-1]
     return None
+
+def insert_space(text):
+	
+    # Handling the case between English words and Chinese characters
+    text = re.sub(r'([a-zA-Z])([\u4e00-\u9fa5])', r'\1 \2', text)
+    text = re.sub(r'([\u4e00-\u9fa5])([a-zA-Z])', r'\1 \2', text)
+
+    # Handling the situation between numbers and Chinese
+    text = re.sub(r'(\d)([\u4e00-\u9fa5])', r'\1 \2', text)
+    text = re.sub(r'([\u4e00-\u9fa5])(\d)', r'\1 \2', text)
+
+    # handling the special characters
+    text = re.sub(r'([\W_])([\u4e00-\u9fa5])', r'\1 \2', text)
+    text = re.sub(r'([\u4e00-\u9fa5])([\W_])', r'\1 \2', text)
+
+    text = text.replace('  ', ' ')
+
+    return text

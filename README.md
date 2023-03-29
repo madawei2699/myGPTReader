@@ -18,21 +18,23 @@ can extend the event processing functions of bot based on this example.
    obtain the
    `Encrypt Key` and `Verification Token`.
 3. Pull the latest code to local and enter the corresponding directory.
-    ```
-    git clone https://github.com/larksuite/lark-samples.git
-    cd lark-samples/robot_quick_start/python
-    ```
 
+   ```
+   git clone https://github.com/larksuite/lark-samples.git
+   cd lark-samples/robot_quick_start/python
+   ```
 
 4. Edit environment variables
 
    Edit the app credential data in the `.env` file to real data.
-    ```
-    APP_ID=cli_9fxxxx00b
-    APP_SECRET=EX6xxxxOF
-    APP_VERIFICATION_TOKEN=cq3xxxxxxkUS 
-    ENCRYPT_KEY=
-    ```
+
+   ```
+   APP_ID=cli_9fxxxx00b
+   APP_SECRET=EX6xxxxOF
+   APP_VERIFICATION_TOKEN=cq3xxxxxxkUS
+   ENCRYPT_KEY=
+   ```
+
    The above parameters can be viewed in [Developer Console](https://open.feishu.cn/app/). Encrypt Key can be empty.
 
 ## Running with Docker
@@ -57,18 +59,21 @@ sh exec.sh
 1. Create and activate a new virtual environment.
 
    **Mac/Linux**
+
    ```
-   python3 -m venv venv 
+   python3 -m venv venv
    . venv/bin/activate
    ```
 
    **Windows**
+
    ```
-   python3 -m venv venv 
+   python3 -m venv venv
    venv\Scripts\activate
    ```
 
    Once activated, the terminal will display the virtual environment's name.
+
    ```
    (venv) **** python %
    ```
@@ -85,56 +90,16 @@ sh exec.sh
    python3 server.py
    ```
 
-## Complete the configuration and experience the bot
+# Feature & bugfix
 
-The messages received by the bot are all in the format of callback event request. Using the POST request method, they
-are sent to the server for processing. Once the local server is started, the callback event can't make requests to the
-intranet. The public network request URL must be configured.
-
-Configuration involves the following two steps: Use the tool to penetrate the intranet, and go to the **Event
-Subscriptions** page to configure the public network request URL.
-
-1. Use the tool to expose the public network access portal for the local server. ngrok is used as an example here. If
-   the local has not been installed, you can access [ngrok](https://ngrok.com/download), and complete the installation
-   according to the guide.
-
-- Use the following commands to obtain the public network URL
-
-  **Note**: Before using a reverse proxy tool (ngrok), you need to determine whether it complies with the company's
-  network security policy.
-
-  **Note**: Need to get the token value in [ngrok](https://dashboard.ngrok.com/signup) in advance.
-   ```
-   ngrok authtoken <token> // <token> needs to be replaced
-   ngrok http 3000
-   ```
-
-
-2. Go to **Features** > **Bot** to enable **Using Bot**.
-3. Go to the **Event Subscriptions** page to configure the **Request URL**. Use the tool to generate the domain and fill
-   in the request URL, as shown in the figure below.
-   ![image.png](https://sf3-cn.feishucdn.com/obj/open-platform-opendoc/0ce38ea653e636accbd6d268b69360f9_Osy22NvNOK.png)
-   **Note**: Configuring the request URL and sending messages to the bot will both send requests to the backend server.
-   During the request period, the server should be kept in enabled status.
-
-4. Select the events listened to by the bot.
-
-   On the **Event Subscriptions** page, click **Add event** and select and subscribe to the `Message received` event.
-5. Add scopes to the bot
-
-   On the **Permissions & Scopes** page, search for the scopes you need, and add them to the bot.
-
-- Dependent scope list
-    - Read and send messages in private and group chats
-    - Read private messages sent to the bot
-
-  **Note**: The `Read private messages sent to the bot` scope is not displayed in **Added events**. You must switch to
-  the **Permissions & Scopes** page to add it to your bot.
-
-6. On the **Version Management & Release** page, click **Create a version** > **Submit for release**.
-
-   **Note**: The release involves scopes that need to be manually approved. You can use Test companies and users
-   function to generate a test version and complete the test. Note: After release, you can check whether users are
-   within the bot's availability range based on whether they can find the bot.
-
-8. Open **Feishu** and search for the **Bot name** to begin experiencing the bot's auto replies.
+[ ] myGptReader 整理 pdf、网页爬取能力，提取视频主要内容
+[ ] 用 ChatGPT 编写儿童故事
+[ ] 拍照，ocr 提起文字，翻译功能
+[ ] chatgpt 需要根据 userId，保存回话的上下文信息，统一加入到一个数组中
+[ ] 增加会话超时能力
+[ ] 支持群聊能力
+bugfix：
+[ ] 解决发一条消息，收到多条回复的问题
+配置：
+● 飞书订阅 url：http://120.27.226.206:5000/api-endpoint
+● tunnel : https://better-guests-fry-101-67-149-121.loca.lt/api-endpoint

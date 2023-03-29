@@ -1,5 +1,4 @@
 #!/usr/bin/env python3.8
-
 import os
 import logging
 import requests
@@ -8,13 +7,16 @@ from api import MessageApiClient
 from event import MessageReceiveEvent, UrlVerificationEvent, EventManager
 from flask import Flask, jsonify
 from dotenv import load_dotenv, find_dotenv
-from utils import extract_link_and_text
+from utils import extract_link_and_text,insert_space
 import concurrent.futures
-from gpt import get_answer_from_chatGPT, get_answer_from_llama_web
+from gpt import get_answer_from_chatGPT, get_answer_from_llama_web, get_answer_from_llama_file
 
 # load env parameters form file named .env
 load_dotenv(find_dotenv())
 executor = concurrent.futures.ThreadPoolExecutor(max_workers=20)
+# initialize logging configuration
+logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
 app = Flask(__name__)
 
 # load from env
@@ -28,6 +30,28 @@ LARK_HOST = os.getenv("LARK_HOST")
 message_api_client = MessageApiClient(APP_ID, APP_SECRET, LARK_HOST)
 event_manager = EventManager()
 
+thread_message_history = {}
+MAX_THREAD_MESSAGE_HISTORY = 10
+
+def update_thread_history(thread_id, message_str=None, urls=None, file=None):
+    if urls is not None:
+        thread_message_history[thread_id]['context_urls'].update(urls)
+    if message_str is not None:
+        if thread_id in thread_message_history:
+            dialog_texts = thread_message_history[thread_id]['dialog_texts']
+            dialog_texts.append(message_str)
+            if len(dialog_texts) > MAX_THREAD_MESSAGE_HISTORY:
+                dialog_texts = dialog_texts[-MAX_THREAD_MESSAGE_HISTORY:]
+            thread_message_history[thread_id]['dialog_texts'] = dialog_texts
+        else:
+            thread_message_history[thread_id]['dialog_texts'] = [message_str]
+    if file is not None:
+        thread_message_history[thread_id]['file'] = file
+
+def dialog_context_keep_latest(dialog_texts, max_length=1):
+    if len(dialog_texts) > max_length:
+        dialog_texts = dialog_texts[-max_length:]
+    return dialog_texts
 
 @event_manager.register("url_verification")
 def request_url_verify_handler(req_data: UrlVerificationEvent):
@@ -39,42 +63,68 @@ def request_url_verify_handler(req_data: UrlVerificationEvent):
 
 @event_manager.register("im.message.receive_v1")
 def message_receive_event_handler(req_data: MessageReceiveEvent):
-    sender_id = req_data.event.sender.sender_id
-    message = req_data.event.message
-    if message.message_type != "text":
-        logging.warn("Other types of messages have not been processed yet")
+    event = req_data.event;
+    sender_id = event['event']["sender"]["sender_id"]
+    message = event['event']["message"]
+    create_time = event['header']["create_time"]
+
+    if message["message_type"] != "text":
+        logging.warning("Other types of messages have not been processed yet")
         return jsonify()
-        # get open_id and text_content
-    open_id = sender_id.open_id
-    text_content = json.loads(message.content)
+
+    open_id = sender_id["open_id"]
+    text_content = json.loads(message["content"])
     print(text_content)
+
+    thread_id = message["message_id"]
+    parent_thread_id = thread_id
+    try:
+        parent_thread_id = message.get("root_id", thread_id)
+        # print(f'parent_id is: {message["parent_id"]}, message_id is: {thread_id}')
+        # print(f'root_id is: {message["root_id"]}, message_id is: {thread_id}')
+        print(f'parent_thread_id is: {parent_thread_id}')
+    except Exception:
+        print(f"Root_id not found, using message_id as parent_thread_id {thread_id}")
+    if parent_thread_id not in thread_message_history:
+        thread_message_history[parent_thread_id] = { 'dialog_texts': [], 'context_urls': set(), 'file': None}
+
     if "text" in text_content:
         result = extract_link_and_text(text_content)
-        text = result["text"]
-        urls = result["link"]
-        # 检查 urls 是否为 None
-        if urls is None:
-            urls = []
-        if len(urls) > 0:
+        item_text = result["text"]
+        item_urls = result["link"]
+        update_thread_history(parent_thread_id, item_text, item_urls)
+    urls = thread_message_history[parent_thread_id]['context_urls']
+    file = thread_message_history[parent_thread_id]['file']
+    text = thread_message_history[parent_thread_id]['dialog_texts']
+    logging.info('=====> Current thread conversation messages are:')
+    logging.info(thread_message_history[parent_thread_id])
+    try:    
+        if file is not None:
+            future = executor.submit(get_answer_from_llama_file, dialog_context_keep_latest(text), file)
+        elif len(urls) > 0:
             future = executor.submit(get_answer_from_llama_web, text, list(urls))
         else:
             future = executor.submit(get_answer_from_chatGPT, text)
-        try:
-            gpt_response = future.result(timeout=300)
-            print(f"请求成功：{type(gpt_response)}")
-            message_api_client.send_text_with_open_id(open_id, json.dumps({"text": str(gpt_response)}))
-            # if voicemessage is None:
-            #     say(f'<@{user}>, {gpt_response}', thread_ts=thread_ts)
-            # else:
-            #     voice_file_path = get_voice_file_from_text(str(gpt_response))
-            #     logger.info(f'=====> Voice file path is {voice_file_path}')
-            #     slack_app.client.files_upload_v2(file=voice_file_path, channel=channel, thread_ts=parent_thread_ts)
-        except concurrent.futures.TimeoutError:
-            future.cancel()
-            err_msg = 'Task timedout(5m) and was canceled.'
-            print(err_msg)
-            # say(f'<@{user}>, {err_msg}', thread_ts=thread_ts)
-    
+        gpt_response = future.result(timeout=300)
+        update_thread_history(parent_thread_id, 'AI: %s' % insert_space(f'{gpt_response}'))
+        print(f"请求成功：{gpt_response}")
+        message_api_client.reply_text_with_message_id(thread_id, json.dumps({"text": f'{str(gpt_response)}'}), create_time)
+        # if voicemessage is None:
+        #     say(f'<@{user}>, {gpt_response}', thread_ts=thread_ts)
+        # else:
+        #     voice_file_path = get_voice_file_from_text(str(gpt_response))
+        #     logger.info(f'=====> Voice file path is {voice_file_path}')
+        #     slack_app.client.files_upload_v2(file=voice_file_path, channel=channel, thread_ts=parent_thread_ts)
+    except concurrent.futures.TimeoutError:
+        future.cancel()
+        err_msg = 'Task timedout(5m) and was canceled.'
+        print(err_msg)
+        message_api_client.reply_text_with_message_id(thread_id, json.dumps({"text": f'<@{open_id}>, {err_msg}'}), create_time)
+        # say(f'<@{user}>, {err_msg}', thread_ts=thread_ts)
+    except Exception as e:
+        # 处理其他异常
+        logging.error(str(e))
+        message_api_client.reply_text_with_message_id(thread_id, json.dumps({"text": f'<@{open_id}>, {str(e)}'}), create_time)
     return jsonify()
 
 
@@ -92,7 +142,8 @@ def msg_error_handler(ex):
 def callback_event_handler():
     # init callback instance and handle
     event_handler, event = event_manager.get_handler_with_event(VERIFICATION_TOKEN, ENCRYPT_KEY)
-    logging.info("/api-endpoint-------------")
+    if event_handler is None:
+        return jsonify()
     return event_handler(event)
 
 

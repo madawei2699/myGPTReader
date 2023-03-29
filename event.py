@@ -5,7 +5,7 @@ import abc
 import hashlib
 import typing as t
 from utils import dict_2_obj
-from flask import request, jsonify
+from flask import request
 from decrypt import AESCipher
 
 
@@ -43,6 +43,8 @@ class Event(object):
 
 class MessageReceiveEvent(Event):
     # message receive event defined in https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/events/receive
+    def __init__(self, dict_data, token, encrypt_key):
+        self.event = dict_data
 
     @staticmethod
     def event_type():
@@ -64,6 +66,7 @@ class EventManager(object):
     event_callback_map = dict()
     event_type_map = dict()
     _event_list = [MessageReceiveEvent, UrlVerificationEvent]
+    last_create_time = None 
 
     def __init__(self):
         for event in EventManager._event_list:
@@ -97,6 +100,17 @@ class EventManager(object):
 
         # get event_type
         event_type = dict_data.get("header").get("event_type")
+        create_time = dict_data.get("header").get("create_time")
+        # check if this is a duplicate event
+        if create_time == EventManager.last_create_time:
+            print(f"Duplicate event received: {event_type}")
+            return None, None
+        else:
+            EventManager.last_create_time = create_time
+        # message_id = dict_data.get("event").get("message").get("message_id")
+        # event_id = dict_data.get("header").get("event_id")
+        # chat_id = dict_data.get("event").get("message").get("chat_id")
+        # print(f'dict_data is: {dict_data}')
         # build event
         event = EventManager.event_type_map.get(event_type)(dict_data, token, encrypt_key)
         # get handler
