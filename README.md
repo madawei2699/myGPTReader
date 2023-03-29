@@ -93,13 +93,19 @@ sh exec.sh
 # Feature & bugfix
 
 [ ] myGptReader 整理 pdf、网页爬取能力，提取视频主要内容
+
 [ ] 用 ChatGPT 编写儿童故事
+
 [ ] 拍照，ocr 提起文字，翻译功能
-[ ] chatgpt 需要根据 userId，保存回话的上下文信息，统一加入到一个数组中
-[ ] 增加会话超时能力
+
+[x] chatgpt 保存回话的上下文信息，统一加入到一个数组中
+
+[x] 增加会话超时能力
+
+[ ] 需要根据 userId，当前是根据时间戳无脑的去重了，单独跟机器人私聊没有问题，但是如果加入群聊就有问题了
+
 [ ] 支持群聊能力
+
 bugfix：
+
 [ ] 解决发一条消息，收到多条回复的问题
-配置：
-● 飞书订阅 url：http://120.27.226.206:5000/api-endpoint
-● tunnel : https://better-guests-fry-101-67-149-121.loca.lt/api-endpoint
