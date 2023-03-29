@@ -1,6 +1,9 @@
 import React from "react";
 
 const Pricing = () => {
+  const getStarted = () => {
+    window.location.href = "https://slack-redirect.i365.tech/";
+  };
   return (
     <section id="pricing">
       <h2 className="text-4xl mb-4 text-center font-black">Choose Your Plan</h2>
@@ -9,25 +12,27 @@ const Pricing = () => {
           <h2 className="font-extrabold">Free</h2>
           <p className="price font-normal">$0/m</p>
           <ul className="benefits">
-            <li>Benefit 1</li>
-            <li>Benefit 2</li>
-            <li>Benefit 3</li>
+            <li>Web read with myGPTReader</li>
+            <li>Ask myGPTReader anything</li>
+            <li>Today Hot News</li>
           </ul>
-          <button className="cta bg-slate-800 font-semibold">
+          <button className="cta bg-slate-800 font-semibold" onClick={getStarted}>
             Get Started
           </button>
         </div>
         <div className="pricing__item premium">
           <h2 className="font-extrabold">Premium</h2>
-          <p className="price font-normal">$5/m</p>
+          <p className="price font-normal">$?/m</p>
           <ul className="benefits">
-            <li>Benefit 1</li>
-            <li>Benefit 2</li>
-            <li>Benefit 3</li>
-            <li>Advanced Feature 1</li>
-            <li>Advanced Feature 2</li>
+            <li>Web read with myGPTReader</li>
+            <li>Ask myGPTReader anything</li>
+            <li>Today Hot News</li>
+            <li>Document read with myGPTReader</li>
+            <li>Voice chat with myGPTReader</li>
+            <li>Bot for you</li>
+            <li className="italic">More in the future</li>
           </ul>
-          <button className="cta bg-gray-800 font-semibold">Get Started</button>
+          <button className="cta bg-gray-800 font-semibold" onClick={getStarted}>Get Started</button>
         </div>
       </div>
     </section>

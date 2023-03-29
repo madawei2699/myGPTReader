@@ -53,30 +53,37 @@ const Features = () => {
         <div className="flex flex-wrap -mx-4">
           <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
             <Feature
-              title="Feature 1"
-              text="This is a description of your feature. It should be short and to the point."
-              videoUrl="path/to/video1.mp4"
-            />
-          </div>
-          <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
-            <Feature
-              title="Feature 2"
-              text="This is another description of your feature. It should be short and to the point."
+              title="Web read with myGPTReader"
+              text="Use myGPTReader to quickly read and understand any web content through conversations, even videos (currently only YouTube videos with subtitles are supported)."
               videoUrl="path/to/video2.mp4"
             />
           </div>
           <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
             <Feature
-              title="Feature 3"
-              text="This is yet another description of your feature. It should be short and to the point."
+              title="Document read with myGPTReader"
+              text="Use myGPTReader to quickly read the content of any file, supporting eBooks, PDF, DOCX, TXT, and Markdown."
               videoUrl="path/to/video3.mp4"
             />
           </div>
           <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
             <Feature
-              title="Feature 4"
-              text="This is a description of your fourth feature. It should be short and to the point."
+              title="Voice chat with myGPTReader"
+              text="Practice your foreign language by speaking with your voice to myGPTReader, which can be your personal tutor and supports Chinese, English, German, and Japanese."
               videoUrl="path/to/video4.mp4"
+            />
+          </div>
+          <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
+            <Feature
+              title="Ask myGPTReader anything"
+              text="A large number of prompt templates are built in, use them for better conversations with chatGPT."
+              videoUrl="path/to/video2.mp4"
+            />
+          </div>
+          <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
+            <Feature
+              title="Today Hot News"
+              text="Every day myGPTReader sends out the latest hot news and automatically generates a summary, so you can quickly learn what's hot today."
+              videoUrl="path/to/video1.mp4"
             />
           </div>
         </div>
