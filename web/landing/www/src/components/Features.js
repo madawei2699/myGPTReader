@@ -83,7 +83,7 @@ const Features = () => {
             <Feature
               title="Today Hot News"
               text="Every day myGPTReader sends out the latest hot news and automatically generates a summary, so you can quickly learn what's hot today."
-              videoUrl="path/to/video1.mp4"
+              videoUrl="https://img.bmpi.dev/my-gpt-reader-hot-news-show-1.mp4"
             />
           </div>
         </div>
