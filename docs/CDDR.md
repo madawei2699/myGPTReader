@@ -9146,3 +9146,39 @@ I hope this helps!
 
 ---
 
+You
+---
+
+ 
+
+import React from "react"; import "./App.css"; import { Helmet } from "react-helmet"; import Header from "./components/Header"; import { BrowserRouter as Router } from "react-router-dom"; import Hero from "./components/Hero"; import Features from "./components/Features"; import Pricing from "./components/Pricing"; import Footer from "./components/Footer"; import FAQ from "./components/FAQ"; function App() { return ( <Router basename="/"> <Helmet> <title>A new way to read with AI bot - myGPTReader</title> <meta name="description" content="myGPTReader is a bot on Slack that can read and summarize any webpage, documents including ebooks, or even videos from YouTube. It can even communicate with you through voice by using the content in the channel." /> <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" /> <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" /> <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" /> <link rel="manifest" href="/site.webmanifest" /> <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" /> <meta name="msapplication-TileColor" content="#da532c" /> <meta name="theme-color" content="#ffffff" /> </Helmet> <Header /> <Hero /> <Features /> <Pricing /> <FAQ /> <Footer /> </Router> ); } export default App; This is my App.js, I want to add the opengraph to make my site to show in the social media beautiful
+
+ChatGPT
+-------
+
+To add OpenGraph metadata to your site, you will need to install the `react-helmet` package.
+
+You have already imported `Helmet` from it, so you can just make use of that.
+
+Here's how you can add OpenGraph meta tags using `react-helmet`:
+
+```jsx
+<Helmet>
+    <title>A new way to read with AI bot - myGPTReader</title>
+    <meta name="description" content="myGPTReader is a bot on Slack that can read and summarize any webpage, documents including ebooks, or even videos from YouTube. It can even communicate with you through voice by using the content in the channel." />
+    <meta property="og:title" content="A new way to read with AI bot - myGPTReader" />
+    <meta property="og:description" content="myGPTReader is a bot on Slack that can read and summarize any webpage, documents including ebooks, or even videos from YouTube. It can even communicate with you through voice by using the content in the channel." />
+    <meta property="og:image" content="/path/to/your/image.jpg" />
+    <meta property="og:url" content="https://yourwebsite.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="myGPTReader" />
+</Helmet>
+```
+
+In the code above, you'll notice that the `property` attribute has been used instead of `name`. This is because these are OpenGraph properties.
+
+Replace `content="/path/to/your/image.jpg"` with a link to your image, and update any values accordingly.
+
+This is just an example, you may want to modify it based on your specific requirements.
+
+
