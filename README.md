@@ -130,14 +130,14 @@ Please join this [slack channel](https://slack-redirect.i365.tech/) with more th
   - [ ] Discord bot
   - [ ] Telegram bot
 - Bot landing page 🚩
-  - [ ] Use [earlybird](https://earlybird.im/) to build the landing page
+  - [x] Use ~~[earlybird](https://earlybird.im/)~~chatGPT to build the landing page
     - [Landing Page Examples](https://landings.dev/)
     - [Landingfolio](https://www.landingfolio.com/)
+  - [ ] [Screen recordings](https://www.screen.studio/) to show how to use the bot
   - [ ] SEO optimization
   - [ ] Traffic analysis
     - [mixpanel](https://mixpanel.com/get-demo/free-plan/)
     - [beamanalytics](https://beamanalytics.io/)
-  - [ ] [Screen recordings](https://www.screen.studio/) to show how to use the bot
   - Promotion
     - [ ] Hacker News
     - [ ] Product Hunt
