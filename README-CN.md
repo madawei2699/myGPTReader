@@ -20,7 +20,7 @@
   </tbody>
 </table>
 
-> 令人激动的是，这个项目的开发也是与 chatGPT 合作完成的。我在这个 [CDDR](docs/chatGPT/CDDR.md) 文件中记录了开发过程。
+> 令人激动的是，这个项目的开发也是与 chatGPT 合作完成的。我在这个 [CDDR](docs/CDDR.md) 文件中记录了开发过程。
 
 ## Main Features
 

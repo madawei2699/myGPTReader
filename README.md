@@ -20,7 +20,7 @@
   </tbody>
 </table>
 
-> The exciting part is that the development of this project is also paired with chatGPT. I document the development process in this [CDDR](docs/chatGPT/CDDR.md) file.
+> The exciting part is that the development of this project is also paired with chatGPT. I document the development process in this [CDDR](docs/CDDR.md) file.
 
 ## Main Features
 
