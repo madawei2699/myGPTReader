@@ -55,28 +55,28 @@ const Features = () => {
             <Feature
               title="Web read with myGPTReader"
               text="Use myGPTReader to quickly read and understand any web content through conversations, even videos (currently only YouTube videos with subtitles are supported)."
-              videoUrl="path/to/video2.mp4"
+              videoUrl="https://img.bmpi.dev/my-gpt-reader-web-page-show-1.mp4"
             />
           </div>
           <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
             <Feature
               title="Document read with myGPTReader"
               text="Use myGPTReader to quickly read the content of any file, supporting eBooks, PDF, DOCX, TXT, and Markdown."
-              videoUrl="path/to/video3.mp4"
+              videoUrl="https://img.bmpi.dev/my-gpt-reader-documents-show-1.mp4"
             />
           </div>
           <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
             <Feature
               title="Voice chat with myGPTReader"
               text="Practice your foreign language by speaking with your voice to myGPTReader, which can be your personal tutor and supports Chinese, English, German, and Japanese."
-              videoUrl="path/to/video4.mp4"
+              videoUrl="https://img.bmpi.dev/my-gpt-reader-voice-show-1.mp4"
             />
           </div>
           <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
             <Feature
               title="Ask myGPTReader anything"
               text="A large number of prompt templates are built in, use them for better conversations with chatGPT."
-              videoUrl="path/to/video2.mp4"
+              videoUrl="https://img.bmpi.dev/my-gpt-reader-prompt-show-1.mp4"
             />
           </div>
           <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">

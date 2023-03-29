@@ -23,13 +23,13 @@ const Pricing = () => {
         <div className="pricing__item premium">
           <h2 className="font-extrabold">Premium</h2>
           <p className="price font-normal">$?/m</p>
-          <ul className="benefits">
+          <ul className="benefits list-disc list-inside">
             <li>Web read with myGPTReader</li>
             <li>Ask myGPTReader anything</li>
             <li>Today Hot News</li>
-            <li>Document read with myGPTReader</li>
-            <li>Voice chat with myGPTReader</li>
-            <li>Bot for you</li>
+            <li className="font-bold text-indigo-600 text-lg">Document read with myGPTReader</li>
+            <li className="font-bold text-purple-600 text-lg">Voice chat with myGPTReader</li>
+            <li className="font-bold text-pink-600 text-lg">Bot for you</li>
             <li className="italic">More in the future</li>
           </ul>
           <button className="cta bg-gray-800 font-semibold" onClick={getStarted}>Get Started</button>
