@@ -1,10 +1,13 @@
 import React from "react";
 
 const Pricing = () => {
+  const referrer = document.referrer;
   const getStarted = () => {
+    umamiEvent("Free", { referrer })
     window.location.href = "https://slack-redirect.i365.tech/";
   };
   const contackUS = () => {
+    umamiEvent("Premium", { referrer })
     window.location.href = "mailto:me@myreader.io"
   }
   return (

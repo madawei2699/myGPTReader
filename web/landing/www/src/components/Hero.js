@@ -1,6 +1,12 @@
 import React from "react";
+import { umamiEvent } from "../util";
 
 const Hero = () => {
+  const joinNow = () => {
+    const referrer = document.referrer;
+    umamiEvent("JoinNow", { referrer })
+    window.location.href = "https://slack-redirect.i365.tech/";
+  }
   return (
     <section className="bg-white text-center">
       <div className="container mx-auto py-20">
@@ -14,7 +20,8 @@ const Hero = () => {
           communicate with you through voice.
         </p>
         <a
-          href="https://slack-redirect.i365.tech/"
+          href='#'
+          onClick={joinNow}
           className="py-3 px-6 bg-green-500 text-white font-semibold rounded-full shadow-md hover:bg-green-700 focus:outline-none focus:bg-gray-700"
         >
           Join Now
