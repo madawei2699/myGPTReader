@@ -4,6 +4,9 @@ const Pricing = () => {
   const getStarted = () => {
     window.location.href = "https://slack-redirect.i365.tech/";
   };
+  const contackUS = () => {
+    window.location.href = "mailto:me@myreader.io"
+  }
   return (
     <section id="pricing">
       <h2 className="text-4xl mb-4 text-center font-black">Choose Your Plan</h2>
@@ -32,7 +35,7 @@ const Pricing = () => {
             <li className="font-bold text-pink-600 text-lg">Bot for you</li>
             <li className="italic">More in the future</li>
           </ul>
-          <button className="cta bg-gray-800 font-semibold" onClick={getStarted}>Get Started</button>
+          <button className="cta bg-gray-800 font-semibold" onClick={contackUS}>Contact US</button>
         </div>
       </div>
     </section>
