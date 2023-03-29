@@ -3,7 +3,7 @@ import React from "react";
 const Pricing = () => {
   return (
     <section id="pricing">
-      <h2 className="text-5xl mb-4 text-center font-black">Choose Your Plan</h2>
+      <h2 className="text-4xl mb-4 text-center font-black">Choose Your Plan</h2>
       <div className="pricing px-4">
         <div className="pricing__item free">
           <h2 className="font-extrabold">Free</h2>

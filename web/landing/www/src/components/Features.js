@@ -46,6 +46,9 @@ Feature.propTypes = {
 const Features = () => {
   return (
     <section id="features">
+      <h2 className="text-4xl mb-4 text-center font-black">
+        Features
+      </h2>
       <div className="container mx-auto px-4 my-16">
         <div className="flex flex-wrap -mx-4">
           <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
