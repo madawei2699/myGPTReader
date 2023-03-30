@@ -9220,3 +9220,81 @@ Alternatively, you can use libraries like react-player or video-react that provi
 
 ---
 
+You
+---
+
+ 
+
+import React from "react"; import ReactDOM from "react-dom/client"; import "./index.css"; import App from "./App"; import reportWebVitals from "./reportWebVitals"; const root = ReactDOM.createRoot(document.getElementById("root")); root.render( <React.StrictMode> <App /> <script async defer data-website-id="856d3289-e627-409c-a9d7-a272cf789f0b" src="https://umami.bmpi.dev/umami.js" ></script> </React.StrictMode> ); // If you want to start measuring performance in your app, pass a function // to log results (for example: reportWebVitals(console.log)) // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals reportWebVitals(); this code cannot add the umami script to the end of body, it is in a div tag, how can I do it?
+
+ChatGPT
+-------
+
+To add the `umami` script at the end of the document's body instead of a specific div, you have two options:
+
+1.  Add it manually to the `index.html` file
+
+Assuming you're using Create React App or a similar setup, you can modify the `public/index.html` file to include the `umami` script at the end of the `body` tag:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    ...
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- Your other scripts and content -->
+    <script
+      async
+      defer
+      data-website-id="856d3289-e627-409c-a9d7-a272cf789f0b"
+      src="https://umami.bmpi.dev/umami.js">
+    </script>
+  </body>
+</html>
+```
+
+This will always add the `umami` script at the end of the document's body, regardless of where the `ReactDOM.render()` call places the root `div`.
+
+2.  Use a package like `react-append-to-body`
+
+If you need to programmatically append elements to the body from within your React app, one option is to use a library like [`react-append-to-body`](https://www.npmjs.com/package/react-append-to-body) which provides a `appendToBody` function:
+
+```
+npm install react-append-to-body
+```
+
+Then, you can modify your code as follows:
+
+```jsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { appendToBody } from 'react-append-to-body';
+
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById("root")
+);
+
+appendToBody(
+  <script
+    async
+    defer
+    data-website-id="856d3289-e627-409c-a9d7-a272cf789f0b"
+    src="https://umami.bmpi.dev/umami.js">
+  </script>
+);
+
+reportWebVitals();
+```
+
+This will append the `umami` script to the end of the document's body, outside of the `#root` div.
+
+---
+

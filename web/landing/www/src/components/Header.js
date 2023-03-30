@@ -18,6 +18,7 @@ const Header = () => {
   };
 
   const goToGitHub = () => {
+    const referrer = document.referrer;
     umamiEvent("GitHubFromMenu", { referrer })
     window.location.href = "https://github.com/madawei2699/myGPTReader";
   }

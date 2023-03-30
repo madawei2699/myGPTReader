@@ -36,12 +36,6 @@ function App() {
       <Pricing />
       <FAQ />
       <Footer />
-      <script
-        async
-        defer
-        data-website-id="856d3289-e627-409c-a9d7-a272cf789f0b"
-        src="https://umami.bmpi.dev/umami.js"
-      ></script>
     </Router>
   );
 }
