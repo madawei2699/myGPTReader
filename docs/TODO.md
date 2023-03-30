@@ -94,7 +94,7 @@
     - [beamanalytics](https://beamanalytics.io/)
   - [x] SEO optimization
   - Promotion
-    - [ ] Hacker News 🚩
+    - [x] [Hacker News](https://news.ycombinator.com/item?id=35371576)
     - [ ] Reddit 🚩
     - [ ] Product Hunt
 - [ ] Integrated with Azure OpenAI Service
