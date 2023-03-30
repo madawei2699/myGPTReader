@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { umamiEvent } from "../util";
+import { umamiEvent, gtagEvent } from "../util";
 
 const Header = () => {
   const scrollToFeatures = () => {
@@ -20,6 +20,7 @@ const Header = () => {
   const goToGitHub = () => {
     const referrer = document.referrer;
     umamiEvent("GitHubFromMenu", { referrer })
+    gtagEvent("GitHubFromMenu")
     window.location.href = "https://github.com/madawei2699/myGPTReader";
   }
 

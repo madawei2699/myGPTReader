@@ -1,14 +1,16 @@
 import React from "react";
-import { umamiEvent } from "../util";
+import { umamiEvent, gtagEvent } from "../util";
 
 const Pricing = () => {
   const referrer = document.referrer;
   const getStarted = () => {
     umamiEvent("Free", { referrer })
+    gtagEvent("Free")
     window.location.href = "https://slack-redirect.i365.tech/";
   };
   const contackUS = () => {
     umamiEvent("Premium", { referrer })
+    gtagEvent("Premium")
     window.location.href = "mailto:me@myreader.io"
   }
   return (
