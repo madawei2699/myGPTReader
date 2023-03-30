@@ -1,11 +1,36 @@
-# myGPTReader
+<h2 align="center">myGPTReader</h2>
+<div align="center">
 
+[![Status](https://img.shields.io/badge/status-active-success.svg)]()
+[![GitHub Issues](https://img.shields.io/github/issues/madawei2699/myGPTReader.svg)](https://github.com/madawei2699/myGPTReader/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/madawei2699/myGPTReader.svg)](https://github.com/madawei2699/myGPTReader/pulls)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+
+</div>
 <p align="center">
     <br> English | <a href="README-CN.md">中文</a>
 </p>
 <p align="center">
     <em>A new way to read with AI bot - powered by chatGPT.</em>
 </p>
+
+> 💡 The exciting part is that the development of this project is also paired with chatGPT. I document the development process in this [CDDR](docs/CDDR.md) file.
+
+---
+
+## 📝 Table of Contents
+
+- [About](#about)
+- [Getting Started](#getting_started)
+- [Main Features](#main_features)
+- [Deployment](#deployment)
+- [TODO](docs/TODO.md)
+- [Authors](#authors)
+- [Acknowledgments](#acknowledgement)
+- [Reference Links](#reference_links)
+- [Star History](#star_history)
+
+## 🧐 About <a name = "about"></a>
 
 <table style="border-collapse: collapse; border: none;">
   <tbody>
@@ -20,164 +45,84 @@
   </tbody>
 </table>
 
-> The exciting part is that the development of this project is also paired with chatGPT. I document the development process in this [CDDR](docs/CDDR.md) file.
+## 🏁 Getting Started <a name = "getting_started"></a>
 
-## Main Features
+Please join this [Slack channel](https://slack-redirect.i365.tech/) with more than 3000+ members to experience all these features for free.
 
-- Web read with myGPTReader
-  
-  Use myGPTReader to quickly read and understand any web content through conversations, even videos (currently only YouTube videos with subtitles are supported).
+## 🔥 Main Features <a name="main_features"></a>
+
+### 📖 Website read with myGPTReader
+
+Use myGPTReader to quickly read and understand any web content through conversations, even videos (currently only YouTube videos with subtitles are supported).
 
 ![Web read with myGPTReader](https://user-images.githubusercontent.com/2446612/228726895-3c789d54-1b15-4d8e-8022-7bf0b93185ff.gif)
 
-- Document read with myGPTReader
+### 📚 Document read with myGPTReader
 
-  Use myGPTReader to quickly read the content of any file, supporting eBooks, PDF, DOCX, TXT, and Markdown.
+Use myGPTReader to quickly read the content of any file, supporting eBooks, PDF, DOCX, TXT, and Markdown.
 
 ![Document read with myGPTReader](https://user-images.githubusercontent.com/2446612/228726930-e623c5f2-5cb5-4d93-9ffc-fda5c722a910.gif)
 
-- Voice chat with myGPTReader
+### 🗣️ Voice chat with myGPTReader
 
-  Practice your foreign language by speaking with your voice to myGPTReader, which can be your personal tutor and supports Chinese, English, German, and Japanese.
+Practice your foreign language by speaking with your voice to myGPTReader, which can be your personal tutor and supports Chinese, English, German, and Japanese.
 
 ![Voice chat with myGPTReader](https://user-images.githubusercontent.com/2446612/228726952-8dc02828-c540-4cf8-9aff-5b1e81a969d0.gif)
 
-- Ask myGPTReader anything
+### 💬 Ask myGPTReader anything
 
-  A large number of prompt templates are built in, use them for better conversations with chatGPT.
+A large number of prompt templates are built in, use them for better conversations with chatGPT.
 
 ![Ask myGPTReader anything](https://user-images.githubusercontent.com/2446612/228726979-15548dc5-2b9a-4fa2-bd52-d2920ab4f81b.gif)
 
-- Hot News Today
+### 🔥 Hot News Today
 
-  Every day myGPTReader sends out the latest hot news and automatically generates a summary, so you can quickly learn what's hot today.
+Every day myGPTReader sends out the latest hot news and automatically generates a summary, so you can quickly learn what's hot today.
   
 ![Hot News Today](https://user-images.githubusercontent.com/2446612/228729812-38c3137a-026e-4100-9fab-0b8f2a1215fc.gif)
 
-## Slack
+## Deployment <a name = "deployment"></a>
 
-Please join this [slack channel](https://slack-redirect.i365.tech/) with more than 3000+ members to experience all these features for free.
+How to deploy myGPTReader on your own server.
+(WIP)
 
-## TODO List
+## Reference Links <a name = "reference_links"></a>
 
-<details>
-  <summary>Click me</summary>
+YouTube Live video for in-depth walkthrough of the project: [![myGPTReader Live Share](http://img.youtube.com/vi/XZIogwFU7jE/0.jpg)](https://www.youtube.com/live/XZIogwFU7jE?feature=share "myGPTReader Live Share")
 
-- [x] Integrated with slack bot
-  - [x] Bot replies messages in the same thread
-- [x] Support web page reading with chatGPT
-  - [x] Consider to use cloudflare worker to scrape the html content
-    - [x] Self-hosting [Web Scraper](https://github.com/adamschwartz/web.scraper.workers.dev)
-    - [x] Restrict to access the web scraper, only allow the API server to access it by [Cloudflare Access](https://www.cloudflare.com/products/zero-trust/access/)
-  - [x] Consider to use a headless browser to scrape the web page content like twitter thread
-    - ~~https://www.browserless.io/~~
-    - https://phantomjscloud.com/
-    - https://scrapfly.io/
-  - [ ] Consider to use OCR to scrape the web page content (Web crawler to get the screenshot, then OCR to get the text)
-    - ~~[Azure OCR](https://learn.microsoft.com/en-us/azure/cognitive-services/computer-vision/overview-ocr)~~
-    - [Google Vision](https://cloud.google.com/vision)
-    - may use GPT4
-- [x] Support RSS reading with chatGPT
-  - RSS is a bunch of links, so it is equivalent to reading a web page to get the content.
-- [x] ~~Support newsletter reading with chatGPT~~
-  - Most newsletters are public and can be accessed online, so we can just give the url to the slack bot.
-- Prompt fine-tue
-  - [x] Support for custom `prompt`
-  - [x] Show `prompt` templates by slack app slash commands
-  - [ ] Auto collect the good `prompt` to `#gpt-prompt` channel by message shortcut
-- Cost saving
-  - [x] by caching the web page llama index
-    - ~~Consider to use [sqlite-vss](https://github.com/asg017/sqlite-vss) to store and search the text embeddings~~
-    - ~~Use [chromadb](https://github.com/chroma-core/chroma) to store and search the text embeddings~~
-    - Use the llama index file to restore the index
-  - [x] Consider to use [sentence-transformers](https://github.com/UKPLab/sentence-transformers) or [txtai](https://github.com/neuml/txtai) to generate [embeddings](https://github.com/asg017/sqlite-vss/blob/main/examples/headlines/build/add_embeddings.py) (vectors)
-    - Not good as the embeddings of OpenAI, rollback to use the OpenAI embeddings, and if enable to use the custom embeddings, the minimum of server's memory is 2GB which still increase the cost.
-  - [ ] Consider to fine-tue the chunk size of index node and prompt to save the cost
-    - If the chunk size is too big, it will cause the index node to be too large and the cost will be high.
-- [x] Bot can read historical messages from the same thread, thus providing context to chatGPT
-  - [x] [Changing the number of output tokens](https://github.com/jerryjliu/llama_index/issues/778#issuecomment-1478303173)
-- Index fine-tune
-  - [x] Use the [GPTListIndex](https://github.com/jerryjliu/llama_index/issues/753#issuecomment-1472387421) to summarize multiple URLs
-  - [ ] Use the `GPTTreeIndex` with `summarize` mode to summarize a single web page
-    - Use [response_mode](https://gist.github.com/ninehills/ecf7107574c83016e8b68965bf9a51c4) to change the summary mode
-- Bot regularly send hot ~~summarizes(expensive cost)~~ news in the slack channel (`#daily-news`)
-  - [x] Use chatGPT to summarize the hot news
-  - ~~Refer to [this](https://github.com/SkywalkerDarren/chatWeb/blob/c2ad05a97aecbe1bc0c846476ea003640f2a0f2e/main.py#L144-L175) approach~~
-    - World News
-      - [x] Zhihu daily hot answers
-      - [x] V2EX daily hot topics
-      - [x] 1point3acres daily hot topics
-      - [x] Reddit world hot news
-    - Dev News
-      - [x] Hacker News daily hot topics
-      - [x] Product Hunt daily hot topics
-    - Invest News
-      - [x] Xueqiu daily hot topics
-      - [x] Jisilu daily hot topics
-- Support file reading and analysis 💥
-  - Considering the expensive billing, it needs to use the slack userID whitelist to restrict the access this feature
-  - Need to cache the file Documents to save extract cost
-  - [x] EPUB
-  - [x] DOCX
-  - [x] MD
-  - [x] TEXT
-  - [x] PDF
-    - Use [Google Vision](https://cloud.google.com/vision/docs/pdf) to handle the PDF reading
-  - [ ] Image
-    - may use GPT4
-- [x] Support voice reading ~~with self-hosting [whisper](https://github.com/aarnphm/whispercpp)~~
-  - (whisper -> chatGPT -> azure text2speech) to play language speaking practices 💥
-  - Support language
-    - Chinese
-    - English
-      - 🇺🇸
-      - 🇬🇧
-      - 🇦🇺
-      - 🇮🇳
-    - Japanese
-    - German
-- Support video summarization
-  - [x] YouTube
-- [x] User access limit
-  - Limit the number of requests to bot per user per day to save the cost
-- IM Support
-  - [x] Slack bot
-    - [ ] Bot for you 💥
-  - [ ] Discord bot
-  - [ ] Telegram bot
-- Bot landing page
-  - [x] Use ~~[earlybird](https://earlybird.im/)~~ chatGPT to build the landing page
-    - [Landing Page Examples](https://landings.dev/)
-    - [Landingfolio](https://www.landingfolio.com/)
-  - [x] ~~[Screen recordings](https://www.screen.studio/)~~ [CleanShot X](https://cleanshot.com/) to show how to use the bot
-  - [x] Traffic analysis
-    - GA
-    - umami
-    - [mixpanel](https://mixpanel.com/get-demo/free-plan/)
-    - [beamanalytics](https://beamanalytics.io/)
-  - [x] SEO optimization
-  - Promotion
-    - [ ] Hacker News 🚩
-    - [ ] Reddit 🚩
-    - [ ] Product Hunt
-- [ ] Integrated with Azure OpenAI Service
-- [ ] Rewrite the code in Typescript ❓
-- [ ] Upgrade chat model (gpt-3.5-turbo) to GPT4 (gpt-4-0314) 💥
-- Publish bot to make it can be used in other workspaces
-  - [ ] Slack marketplace
+Blog post: [我的 AI 阅读助手](https://www.bmpi.dev/self/my-gpt-reader/)
 
-</details>
+## ✍️ Authors <a name = "authors"></a>
 
-## Documentation
+- [@madawei2699](https://twitter.com/madawei2699)
 
-Currently, if you want to know this repo quickly, you can refer to the following YouTube video:
+See also the list of [contributors](https://github.com/madawei2699/myGPTReader/contributors) who participated in this project.
 
-[![myGPTReader Live Share](http://img.youtube.com/vi/XZIogwFU7jE/0.jpg)](https://www.youtube.com/live/XZIogwFU7jE?feature=share "myGPTReader Live Share")
+## 🎉 Acknowledgements <a name = "acknowledgement"></a>
 
-## Post
+- Hat tip to anyone whose code was used
 
-- [我的AI阅读助手](https://www.bmpi.dev/self/my-gpt-reader/)
+## Deployment <a name = "deployment"></a>
 
-## Star History
+How to deploy myGPTReader on your own server.
+(WIP)
+
+## Reference Links <a name = "reference_links"></a>
+
+YouTube Live video for in-depth walkthrough of the project: [![myGPTReader Live Share](http://img.youtube.com/vi/XZIogwFU7jE/0.jpg)](https://www.youtube.com/live/XZIogwFU7jE?feature=share "myGPTReader Live Share")
+
+Blog post: [我的 AI 阅读助手](https://www.bmpi.dev/self/my-gpt-reader/)
+
+## ✍️ Authors <a name = "authors"></a>
+
+- [@madawei2699](https://twitter.com/madawei2699)
+
+See also the list of [contributors](https://github.com/madawei2699/myGPTReader/contributors) who participated in this project.
+
+## 🎉 Acknowledgements <a name = "acknowledgement"></a>
+
+- Hat tip to anyone whose code was used
+
+## Star History <a name = "star_history"></a>
 
 [![Star History Chart](https://api.star-history.com/svg?repos=madawei2699/myGPTReader&type=Date)](https://star-history.com/#madawei2699/myGPTReader&Date)
