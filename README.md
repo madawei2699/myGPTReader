@@ -14,7 +14,7 @@
           <img src="./web/landing/logo/my-gpt-reader-logo-1-removebg.png" data-canonical-src="./web/landing/logo/my-gpt-reader-logo-1-removebg.png"/>
         </td>
         <td>
-          myGPTReader is a slack bot that can read any webpage, ebook, video(YouTube) or document and summarize it with chatGPT. It can also talk to you via voice using the content in the channel.
+          myGPTReader is a bot on Slack that can read and summarize any webpage, documents including ebooks, or even videos from YouTube. It can communicate with you through voice.
         </td>
     </tr>
   </tbody>
@@ -24,23 +24,39 @@
 
 ## Main Features
 
-- Stay updated with the latest news summaries daily with chatGPT.
-  ![my-gpt-reader-read-hot-news-1-s-min](https://user-images.githubusercontent.com/2446612/227771698-961cf6ee-c28a-44a0-811d-22b28578e8a9.gif)
-- Use chatGPT to read and provide a summary of any webpage include the video(YouTube).
-  ![my-gpt-reader-read-web-page-1](https://user-images.githubusercontent.com/2446612/227771860-1a6182d4-1e12-49a4-9adc-f170a338f1ce.gif)
-  ![](https://img.bmpi.dev/my-gpt-reader-read-web-page-2.gif)
-- Use chatGPT to read and provide a summary of any document include the eBook.
-  ![my-gpt-reader-read-pdf-1-s-min](https://user-images.githubusercontent.com/2446612/227771769-96b3ee60-232f-4992-bf50-c57ff1b0ffe4.gif)
-  ![](https://img.bmpi.dev/my-gpt-reader-read-epub-1.gif)
-- Enjoy customizable prompt templates that use context from previous conversations with chatGPT.
-  ![](https://img.bmpi.dev/my-gpt-reader-prompt-template-1.gif)
-- Practice speaking languages by conversing with chatGPT using your voice.
-  ![](https://img.bmpi.dev/my-gpt-reader-voice-1.gif)
-  ![](https://img.bmpi.dev/my-gpt-reader-voice-2.gif)
+- Web read with myGPTReader
+  
+  Use myGPTReader to quickly read and understand any web content through conversations, even videos (currently only YouTube videos with subtitles are supported).
+
+https://user-images.githubusercontent.com/2446612/228719290-cae75726-809e-491f-8dd8-7dfbb7056a13.mp4
+
+- Document read with myGPTReader
+
+  Use myGPTReader to quickly read the content of any file, supporting eBooks, PDF, DOCX, TXT, and Markdown.
+
+https://user-images.githubusercontent.com/2446612/228718867-f5d08835-0c62-4f8e-9bac-f54c0a49b824.mp4
+
+- Voice chat with myGPTReader
+
+  Practice your foreign language by speaking with your voice to myGPTReader, which can be your personal tutor and supports Chinese, English, German, and Japanese.
+
+https://user-images.githubusercontent.com/2446612/228718994-8c0294ee-b93b-4552-81e0-eb2537c6e892.mp4
+
+- Ask myGPTReader anything
+
+  A large number of prompt templates are built in, use them for better conversations with chatGPT.
+  
+https://user-images.githubusercontent.com/2446612/228719078-7e82c86a-4f34-4a5d-921f-6d10e7b2573e.mp4
+
+- Hot News Today
+
+  Every day myGPTReader sends out the latest hot news and automatically generates a summary, so you can quickly learn what's hot today.
+
+https://user-images.githubusercontent.com/2446612/228719144-1787cbd4-cc9f-4aac-ae2e-20dde3a16182.mp4
+
+## Slack
 
 Please join this [slack channel](https://slack-redirect.i365.tech/) with more than 3000+ members to experience all these features for free.
-
-![](https://img.bmpi.dev/my-gpt-reader-showcase.gif)
 
 ## TODO List
 
@@ -129,7 +145,7 @@ Please join this [slack channel](https://slack-redirect.i365.tech/) with more th
     - [ ] Bot for you 💥
   - [ ] Discord bot
   - [ ] Telegram bot
-- Bot landing page 🚩
+- Bot landing page
   - [x] Use ~~[earlybird](https://earlybird.im/)~~ chatGPT to build the landing page
     - [Landing Page Examples](https://landings.dev/)
     - [Landingfolio](https://www.landingfolio.com/)
@@ -141,8 +157,8 @@ Please join this [slack channel](https://slack-redirect.i365.tech/) with more th
     - [beamanalytics](https://beamanalytics.io/)
   - [x] SEO optimization
   - Promotion
-    - [ ] Hacker News
-    - [ ] Reddit
+    - [ ] Hacker News 🚩
+    - [ ] Reddit 🚩
     - [ ] Product Hunt
 - [ ] Integrated with Azure OpenAI Service
 - [ ] Rewrite the code in Typescript ❓
