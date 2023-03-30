@@ -107,6 +107,27 @@ See also the list of [contributors](https://github.com/madawei2699/myGPTReader/c
 
 - Hat tip to anyone whose code was used
 
+## Deployment <a name = "deployment"></a>
+
+How to deploy myGPTReader on your own server.
+(WIP)
+
+## Reference Links <a name = "reference_links"></a>
+
+YouTube Live video for in-depth walkthrough of the project: [![myGPTReader Live Share](http://img.youtube.com/vi/XZIogwFU7jE/0.jpg)](https://www.youtube.com/live/XZIogwFU7jE?feature=share "myGPTReader Live Share")
+
+Blog post: [我的 AI 阅读助手](https://www.bmpi.dev/self/my-gpt-reader/)
+
+## ✍️ Authors <a name = "authors"></a>
+
+- [@madawei2699](https://twitter.com/madawei2699)
+
+See also the list of [contributors](https://github.com/madawei2699/myGPTReader/contributors) who participated in this project.
+
+## 🎉 Acknowledgements <a name = "acknowledgement"></a>
+
+- Hat tip to anyone whose code was used
+
 ## Star History <a name = "star_history"></a>
 
 [![Star History Chart](https://api.star-history.com/svg?repos=madawei2699/myGPTReader&type=Date)](https://star-history.com/#madawei2699/myGPTReader&Date)
