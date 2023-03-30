@@ -23,7 +23,7 @@
 - [About](#about)
 - [Getting Started](#getting_started)
 - [Main Features](#main_features)
-- [Deployment](#deployment)
+- [How to Install](#how_to_install)
 - [TODO](docs/TODO.md)
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgement)
@@ -81,7 +81,7 @@ Every day myGPTReader sends out the latest hot news and automatically generates 
   
 ![Hot News Today](https://user-images.githubusercontent.com/2446612/228729812-38c3137a-026e-4100-9fab-0b8f2a1215fc.gif)
 
-## Deployment <a name = "deployment"></a>
+## How to Install <a name = "how_to_install"></a>
 
 How to deploy myGPTReader on your own server.
 (WIP)
