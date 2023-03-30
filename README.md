@@ -88,6 +88,7 @@ https://user-images.githubusercontent.com/2446612/228719144-1787cbd4-cc9f-4aac-a
 
 ## Deployment <a name = "deployment"></a>
 
+How to deploy myGPTReader on your own server.
 (WIP)
 
 ## Reference Links <a name = "reference_links"></a>
