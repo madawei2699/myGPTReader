@@ -26,7 +26,7 @@ llm_predictor = LLMPredictor(llm=ChatOpenAI(
 
 index_cache_web_dir = Path('/tmp/myGPTReader/cache_web/')
 index_cache_voice_dir = Path('/tmp/myGPTReader/voice/')
-index_cache_file_dir = Path('/data/myGPTReader/file/')
+index_cache_file_dir = Path('/tmp/myGPTReader/file/')
 
 if not index_cache_web_dir.is_dir():
     index_cache_web_dir.mkdir(parents=True, exist_ok=True)
