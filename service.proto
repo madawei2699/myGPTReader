@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+service MyService {
+  rpc webCrawl (HelloRequest) returns (HelloResponse);
+}
+
+message HelloRequest {
+  string url = 1;
+}
+
+message HelloResponse {
+  string result = 1;
+	int32 status_code = 2;
+}

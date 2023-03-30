@@ -7,12 +7,18 @@ import feedparser
 import validators
 import fnmatch
 from youtube_transcript_api import YouTubeTranscriptApi
+import grpc
+import service_pb2
+import service_pb2_grpc
 
 CF_ACCESS_CLIENT_ID = os.environ.get('CF_ACCESS_CLIENT_ID')
 CF_ACCESS_CLIENT_SECRET = os.environ.get('CF_ACCESS_CLIENT_SECRET')
 
 PHANTOMJSCLOUD_API_KEY = os.environ.get('PHANTOMJSCLOUD_API_KEY')
 PHANTOMJSCLOUD_WEBSITES = ['https://twitter.com/', 'https://t.co/', 'https://medium.com/', 'https://app.mailbrew.com/', 'https://us12.campaign-archive.com', 'https://news.ycombinator.com', 'https://www.bloomberg.com', 'https://*.substack.com/*', 'https://*.1point3acres.com/*', 'https://www.v2ex.com', 'https://www.producthunt.com', 'http://xueqiu.com', 'https://www.jisilu.cn', 'https://www.163.com']
+
+channel = grpc.insecure_channel("localhost:50051")
+stub = service_pb2_grpc.MyServiceStub(channel)
 
 def check_if_need_use_phantomjscloud(url):
     for site in PHANTOMJSCLOUD_WEBSITES:
@@ -49,15 +55,17 @@ def format_text(text):
     return fix_chinese_split_chunk_size_error
 
 def scrape_website(url: str) -> str:
-    data = {"url": url}
-    response = requests.post("http://127.0.0.1:4000/webhook", data=data)
+    request = service_pb2.HelloRequest(url=url)
+    response = stub.webCrawl(request)
+    result = response.result
+    print(f'response 成功=>{response.status_code} ->> {response.status_code == 200}')
     if response.status_code == 200:
-        html_content = response.text
-        text_content = html2text.html2text(html_content)
+        logging.info(f'scrape_website 成功{response.status_code}')
+        text_content = html2text.html2text(result)
         return text_content
     else:
         print(f"请求失败，状态码：{response.status_code}")
-        return f"Error: {response.status_code} - {response.reason}"
+        return f"Error: {response.status_code} - {result}"
     
 def scrape_website_by_phantomjscloud(url: str) -> str:
     endpoint_url = f"https://PhantomJsCloud.com/api/browser/v2/{PHANTOMJSCLOUD_API_KEY}/"

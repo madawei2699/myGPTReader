@@ -37,6 +37,23 @@ can extend the event processing functions of bot based on this example.
 
    The above parameters can be viewed in [Developer Console](https://open.feishu.cn/app/). Encrypt Key can be empty.
 
+## server rpc
+
+- change service.proto
+
+```
+python3 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. service.proto
+```
+
+- 这将生成 service_pb2.py 和 service_pb2_grpc.py 文件。
+
+```
+npm install -g grpc-tools
+grpc_tools_node_protoc --js_out=import_style=commonjs,binary:. --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_tools_node_protoc_plugin` service.proto
+```
+
+- 这将生成 service_pb.js 和 service_grpc_pb.js 文件。
+
 ## Running with Docker
 
 Ensure that [Docker](https://www.docker.com/) has been installed before running. You can choose to run your code either
