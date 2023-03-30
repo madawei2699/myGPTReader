@@ -1,5 +1,6 @@
 import React from "react";
 import { umamiEvent } from "../util";
+import ProductHuntBadge from "./ProductHuntBadge";
 
 const Hero = () => {
   const joinNow = () => {
@@ -10,6 +11,7 @@ const Hero = () => {
   return (
     <section className="bg-white text-center">
       <div className="container mx-auto py-20">
+        <ProductHuntBadge />
         <h1 className="text-5xl mb-6 font-black">myGPTReader</h1>
         <h2 className="text-4xl mb-6 font-black">
           A new way to read with AI bot
