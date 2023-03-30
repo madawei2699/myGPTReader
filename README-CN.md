@@ -1,5 +1,14 @@
 # myGPTReader
 
+<div align="center">
+
+[![Status](https://img.shields.io/badge/status-active-success.svg)]()
+[![GitHub Issues](https://img.shields.io/github/issues/madawei2699/myGPTReader.svg)](https://github.com/madawei2699/myGPTReader/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/madawei2699/myGPTReader.svg)](https://github.com/madawei2699/myGPTReader/pulls)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+
+</div>
+
 <p align="center">
     <br> <a href="README.md">English</a> | 中文
 </p>
@@ -74,7 +83,7 @@
 
 每天 myGPTReader 会发送最新的热榜新闻并自动生成摘要，方便你快速了解今日热点。
 
-![Hot News Today](https://user-images.githubusercontent.com/2446612/228727918-3fe0e821-4608-4893-b514-bd41f843bb60.gif)
+![Hot News Today](https://user-images.githubusercontent.com/2446612/228729812-38c3137a-026e-4100-9fab-0b8f2a1215fc.gif)
 
 ### 如何安装 <a name = "how_to_install"></a>
 
@@ -84,7 +93,7 @@
 
 - 目前，如果你想快速了解这个项目，可以参考以下 YouTube 我录制的介绍视频：
   [![myGPTReader Live Share](http://img.youtube.com/vi/XZIogwFU7jE/0.jpg)](https://www.youtube.com/live/XZIogwFU7jE?feature=share "myGPTReader介绍视频")
-- 博文[我的 AI 阅读助手](https://www.bmpi.dev/self/my-gpt-reader/)
+- 博文：[我的 AI 阅读助手](https://www.bmpi.dev/self/my-gpt-reader/)
 
 ## ✍️ 作者 <a name = "authors"></a>
 
@@ -94,7 +103,7 @@
 
 ## 🎉 致谢 <a name = "acknowledgement"></a>
 
-- Hat tip to anyone whose code was used
+感谢所有为此项目贡献的人🫡
 
 ## 星数历史 <a name = "star_history"></a>
 
