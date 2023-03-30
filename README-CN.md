@@ -47,13 +47,13 @@
   </tbody>
 </table>
 
-## 🏁 Getting Started <a name = "getting_started"></a>
+## 🏁 如何开始 <a name = "getting_started"></a>
 
 现在加入这个拥有超过 3000 多名成员的[ slack 频道](https://slack-redirect.i365.tech/)，免费体验所有这些功能，不仅能使用 chatGPT 的全部功能，还能围观他人的对话，学习如何与 chatGPT 更好的对话。
 
 ![](https://img.bmpi.dev/my-gpt-reader-showcase.gif)
 
-## 🔥 Main Features <a name="main_features"></a>
+## 🔥 主要功能 <a name="main_features"></a>
 
 ### 📖 快速了解网页内容
 
