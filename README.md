@@ -49,33 +49,33 @@
 
 Please join this [Slack channel](https://slack-redirect.i365.tech/) with more than 3000+ members to experience all these features for free.
 
-## Main Features <a name = "main_features"></a>
+## Main Features <a name="main_features"></a>
 
-- Website read with myGPTReader
+- 📖 Website read with myGPTReader
 
   Use myGPTReader to quickly read and understand any web content through conversations, even videos (currently only YouTube videos with subtitles are supported).
 
 ![Web read with myGPTReader](https://user-images.githubusercontent.com/2446612/228726895-3c789d54-1b15-4d8e-8022-7bf0b93185ff.gif)
 
-- Document read with myGPTReader
+- 📚 Document read with myGPTReader
 
   Use myGPTReader to quickly read the content of any file, supporting eBooks, PDF, DOCX, TXT, and Markdown.
 
 ![Document read with myGPTReader](https://user-images.githubusercontent.com/2446612/228726930-e623c5f2-5cb5-4d93-9ffc-fda5c722a910.gif)
 
-- Voice chat with myGPTReader
+- 🗣️ Voice chat with myGPTReader
 
   Practice your foreign language by speaking with your voice to myGPTReader, which can be your personal tutor and supports Chinese, English, German, and Japanese.
 
 ![Voice chat with myGPTReader](https://user-images.githubusercontent.com/2446612/228726952-8dc02828-c540-4cf8-9aff-5b1e81a969d0.gif)
 
-- Ask myGPTReader anything
+- 💬 Ask myGPTReader anything
 
   A large number of prompt templates are built in, use them for better conversations with chatGPT.
 
 ![Ask myGPTReader anything](https://user-images.githubusercontent.com/2446612/228726979-15548dc5-2b9a-4fa2-bd52-d2920ab4f81b.gif)
 
-- Hot News Today
+- 🔥 Hot News Today
 
   Every day myGPTReader sends out the latest hot news and automatically generates a summary, so you can quickly learn what's hot today.
 
