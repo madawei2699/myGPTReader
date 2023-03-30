@@ -30,20 +30,18 @@ function App() {
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="myGPTReader" />
       </Helmet>
-      <body>
-        <script
-            async
-            defer
-            data-website-id="856d3289-e627-409c-a9d7-a272cf789f0b"
-            src="https://umami.bmpi.dev/umami.js"
-          ></script>
-      </body>
       <Header />
       <Hero />
       <Features />
       <Pricing />
       <FAQ />
       <Footer />
+      <script
+        async
+        defer
+        data-website-id="856d3289-e627-409c-a9d7-a272cf789f0b"
+        src="https://umami.bmpi.dev/umami.js"
+      ></script>
     </Router>
   );
 }
