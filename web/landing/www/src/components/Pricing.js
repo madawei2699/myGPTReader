@@ -32,7 +32,7 @@ const Pricing = () => {
         <div className="pricing__item premium">
           <h2 className="font-extrabold">Premium</h2>
           <p className="price font-normal">$?/m</p>
-          <ul className="benefits list-disc list-inside">
+          <ul className="benefits">
             <li>Web read with myGPTReader</li>
             <li>Ask myGPTReader anything</li>
             <li>Today Hot News</li>
