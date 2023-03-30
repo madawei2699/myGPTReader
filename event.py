@@ -86,6 +86,7 @@ class EventManager(object):
     @staticmethod
     def get_handler_with_event(token, encrypt_key):
         dict_data = json.loads(request.data)
+        # print(dict_data)
         dict_data = EventManager._decrypt_data(encrypt_key, dict_data)
         callback_type = dict_data.get("type")
         # only verification data has callback_type, else is event
@@ -101,7 +102,7 @@ class EventManager(object):
         # get event_type
         event_type = dict_data.get("header").get("event_type")
         create_time = dict_data.get("header").get("create_time")
-        # check if this is a duplicate event
+        #TODO bugfix: 只有同一个 uid 在相同时间发的多条消息才去重 check if this is a duplicate event
         if create_time == EventManager.last_create_time:
             print(f"Duplicate event received: {event_type}")
             return None, None

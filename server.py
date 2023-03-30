@@ -1,21 +1,20 @@
 #!/usr/bin/env python3.8
 import os
-import logging
 import requests
 import json
 from api import MessageApiClient
 from event import MessageReceiveEvent, UrlVerificationEvent, EventManager
 from flask import Flask, jsonify
 from dotenv import load_dotenv, find_dotenv
-from utils import extract_link_and_text,insert_space
-import concurrent.futures
+from utils import extract_text_and_links_from_content,insert_space,setup_logger,extract_post_text_and_links_from_content
 from gpt import get_answer_from_chatGPT, get_answer_from_llama_web, get_answer_from_llama_file
 
 # load env parameters form file named .env
 load_dotenv(find_dotenv())
-executor = concurrent.futures.ThreadPoolExecutor(max_workers=20)
-# initialize logging configuration
-logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# 对于计算密集型任务，将 max_workers 设置为系统 CPU 核心数可能是一个更合适的选择。
+# executor = concurrent.futures.ThreadPoolExecutor(max_workers=4)
+# 创建一个日志器
+logger = setup_logger('my_gpt_reader_server')
 
 app = Flask(__name__)
 
@@ -39,12 +38,12 @@ def update_thread_history(thread_id, message_str=None, urls=None, file=None):
     if message_str is not None:
         if thread_id in thread_message_history:
             dialog_texts = thread_message_history[thread_id]['dialog_texts']
-            dialog_texts.append(message_str)
+            dialog_texts = dialog_texts + message_str
             if len(dialog_texts) > MAX_THREAD_MESSAGE_HISTORY:
                 dialog_texts = dialog_texts[-MAX_THREAD_MESSAGE_HISTORY:]
             thread_message_history[thread_id]['dialog_texts'] = dialog_texts
         else:
-            thread_message_history[thread_id]['dialog_texts'] = [message_str]
+            thread_message_history[thread_id]['dialog_texts'] = message_str
     if file is not None:
         thread_message_history[thread_id]['file'] = file
 
@@ -67,14 +66,15 @@ def message_receive_event_handler(req_data: MessageReceiveEvent):
     sender_id = event['event']["sender"]["sender_id"]
     message = event['event']["message"]
     create_time = event['header']["create_time"]
-
-    if message["message_type"] != "text":
-        logging.warning("Other types of messages have not been processed yet")
+    message_type = message["message_type"]
+    logger.info(f'message_type-{message_type}')
+    if message_type != "text" and message_type != "post":
+        logger.warning("Other types of messages have not been processed yet")
+        message_api_client.reply_text_with_message_id(thread_id, json.dumps({"text": f'不接受如下类型为：{message["message_type"]}的消息'}), create_time)
         return jsonify()
 
     open_id = sender_id["open_id"]
     text_content = json.loads(message["content"])
-    print(text_content)
 
     thread_id = message["message_id"]
     parent_thread_id = thread_id
@@ -82,32 +82,39 @@ def message_receive_event_handler(req_data: MessageReceiveEvent):
         parent_thread_id = message.get("root_id", thread_id)
         # print(f'parent_id is: {message["parent_id"]}, message_id is: {thread_id}')
         # print(f'root_id is: {message["root_id"]}, message_id is: {thread_id}')
-        print(f'parent_thread_id is: {parent_thread_id}')
+        # print(f'parent_thread_id is: {parent_thread_id}')
     except Exception:
         print(f"Root_id not found, using message_id as parent_thread_id {thread_id}")
+    # 初始化 history
     if parent_thread_id not in thread_message_history:
         thread_message_history[parent_thread_id] = { 'dialog_texts': [], 'context_urls': set(), 'file': None}
-
-    if "text" in text_content:
-        result = extract_link_and_text(text_content)
-        item_text = result["text"]
-        item_urls = result["link"]
-        update_thread_history(parent_thread_id, item_text, item_urls)
+    # 提取用户输入的内容更新到 thread_history
+    result = None
+    if message_type == 'text':
+        if "text" in text_content:
+            result = extract_text_and_links_from_content(text_content)
+    elif message_type == 'post':
+        if "content" in text_content:
+            result = extract_post_text_and_links_from_content(text_content)
+    item_text = result["text"]
+    item_urls = result["link"]
+    update_thread_history(parent_thread_id, item_text, item_urls)
+    # 从 thread_history 中提取内容开始请求
     urls = thread_message_history[parent_thread_id]['context_urls']
     file = thread_message_history[parent_thread_id]['file']
     text = thread_message_history[parent_thread_id]['dialog_texts']
-    logging.info('=====> Current thread conversation messages are:')
-    logging.info(thread_message_history[parent_thread_id])
-    try:    
+    logger.info('=====> Current thread conversation messages are:')
+    logger.info(thread_message_history[parent_thread_id])
+    try:
         if file is not None:
-            future = executor.submit(get_answer_from_llama_file, dialog_context_keep_latest(text), file)
+            gpt_response = get_answer_from_llama_file(dialog_context_keep_latest(text), file)
         elif len(urls) > 0:
-            future = executor.submit(get_answer_from_llama_web, text, list(urls))
+            gpt_response = get_answer_from_llama_web(text, list(urls))
         else:
-            future = executor.submit(get_answer_from_chatGPT, text)
-        gpt_response = future.result(timeout=300)
-        update_thread_history(parent_thread_id, 'AI: %s' % insert_space(f'{gpt_response}'))
-        print(f"请求成功：{gpt_response}")
+            gpt_response = get_answer_from_chatGPT(text)
+        
+        update_thread_history(parent_thread_id, ['AI: %s' % insert_space(f'{gpt_response}')])
+        logger.info(f"请求成功-接下来调用接口发送消息")
         message_api_client.reply_text_with_message_id(thread_id, json.dumps({"text": f'{str(gpt_response)}'}), create_time)
         # if voicemessage is None:
         #     say(f'<@{user}>, {gpt_response}', thread_ts=thread_ts)
@@ -115,22 +122,17 @@ def message_receive_event_handler(req_data: MessageReceiveEvent):
         #     voice_file_path = get_voice_file_from_text(str(gpt_response))
         #     logger.info(f'=====> Voice file path is {voice_file_path}')
         #     slack_app.client.files_upload_v2(file=voice_file_path, channel=channel, thread_ts=parent_thread_ts)
-    except concurrent.futures.TimeoutError:
-        future.cancel()
-        err_msg = 'Task timedout(5m) and was canceled.'
+    except Exception as e:
+        err_msg = f'Task failed with error: {e}'
         print(err_msg)
         message_api_client.reply_text_with_message_id(thread_id, json.dumps({"text": f'<@{open_id}>, {err_msg}'}), create_time)
         # say(f'<@{user}>, {err_msg}', thread_ts=thread_ts)
-    except Exception as e:
-        # 处理其他异常
-        logging.error(str(e))
-        message_api_client.reply_text_with_message_id(thread_id, json.dumps({"text": f'<@{open_id}>, {str(e)}'}), create_time)
     return jsonify()
 
 
 @app.errorhandler
 def msg_error_handler(ex):
-    logging.error(ex)
+    logger.error(ex)
     response = jsonify(message=str(ex))
     response.status_code = (
         ex.response.status_code if isinstance(ex, requests.HTTPError) else 500
@@ -141,6 +143,7 @@ def msg_error_handler(ex):
 @app.route("/api-endpoint", methods=["POST"])
 def callback_event_handler():
     # init callback instance and handle
+    logger.info('=====> api-endpoint !')
     event_handler, event = event_manager.get_handler_with_event(VERIFICATION_TOKEN, ENCRYPT_KEY)
     if event_handler is None:
         return jsonify()

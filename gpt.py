@@ -1,6 +1,5 @@
 
 import os
-import logging
 import hashlib
 import random
 import uuid
@@ -14,13 +13,14 @@ from langchain.chat_models import ChatOpenAI
 from azure.cognitiveservices.speech import SpeechConfig, SpeechSynthesizer, ResultReason, CancellationReason, SpeechSynthesisOutputFormat
 from azure.cognitiveservices.speech.audio import AudioOutputConfig
 from dotenv import load_dotenv, find_dotenv
+from utils import setup_logger
 
 from fetch_web_post import get_urls, get_youtube_transcript, scrape_website, scrape_website_by_phantomjscloud
 from utils import get_youtube_video_id
 # load env parameters form file named .env
 load_dotenv(find_dotenv())
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-print("OPENAI_API_KEY-{}", OPENAI_API_KEY)
+logging = setup_logger('my_gpt_reader_gpt')
 # SPEECH_KEY = os.environ.get('SPEECH_KEY')
 # SPEECH_REGION = os.environ.get('SPEECH_REGION')
 openai.api_key = OPENAI_API_KEY
@@ -89,7 +89,6 @@ def get_answer_from_chatGPT(messages):
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": dialog_messages}]
     )
-    logging.info(completion.usage)
     return completion.choices[0].message.content
 
 
@@ -125,7 +124,7 @@ def get_index_from_file_cache(name):
 def get_answer_from_llama_web(messages, urls):
     dialog_messages = format_dialog_messages(messages)
     logging.info('=====> Use llama web with chatGPT to answer!')
-    logging.info(dialog_messages)
+    # logging.info(dialog_messages)
     combained_urls = get_urls(urls)
     logging.info(combained_urls)
     index_file_name = get_unique_md5(urls)
