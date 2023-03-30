@@ -9,8 +9,6 @@ const Footer = () => {
         <p>©2023 i365.tech All rights reserved.</p>
         <a
           href="https://github.com/madawei2699/myGPTReader"
-          target="_blank"
-          rel="noopener noreferrer"
         >
           <FontAwesomeIcon icon={faGithub} />
         </a>

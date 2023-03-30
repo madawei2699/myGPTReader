@@ -49,7 +49,6 @@ const Header = () => {
           <a
             href="#"
             onClick={goToGitHub}
-            target="_blank"
             className="github-link ml-4 flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-white font-semibold shadow-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
           >
             <svg
