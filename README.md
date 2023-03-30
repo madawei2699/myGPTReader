@@ -78,8 +78,8 @@ A large number of prompt templates are built in, use them for better conversatio
 ### 🔥 Hot News Today
 
 Every day myGPTReader sends out the latest hot news and automatically generates a summary, so you can quickly learn what's hot today.
-
-![Hot News Today](https://user-images.githubusercontent.com/2446612/228727918-3fe0e821-4608-4893-b514-bd41f843bb60.gif)
+  
+![Hot News Today](https://user-images.githubusercontent.com/2446612/228729812-38c3137a-026e-4100-9fab-0b8f2a1215fc.gif)
 
 ## Deployment <a name = "deployment"></a>
 
