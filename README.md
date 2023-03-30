@@ -86,12 +86,6 @@ Every day myGPTReader sends out the latest hot news and automatically generates 
 How to deploy myGPTReader on your own server.
 (WIP)
 
-## Reference Links <a name = "reference_links"></a>
-
-YouTube Live video for in-depth walkthrough of the project: [![myGPTReader Live Share](http://img.youtube.com/vi/XZIogwFU7jE/0.jpg)](https://www.youtube.com/live/XZIogwFU7jE?feature=share "myGPTReader Live Share")
-
-Blog post: [我的 AI 阅读助手](https://www.bmpi.dev/self/my-gpt-reader/)
-
 ## ✍️ Authors <a name = "authors"></a>
 
 - [@madawei2699](https://twitter.com/madawei2699)
@@ -101,6 +95,12 @@ See also the list of [contributors](https://github.com/madawei2699/myGPTReader/c
 ## 🎉 Acknowledgements <a name = "acknowledgement"></a>
 
 - Hat tip to anyone whose code was used
+
+## Reference Links <a name = "reference_links"></a>
+
+YouTube Live video for in-depth walkthrough of the project: [![myGPTReader Live Share](http://img.youtube.com/vi/XZIogwFU7jE/0.jpg)](https://www.youtube.com/live/XZIogwFU7jE?feature=share "myGPTReader Live Share")
+
+Blog post: [我的 AI 阅读助手](https://www.bmpi.dev/self/my-gpt-reader/)
 
 ## Star History <a name = "star_history"></a>
 
