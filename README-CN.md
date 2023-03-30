@@ -88,6 +88,7 @@
 ### 如何安装 <a name = "how_to_install"></a>
 
 - 可参考 [@nigdaemon](./docs/how-to-install/nigdaemon.md) 的安装记录。
+- 如果想使用 Docker 部署也可参考 [@polly3d](./docs/how-to-install/docker.md) 的安装记录。
 
 ## 相关链接 <a name = "reference_links"></a>
 
