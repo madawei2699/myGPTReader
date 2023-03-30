@@ -100,6 +100,11 @@
       - [r/ChatGPT](https://www.reddit.com/r/ChatGPT/comments/126mp6l/introducing_mygptreader_a_slack_bot_that/)
       - [r/Python](https://www.reddit.com/r/Python/comments/126n53p/github_madawei2699mygptreader_mygptreader_is_a/)
     - [x] [Product Hunt](https://www.producthunt.com/products/mygptreader)
+- User management
+  - [ ] Message statistics
+  - [ ] Token statistics
+  - [ ] User premium membership plan
+  - [ ] Payment
 - [ ] Integrated with Azure OpenAI Service
 - [ ] Rewrite the code in Typescript ❓
 - [ ] Upgrade chat model (gpt-3.5-turbo) to GPT4 (gpt-4-0314) 💥
