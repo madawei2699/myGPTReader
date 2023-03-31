@@ -224,6 +224,15 @@ def handle_mentions(event, say, logger):
         logger.warning(err_msg)
         say(f'<@{user}>, {err_msg}', thread_ts=thread_ts)
 
+@slack_app.event("message.im")
+async def direct_message_handler(event, say, logger):
+    try:
+        logger.info(event)
+        thread_ts = event["ts"]
+        say(f'Thanks for your message 👋!', thread_ts=thread_ts)
+    except Exception as e:
+        logger.error(f"Error responding to direct message: {e}")
+
 register_slack_slash_commands(slack_app)
 scheduler.start()
 
