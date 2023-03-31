@@ -254,6 +254,27 @@ def log_message(logger, event, say):
     except Exception as e:
         logger.error(f"Error responding to direct message: {e}")
 
+@slack_app.event("app_home_opened")
+def update_home_tab(client, event, logger):
+    try:
+        client.views_publish(
+            user_id=event["user"],
+            view={
+                "type": "home",
+                "blocks": [
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": "*Welcome home, <@" + event["user"] + "> :house:*"
+                        }
+                    }
+                ]
+            }
+        )
+    except Exception as e:
+        logger.error(f"Error publishing home tab: {e}")
+
 register_slack_slash_commands(slack_app)
 scheduler.start()
 
