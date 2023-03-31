@@ -19,6 +19,12 @@ class TtlSet:
     def add(self, value, ttl_seconds):
         with self.lock:
             self.ttl[value] = time.time() + ttl_seconds
+    
+    def adds(self, values, ttl_seconds):
+        with self.lock:
+            now = time.time()
+            for value in values:
+                self.ttl[value] = now + ttl_seconds
 
     def discard(self, value):
         with self.lock:

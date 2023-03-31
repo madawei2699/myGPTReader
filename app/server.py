@@ -2,7 +2,6 @@ import logging
 import re
 import os
 import requests
-from pathlib import Path
 from urllib.parse import urlparse
 from flask import Flask, request
 from flask_apscheduler import APScheduler
@@ -117,8 +116,19 @@ limiter_message_per_user = 15
 limiter_time_period = 3 * 3600
 limiter = RateLimiter(limit=limiter_message_per_user, period=limiter_time_period)
 
+def update_whitelist():
+    response = slack_app.client.conversations_members(channel=temp_whitelist_channle_id)
+    members = response["members"]
+    temp_whitelist_users.adds(members, 10 * 60)
+    logging.info("Updated whitelist: %s", temp_whitelist_users)
+
+def is_user_in_whitelist(user_id: str) -> bool:
+    if len(temp_whitelist_users) == 0:
+        update_whitelist()
+    return user_id in temp_whitelist_users    
+
 def is_authorized(user_id: str) -> bool:
-    if user_id in temp_whitelist_users:
+    if is_user_in_whitelist(user_id):
         return True
     with open(whitelist_file, "r") as f:
         return user_id in f.read().splitlines()
@@ -129,12 +139,11 @@ def dialog_context_keep_latest(dialog_texts, max_length=1):
     return dialog_texts
 
 def format_dialog_text(text, voicemessage=None):
-    return insert_space(text.replace("<@U04TCNR9MNF>", "")) + ('\n' + voicemessage if voicemessage else '')
+    if text is None:
+        return voicemessage if voicemessage else ''
+    return insert_space(text.replace("<@U051JKES6Q1>", "")) + ('\n' + voicemessage if voicemessage else '')
 
-@slack_app.event("app_mention")
-def handle_mentions(event, say, logger):
-    logger.info(event)
-
+def bot_process(event, say, logger):
     user = event["user"]
     thread_ts = event["ts"]
     channel = event["channel"]
@@ -142,20 +151,7 @@ def handle_mentions(event, say, logger):
     file_md5_name = None
     voicemessage = None
 
-    if not limiter.allow_request(user):
-        if not is_authorized(user):
-            say(f'<@{user}>, you have reached the limit of {limiter_message_per_user} messages {limiter_time_period / 3600} hour, please try again later or contact the <@U04TCNR9MNF>.', thread_ts=thread_ts)
-            return
-
-    # temp whitelist handle
-    if channel == temp_whitelist_channle_id:
-        # add 1 hour play time, refresh temp whitelist when user mention bot in temp whitelist channel
-        temp_whitelist_users.add(user, 60 * 60)
-
     if event.get('files'):
-        if not is_authorized(event['user']):
-            say(f'<@{user}>, this feature is only allowed by the premium user, if you want to it, please contact the <@U04TCNR9MNF>.', thread_ts=thread_ts)
-            return
         file = event['files'][0] # only support one file for one thread
         logger.info('=====> Received file:')
         logger.info(file)
@@ -186,7 +182,7 @@ def handle_mentions(event, say, logger):
     if parent_thread_ts not in thread_message_history:
         thread_message_history[parent_thread_ts] = { 'dialog_texts': [], 'context_urls': set(), 'file': None}
 
-    if "text" in event:
+    if "text" in event or voicemessage:
         update_thread_history(parent_thread_ts, f'User: {format_dialog_text(event["text"], voicemessage)}', extract_urls_from_event(event))
 
     if file_md5_name is not None:
@@ -224,12 +220,35 @@ def handle_mentions(event, say, logger):
         logger.warning(err_msg)
         say(f'<@{user}>, {err_msg}', thread_ts=thread_ts)
 
-@slack_app.event("message.im")
-async def direct_message_handler(event, say, logger):
+@slack_app.event("app_mention")
+def handle_mentions(event, say, logger):
+    logger.info(event)
+
+    user = event["user"]
+
+    if not limiter.allow_request(user):
+        if not is_authorized(user):
+            say(f'<@{user}>, you have reached the limit of {limiter_message_per_user} messages {limiter_time_period / 3600} hour, please try again later or contact the <@U051JKES6Q1>.', thread_ts=thread_ts)
+            return
+    
+    bot_process(event, say, logger)
+    
+
+def bot_messages(message, next):
+    logging.info(message)
+    subtype = message.get("subtype")
+    channel_type = message.get("channel_type")
+    if channel_type == 'im' and (subtype is None or subtype == "file_share" or subtype == "message_changed"):
+        logging.info(f"This is a message to bot: {message}")
+        next()
+
+@slack_app.event(event="message", middleware=[bot_messages])
+def log_message(logger, event, say):
     try:
-        logger.info(event)
-        thread_ts = event["ts"]
-        say(f'Thanks for your message 👋!', thread_ts=thread_ts)
+        if is_authorized(event["user"]):
+            bot_process(event, say, logger)
+        else:
+            say(f'This feature is for PREMIUM user only, if you want to talk with the bot directly, please contact the <@U051JKES6Q1>.', thread_ts=event["ts"])
     except Exception as e:
         logger.error(f"Error responding to direct message: {e}")
 

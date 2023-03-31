@@ -79,7 +79,9 @@
   - Limit the number of requests to bot per user per day to save the cost
 - IM Support
   - [x] Slack bot
-    - [ ] Bot for you 💥
+    - [x] Bot for you 💥
+    - [ ] Bot home page
+      - Show token consumption
   - [ ] Discord bot
   - [ ] Telegram bot
 - Bot landing page
