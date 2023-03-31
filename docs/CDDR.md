@@ -9298,3 +9298,109 @@ This will append the `umami` script to the end of the document's body, outside o
 
 ---
 
+## 2023-03-31
+
+---
+
+You
+---
+
+ 
+
+I have a website page has four videos, but google says Google could not determine the prominent video on the page how can I fix it?
+
+ChatGPT
+-------
+
+To fix the issue, you need to mark one of the four videos as the prominent video on the page. One of the ways to do this is by using Schema.org markup.
+
+Here are the steps to follow:
+
+1.  Choose the video that you want to mark as prominent, and note down its URL.
+2.  Go to Google's Structured Data Markup Helper ([https://www.google.com/webmasters/markup-helper/](https://www.google.com/webmasters/markup-helper/)), select "Video" as the data type, and paste the URL of the prominent video into the "Enter URL" field.
+3.  Click on "Start Tagging" and highlight the different elements of the video, such as the title, description, thumbnail, and duration.
+4.  Once you've highlighted all the relevant information, click on "Create HTML". The tool will generate HTML code with microdata that corresponds to the video you tagged.
+5.  Copy the generated HTML code and add it to your website's HTML source code. Make sure to include the code on the same page as the prominent video.
+
+After adding the markup to your site, use Google's structured data testing tool to check if there are any issues with the markup. Once everything looks correct, use Google Search Console to submit the marked up video for indexing.
+
+After doing these steps, Google should be able to detect and display the prominent video on the page.
+
+You
+---
+
+ 
+
+can I use this to fix it? <script type="application/ld+json"> { "@context": "https://schema.org/", "@type": "Recipe", "name": "Banana Bread Recipe", "description": "The best banana bread recipe you'll ever find! Learn how to use up all those extra bananas.", "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.7", "ratingCount": "123" }, "video": { "@type": "VideoObject", "name": "How To Make Banana Bread", "description": "This is how you make banana bread, in 5 easy steps.", "contentUrl": "https://www.example.com/video123.mp4" } } </script>
+
+ChatGPT
+-------
+
+While using the Recipe and VideoObject schema can help improve the visibility of your content in Google search results, it may not necessarily solve the issue with determining the prominent video on the page.
+
+To fix the problem with Google not being able to determine the prominent video on your page, you can try a few things:
+
+1.  Make sure you have only one video prominently displayed on the page. If there are multiple videos, consider picking one that is most relevant to the page's content and making it the main focus.
+    
+2.  Use structured data markup to indicate which video on your page is the main video. To do this, you can add the “mainEntityOfPage” property to your video schema definition and set it to “true” for the main video.
+    
+
+Here is an example of how to add the “mainEntityOfPage” property to the VideoObject schema:
+
+```
+{
+  "@context": "https://schema.org/",
+  "@type": "VideoObject",
+  "name": "How To Make Banana Bread",
+  "description": "This is how you make banana bread, in 5 easy steps.",
+  "contentUrl": "https://www.example.com/video123.mp4",
+  "thumbnailUrl": "https://www.example.com/video123-thumbnail.jpg",
+  "uploadDate": "2020-05-01",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.example.com/banana-bread-recipe"
+  }
+}
+```
+
+3.  Provide additional context around the video using related schema markup. This could include things like a description of the video content, the creator of the video, the length of the video, or any other metadata that might help Google understand the relevance of the video.
+
+By implementing these changes and providing additional information about your video content using structured data, you should be able to improve the visibility and prominence of your videos in Google search results.
+
+You
+---
+
+ 
+
+OK, this is my website html: <section class="bg-white text-center"><div class="container mx-auto py-20"><h1 class="text-5xl mb-6 font-black">myGPTReader</h1><h2 class="text-4xl mb-6 font-black">A new way to read with AI bot</h2><p class="text-gray-600 leading-normal mb-8 max-w-2xl mx-auto">myGPTReader is a bot on Slack that can read and summarize any webpage, documents including ebooks, or even videos from YouTube. It can communicate with you through voice.</p><a href="#" class="py-3 px-6 bg-green-500 text-white font-semibold rounded-full shadow-md hover:bg-green-700 focus:outline-none focus:bg-gray-700">Join Now</a><p class="mt-4 italic text-gray-400">with more than 3000+ members to experience all these features for free.</p><img class="mt-12 mx-auto w-4/5" src="/hero.jpg" alt="Hero" /></div></section><section id="features"><h2 class="text-4xl mb-4 text-center font-black">Features</h2><div class="container mx-auto px-4 my-16"><div class="flex flex-wrap -mx-4"><div class="w-full mx-auto lg:w-4/5 px-4 mb-8"><div class="mb-16"><div style="padding-bottom: 56.25%; position: relative; border-radius: 0.5rem; overflow: hidden;"><video src="https://img.bmpi.dev/my-gpt-reader-web-page-show-1.mp4" autoplay="" loop="" playsinline="" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; object-fit: cover; border-radius: 0.5rem;"></video></div><div class="px-4 py-6 bg-white shadow-md -mt-12 relative z-10"><h3 class="text-3xl font-bold mb-4">Web read with myGPTReader</h3><p>Use myGPTReader to quickly read and understand any web content through conversations, even videos (currently only YouTube videos with subtitles are supported).</p></div></div></div><div class="w-full mx-auto lg:w-4/5 px-4 mb-8"><div class="mb-16"><div style="padding-bottom: 56.25%; position: relative; border-radius: 0.5rem; overflow: hidden;"><video src="https://img.bmpi.dev/my-gpt-reader-documents-show-1.mp4" autoplay="" loop="" playsinline="" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; object-fit: cover; border-radius: 0.5rem;"></video></div><div class="px-4 py-6 bg-white shadow-md -mt-12 relative z-10"><h3 class="text-3xl font-bold mb-4">Document read with myGPTReader</h3><p>Use myGPTReader to quickly read the content of any file, supporting eBooks, PDF, DOCX, TXT, and Markdown.</p></div></div></div><div class="w-full mx-auto lg:w-4/5 px-4 mb-8"><div class="mb-16"><div style="padding-bottom: 56.25%; position: relative; border-radius: 0.5rem; overflow: hidden;"><video src="https://img.bmpi.dev/my-gpt-reader-voice-show-1.mp4" autoplay="" loop="" playsinline="" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; object-fit: cover; border-radius: 0.5rem;"></video></div><div class="px-4 py-6 bg-white shadow-md -mt-12 relative z-10"><h3 class="text-3xl font-bold mb-4">Voice chat with myGPTReader</h3><p>Practice your foreign language by speaking with your voice to myGPTReader, which can be your personal tutor and supports Chinese, English, German, and Japanese.</p></div></div></div><div class="w-full mx-auto lg:w-4/5 px-4 mb-8"><div class="mb-16"><div style="padding-bottom: 56.25%; position: relative; border-radius: 0.5rem; overflow: hidden;"><video src="https://img.bmpi.dev/my-gpt-reader-prompt-show-1.mp4" autoplay="" loop="" playsinline="" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; object-fit: cover; border-radius: 0.5rem;"></video></div><div class="px-4 py-6 bg-white shadow-md -mt-12 relative z-10"><h3 class="text-3xl font-bold mb-4">Ask myGPTReader anything</h3><p>A large number of prompt templates are built in, use them for better conversations with chatGPT.</p></div></div></div><div class="w-full mx-auto lg:w-4/5 px-4 mb-8"><div class="mb-16"><div style="padding-bottom: 56.25%; position: relative; border-radius: 0.5rem; overflow: hidden;"><video src="https://img.bmpi.dev/my-gpt-reader-hot-news-show-1.mp4" autoplay="" loop="" playsinline="" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; object-fit: cover; border-radius: 0.5rem;"></video></div><div class="px-4 py-6 bg-white shadow-md -mt-12 relative z-10"><h3 class="text-3xl font-bold mb-4">Hot News Today</h3><p>Every day myGPTReader sends out the latest hot news and automatically generates a summary, so you can quickly learn what&#39;s hot today.</p></div></div></div></div></div></section><section id="pricing"><h2 class="text-4xl mb-4 text-center font-black">Choose Your Plan</h2><div class="pricing px-4"><div class="pricing\_\_item free"><h2 class="font-extrabold">Free</h2><p class="price font-normal">$0/m</p><ul class="benefits"><li>Web read with myGPTReader</li><li>Ask myGPTReader anything</li><li>Today Hot News</li></ul><button class="cta bg-slate-800 font-semibold">Get Started</button></div><div class="pricing\_\_item premium"><h2 class="font-extrabold">Premium</h2><p class="price font-normal">$?/m</p><ul class="benefits"><li>Web read with myGPTReader</li><li>Ask myGPTReader anything</li><li>Today Hot News</li><li class="font-bold text-indigo-600 text-lg">Document read with myGPTReader</li><li class="font-bold text-purple-600 text-lg">Voice chat with myGPTReader</li><li class="font-bold text-pink-600 text-lg">Bot for you</li><li class="italic">More in the future</li></ul><button class="cta bg-gray-800 font-semibold">Contact US</button></div></div></section><section class="bg-white py-10 px-5"><h2 class="text-4xl mb-4 text-center font-black">Questions &amp; Answers</h2><div class="container mx-auto max-w-lg"><ul><li class="mb-6"><div class="rounded-lg shadow-md bg-white p-5 cursor-pointer transition-all duration-300 hover:bg-gray-50"><p class="text-xl font-medium">What limitations are there in the FREE version?</p></div></li><li class="mb-6"><div class="rounded-lg shadow-md bg-white p-5 cursor-pointer transition-all duration-300 hover:bg-gray-50"><p class="text-xl font-medium">What are the limitations of the PREMIUM version?</p></div></li><li class="mb-6"><div class="rounded-lg shadow-md bg-white p-5 cursor-pointer transition-all duration-300 hover:bg-gray-50"><p class="text-xl font-medium">What is &lt;Bot for you&gt; of the PREMIUM version?</p></div></li></ul></div></section><footer class="bg-white px-4 md:px-20 mx-auto"><div class="container flex justify-between items-center py-3 lg:px-20"><p>©2023 i365.tech All rights reserved.</p><a href="https://github.com/madawei2699/myGPTReader"> It is a opensource python project, and its feature is myGPTReader is a bot on Slack that can read and summarize any webpage, documents including ebooks, or even videos from YouTube. It can communicate with you through voice. There is four video to show its function, based this, can u give me the schema?
+
+ChatGPT
+-------
+
+Sure! Based on your website, here is the schema you can use to specify the prominent video on your page:
+
+```
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "myGPTReader Demo Video 1",
+  "description": "A demo video showcasing myGPTReader's web reading functionality",
+  "thumbnailUrl": "https://img.bmpi.dev/my-gpt-reader-web-page-show-1-thumbnail.jpg",
+  "uploadDate": "2022-01-01T00:00:00+08:00",
+  "duration": "PT2M30S",
+  "contentUrl": "https://img.bmpi.dev/my-gpt-reader-web-page-show-1.mp4",
+  "embedUrl": "https://www.youtube.com/embed/your-video-id-here",
+  "interactionCount": {
+    "@type": "InteractionCounter",
+    "userInteractionCount": "100"
+  },
+  "prominenceRank": "1"
+}
+</script>
+```
+
+You will need to update the `name`, `description`, `thumbnailUrl`, `uploadDate`, `duration`, and `contentUrl` properties with appropriate values for each of the four videos on your page.
+
+Note that since `myGPTReader` is not a recipe, do not include the `Recipe` type in the schema. Instead, only use the `VideoObject` type. Additionally, the `video` property you mentioned earlier in your example does not conform to the Structured Data Testing Tool specification for marking up videos.
+
