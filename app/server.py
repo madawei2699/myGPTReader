@@ -95,6 +95,8 @@ def update_thread_history(thread_ts, message_str=None, urls=None, file=None):
         thread_message_history[thread_ts]['file'] = file
 
 def extract_urls_from_event(event):
+    if 'blocks' not in event:
+        return None
     urls = set()
     for block in event['blocks']:
         for element in block['elements']:
