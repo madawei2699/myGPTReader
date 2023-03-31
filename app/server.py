@@ -111,9 +111,9 @@ filetype_extension_allowed = ['epub', 'pdf', 'text', 'docx', 'markdown', 'm4a', 
 filetype_voice_extension_allowed = ['m4a', 'webm', 'mp3', 'wav']
 max_file_size = 3 * 1024 * 1024
 temp_whitelist_users = TtlSet()
-temp_whitelist_channle_id = 'C04VARAS1S7'
+temp_whitelist_channle_id = 'C0518EY9D0U'
 
-limiter_message_per_user = 25
+limiter_message_per_user = 15
 limiter_time_period = 3 * 3600
 limiter = RateLimiter(limit=limiter_message_per_user, period=limiter_time_period)
 
@@ -144,7 +144,7 @@ def handle_mentions(event, say, logger):
 
     if not limiter.allow_request(user):
         if not is_authorized(user):
-            say(f'<@{user}>, you have reached the limit of {limiter_message_per_user} messages {limiter_time_period / 3600} hour, please try again later.', thread_ts=thread_ts)
+            say(f'<@{user}>, you have reached the limit of {limiter_message_per_user} messages {limiter_time_period / 3600} hour, please try again later or contact the <@U04TCNR9MNF>.', thread_ts=thread_ts)
             return
 
     # temp whitelist handle
@@ -154,7 +154,7 @@ def handle_mentions(event, say, logger):
 
     if event.get('files'):
         if not is_authorized(event['user']):
-            say(f'<@{user}>, this feature is only allowed by whitelist user, please contact the admin to open it.', thread_ts=thread_ts)
+            say(f'<@{user}>, this feature is only allowed by the premium user, if you want to it, please contact the <@U04TCNR9MNF>.', thread_ts=thread_ts)
             return
         file = event['files'][0] # only support one file for one thread
         logger.info('=====> Received file:')
