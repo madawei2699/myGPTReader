@@ -1,6 +1,7 @@
 import logging
 import re
 import os
+from datetime import datetime
 import requests
 from urllib.parse import urlparse
 from flask import Flask, request
@@ -268,19 +269,17 @@ def update_home_tab(client, event, logger):
         user_info = get_user(event["user"])
         if user_info is not None:
             user_type = user_info['user_type']
+            premium_end_date = user_info['premium_end_date']
             llm_token_usage = user_info['llm_token_usage']
             embedding_token_usage = user_info['embedding_token_usage']
             message_count = user_info['message_count']
         else:
             user_type = None
+            premium_end_date = None
             llm_token_usage = None
             embedding_token_usage = None
             message_count = None
-        client.views_publish(
-            user_id=event["user"],
-            view={
-                "type": "home",
-                "blocks": [
+        blocks = [
                     {
                         "type": "header",
                         "text": {
@@ -324,6 +323,21 @@ def update_home_tab(client, event, logger):
                         }
                     }
                 ]
+        if premium_end_date is not None:
+            dt_object = datetime.utcfromtimestamp(int(premium_end_date))
+            date_string = dt_object.strftime("%m/%d/%Y")
+            blocks.append({
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": f"*Premium End Date:* {date_string}(UTC)"
+                        }
+                    })
+        client.views_publish(
+            user_id=event["user"],
+            view={
+                "type": "home",
+                "blocks": blocks
             }
         )
     except Exception as e:
