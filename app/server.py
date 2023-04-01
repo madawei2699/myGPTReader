@@ -13,8 +13,7 @@ from app.daily_hot_news import build_all_news_block
 from app.gpt import get_answer_from_chatGPT, get_answer_from_llama_file, get_answer_from_llama_web, get_text_from_whisper, get_voice_file_from_text, index_cache_file_dir
 from app.rate_limiter import RateLimiter
 from app.slash_command import register_slack_slash_commands
-from app.ttl_set import TtlSet
-from app.user import get_user, update_message_token_usage
+from app.user import get_user, is_premium_user, update_message_token_usage
 from app.util import md5
 
 class Config:
@@ -116,34 +115,14 @@ def extract_urls_from_event(event):
                     urls.add(url)
     return list(urls)
 
-whitelist_file = "app/data//vip_whitelist.txt"
-
 filetype_extension_allowed = ['epub', 'pdf', 'text', 'docx', 'markdown', 'm4a', 'webm', 'mp3', 'wav']
 filetype_voice_extension_allowed = ['m4a', 'webm', 'mp3', 'wav']
 max_file_size = 3 * 1024 * 1024
-temp_whitelist_users = TtlSet()
 temp_whitelist_channle_id = 'C0518EY9D0U'
 
 limiter_message_per_user = 15
 limiter_time_period = 3 * 3600
 limiter = RateLimiter(limit=limiter_message_per_user, period=limiter_time_period)
-
-def update_whitelist():
-    response = slack_app.client.conversations_members(channel=temp_whitelist_channle_id)
-    members = response["members"]
-    temp_whitelist_users.adds(members, 10 * 60)
-    logging.info("Updated whitelist: %s", temp_whitelist_users)
-
-def is_user_in_whitelist(user_id: str) -> bool:
-    if len(temp_whitelist_users) == 0:
-        update_whitelist()
-    return user_id in temp_whitelist_users    
-
-def is_authorized(user_id: str) -> bool:
-    if is_user_in_whitelist(user_id):
-        return True
-    with open(whitelist_file, "r") as f:
-        return user_id in f.read().splitlines()
     
 def dialog_context_keep_latest(dialog_texts, max_length=1):
     if len(dialog_texts) > max_length:
@@ -259,7 +238,7 @@ def handle_mentions(event, say, logger):
     user = event["user"]
 
     if not limiter.allow_request(user):
-        if not is_authorized(user):
+        if not is_premium_user(user):
             say(f'<@{user}>, you have reached the limit of {limiter_message_per_user} messages {limiter_time_period / 3600} hour, please try again later or contact the <@U051JKES6Q1>.', thread_ts=thread_ts)
             return
     
@@ -277,7 +256,7 @@ def bot_messages(message, next):
 @slack_app.event(event="message", middleware=[bot_messages])
 def log_message(logger, event, say):
     try:
-        if is_authorized(event["user"]):
+        if is_premium_user(event["user"]):
             bot_process(event, say, logger)
         else:
             say(f'This feature is for PREMIUM user only, if you want to talk with the bot directly, please contact the <@U051JKES6Q1>.', thread_ts=event["ts"])
@@ -308,6 +287,13 @@ def update_home_tab(client, event, logger):
                         "text": {
                             "type": "plain_text",
                             "text": "This month's usage",
+                        }
+                    },
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": f"*User ID:* {event['user'] or ''}"
                         }
                     },
                     {

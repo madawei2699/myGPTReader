@@ -1,3 +1,5 @@
+from datetime import datetime
+import pytz
 import json
 import logging
 import os
@@ -53,3 +55,23 @@ def get_user(user_id):
             return "Error: Unable to parse JSON response"
     else:
         return f"Error: {response.status_code} - {response.reason}"
+        
+def is_premium_user(user_id):
+    try:
+        user = get_user(user_id)
+        if not user:
+            return False
+
+        if user['user_type'] == 'free':
+            return False
+
+        premium_end_date = user['premium_end_date']
+        if not premium_end_date:
+            return False
+        
+        utc_timezone = pytz.timezone('UTC')
+        premium_end_datetime = datetime.utcfromtimestamp(int(premium_end_date)).replace(tzinfo=utc_timezone)
+        return premium_end_datetime > datetime.utcnow().replace(tzinfo=utc_timezone)
+    except Exception as e:
+        logging.error(f"Error while checking if user {user_id} is premium: {e}")
+        return False
