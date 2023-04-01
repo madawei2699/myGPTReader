@@ -80,7 +80,7 @@
 - IM Support
   - [x] Slack bot
     - [x] Bot for you 💥
-    - [ ] Bot home page
+    - [x] Bot home page
       - Show token consumption
   - [ ] Discord bot
   - [ ] Telegram bot
