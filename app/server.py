@@ -5,8 +5,9 @@ import requests
 from urllib.parse import urlparse
 from flask import Flask, request
 from flask_apscheduler import APScheduler
-from slack_bolt import App
+from slack_bolt import App, BoltResponse
 from slack_bolt.adapter.flask import SlackRequestHandler
+from slack_bolt.error import BoltUnhandledRequestError
 import concurrent.futures
 from app.daily_hot_news import build_all_news_block
 from app.gpt import get_answer_from_chatGPT, get_answer_from_llama_file, get_answer_from_llama_web, get_text_from_whisper, get_voice_file_from_text, index_cache_file_dir
@@ -27,9 +28,17 @@ app = Flask(__name__)
 
 slack_app = App(
     token=os.environ.get("SLACK_TOKEN"),
-    signing_secret=os.environ.get("SLACK_SIGNING_SECRET")
+    signing_secret=os.environ.get("SLACK_SIGNING_SECRET"),
+    raise_error_for_unhandled_request=True
 )
 slack_handler = SlackRequestHandler(slack_app)
+
+@slack_app.error
+def handle_errors(error):
+    if isinstance(error, BoltUnhandledRequestError):
+        return BoltResponse(status=200, body="")
+    else:
+        return BoltResponse(status=500, body="Something Wrong")
 
 scheduler = APScheduler()
 scheduler.api_enabled = True
@@ -150,6 +159,7 @@ def generate_message_id(channel, thread_ts):
     return f"{channel}-{thread_ts}"
 
 def update_token_usage(event, total_llm_model_tokens, total_embedding_model_tokens):
+    logging.info("=====> Start to update token usage!")
     try:
         user = event["user"]
         message_id = generate_message_id(event["channel"], event["ts"])
@@ -278,11 +288,16 @@ def log_message(logger, event, say):
 def update_home_tab(client, event, logger):
     try:
         user_info = get_user(event["user"])
-        if user_info is None:
+        if user_info is not None:
             user_type = user_info['user_type']
             llm_token_usage = user_info['llm_token_usage']
             embedding_token_usage = user_info['embedding_token_usage']
             message_count = user_info['message_count']
+        else:
+            user_type = None
+            llm_token_usage = None
+            embedding_token_usage = None
+            message_count = None
         client.views_publish(
             user_id=event["user"],
             view={
