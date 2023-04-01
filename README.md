@@ -2,6 +2,7 @@
 <div align="center">
 
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
+[![GitHub Actions](https://github.com/madawei2699/myGPTReader/actions/workflows/fly.yml/badge.svg)]()
 [![GitHub Issues](https://img.shields.io/github/issues/madawei2699/myGPTReader.svg)](https://github.com/madawei2699/myGPTReader/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/madawei2699/myGPTReader.svg)](https://github.com/madawei2699/myGPTReader/pulls)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
@@ -20,15 +21,20 @@
 
 ## 📝 Table of Contents
 
-- [About](#about)
-- [Getting Started](#getting_started)
-- [Main Features](#main_features)
-- [How to Install](#how_to_install)
-- [TODO](docs/TODO.md)
-- [Authors](#authors)
-- [Acknowledgments](#acknowledgement)
-- [Reference Links](#reference_links)
-- [Star History](#star_history)
+- [📝 Table of Contents](#-table-of-contents)
+- [🧐 About ](#-about-)
+- [🏁 Getting Started ](#-getting-started-)
+- [🔥 Main Features ](#-main-features-)
+  - [📖 Website read with myGPTReader](#-website-read-with-mygptreader)
+  - [📚 Document read with myGPTReader](#-document-read-with-mygptreader)
+  - [🗣️ Voice chat with myGPTReader](#️-voice-chat-with-mygptreader)
+  - [💬 Ask myGPTReader anything](#-ask-mygptreader-anything)
+  - [🔥 Hot News Today](#-hot-news-today)
+- [How to Install ](#how-to-install-)
+- [✍️ Authors ](#️-authors-)
+- [🎉 Acknowledgements ](#-acknowledgements-)
+- [Reference Links ](#reference-links-)
+- [Star History ](#star-history-)
 
 ## 🧐 About <a name = "about"></a>
 
