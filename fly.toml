@@ -1,38 +1,34 @@
-# fly.toml file generated for my-gpt-reader on 2023-03-08T15:11:38Z
+# fly.toml file generated for reader-gpt on 2023-04-01T20:33:03+08:00
 
-app = "my-gpt-reader"
+app = "reader-gpt"
 kill_signal = "SIGINT"
 kill_timeout = 5
+primary_region = "lhr"
 
 [build]
   builder = "paketobuildpacks/builder:full"
-  builtin = "python"
-
-[build.settings]
-  pythonbase = "3.9-slim-buster"
-
-[mount]
-  source = "data"
-  destination = "/data/myGPTReader"
 
 [env]
   PORT = "8080"
 
+[mounts]
+  source = "data"
+  destination = "/data/myGPTReader"
+
 [[services]]
   internal_port = 8080
+  processes = ["app"]
   protocol = "tcp"
   [services.concurrency]
     hard_limit = 25
     soft_limit = 20
+    type = "connections"
 
   [[services.ports]]
+    force_https = true
     handlers = ["http"]
-    port = "80"
+    port = 80
 
   [[services.ports]]
     handlers = ["tls", "http"]
-    port = "443"
-
-  [[services.tcp_checks]]
-    interval = 10000
-    timeout = 2000
+    port = 443

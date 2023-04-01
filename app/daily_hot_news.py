@@ -7,7 +7,7 @@ import concurrent.futures
 
 from app.gpt import get_answer_from_llama_web
 
-with open("./data/hot_news_rss.json", "r") as f:
+with open("app/data/hot_news_rss.json", "r") as f:
     rss_urls = json.load(f)
 
 TODAY = today = date.today()
