@@ -29,7 +29,9 @@ def cut_string(text):
 
 def get_summary_from_gpt_thread(url):
     news_summary_prompt = '请用中文简短概括这篇文章的内容。'
-    return str(get_answer_from_llama_web([news_summary_prompt], [url]))
+    gpt_response, total_llm_model_tokens, total_embedding_model_tokens = get_answer_from_llama_web([news_summary_prompt], [url])
+    logging.info(f"=====> GPT response: {gpt_response} (total_llm_model_tokens: {total_llm_model_tokens}, total_embedding_model_tokens: {total_embedding_model_tokens}")
+    return str(gpt_response)
 
 def get_summary_from_gpt(url):
     with concurrent.futures.ThreadPoolExecutor() as executor:

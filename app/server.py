@@ -13,6 +13,7 @@ from app.gpt import get_answer_from_chatGPT, get_answer_from_llama_file, get_ans
 from app.rate_limiter import RateLimiter
 from app.slash_command import register_slack_slash_commands
 from app.ttl_set import TtlSet
+from app.user import get_user, update_message_token_usage
 from app.util import md5
 
 class Config:
@@ -145,6 +146,24 @@ def format_dialog_text(text, voicemessage=None):
         return voicemessage if voicemessage else ''
     return insert_space(text.replace("<@U051JKES6Q1>", "")) + ('\n' + voicemessage if voicemessage else '')
 
+def generate_message_id(channel, thread_ts):
+    return f"{channel}-{thread_ts}"
+
+def update_token_usage(event, total_llm_model_tokens, total_embedding_model_tokens):
+    try:
+        user = event["user"]
+        message_id = generate_message_id(event["channel"], event["ts"])
+        message_type = 'text' if 'text' in event else 'file'
+        if 'files' in event:
+             filetype = event['files'][0]["filetype"]
+             if filetype in filetype_voice_extension_allowed:
+                message_type = 'voice'
+        result = update_message_token_usage(user, message_id, message_type, total_llm_model_tokens, total_embedding_model_tokens)
+        if not result:
+            logging.error(f"Failed to update message token usage for {message_id}")
+    except Exception as e:
+        logging.error(e)
+
 def bot_process(event, say, logger):
     user = event["user"]
     thread_ts = event["ts"]
@@ -207,7 +226,8 @@ def bot_process(event, say, logger):
         future = executor.submit(get_answer_from_chatGPT, thread_message_history[parent_thread_ts]['dialog_texts'])
 
     try:
-        gpt_response = future.result(timeout=300)
+        gpt_response, total_llm_model_tokens, total_embedding_model_tokens = future.result(timeout=300)
+        update_token_usage(event, total_llm_model_tokens, total_embedding_model_tokens)
         update_thread_history(parent_thread_ts, 'chatGPT: %s' % insert_space(f'{gpt_response}'))
         logger.info(gpt_response)
         if voicemessage is None:
@@ -257,16 +277,50 @@ def log_message(logger, event, say):
 @slack_app.event("app_home_opened")
 def update_home_tab(client, event, logger):
     try:
+        user_info = get_user(event["user"])
+        if user_info is None:
+            user_type = user_info['user_type']
+            llm_token_usage = user_info['llm_token_usage']
+            embedding_token_usage = user_info['embedding_token_usage']
+            message_count = user_info['message_count']
         client.views_publish(
             user_id=event["user"],
             view={
                 "type": "home",
                 "blocks": [
                     {
+                        "type": "header",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "This month's usage",
+                        }
+                    },
+                    {
                         "type": "section",
                         "text": {
                             "type": "mrkdwn",
-                            "text": "*Welcome home, <@" + event["user"] + "> :house:*"
+                            "text": f"*User Type:* {user_type or ''}"
+                        }
+                    },
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": f"*User llm token usage:* {llm_token_usage or ''}"
+                        }
+                    },
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": f"*User embedding token usage:* {embedding_token_usage or ''}"
+                        }
+                    },
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": f"*User message count:* {message_count or ''}"
                         }
                     }
                 ]

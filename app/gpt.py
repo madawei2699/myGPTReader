@@ -78,17 +78,6 @@ def get_documents_from_urls(urls):
                 documents.append(Document(f"Can't get transcript from youtube video: {url}"))
     return documents
 
-def get_answer_from_chatGPT(messages):
-    dialog_messages = format_dialog_messages(messages)
-    logging.info('=====> Use chatGPT to answer!')
-    logging.info(dialog_messages)
-    completion = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": dialog_messages}]
-    )
-    logging.info(completion.usage)
-    return completion.choices[0].message.content
-
 def get_index_from_web_cache(name):
     web_cache_file = index_cache_web_dir / name
     if not web_cache_file.is_file():
@@ -106,6 +95,23 @@ def get_index_from_file_cache(name):
     logging.info(
         f"=====> Get index from file cache: {file_cache_file}")
     return index
+
+def get_index_name_from_file(file: str):
+    file_md5_with_extension = str(Path(file).relative_to(index_cache_file_dir).name)
+    file_md5 = file_md5_with_extension.split('.')[0]
+    return file_md5 + '.json'
+
+def get_answer_from_chatGPT(messages):
+    dialog_messages = format_dialog_messages(messages)
+    logging.info('=====> Use chatGPT to answer!')
+    logging.info(dialog_messages)
+    completion = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": dialog_messages}]
+    )
+    logging.info(completion.usage)
+    total_tokens = completion.usage.total_tokens
+    return completion.choices[0].message.content, total_tokens, None
 
 def get_answer_from_llama_web(messages, urls):
     dialog_messages = format_dialog_messages(messages)
@@ -128,12 +134,10 @@ def get_answer_from_llama_web(messages, urls):
     logging.info(dialog_messages)
     logging.info('=====> text_qa_template')
     logging.info(prompt)
-    return index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=prompt)
-
-def get_index_name_from_file(file: str):
-    file_md5_with_extension = str(Path(file).relative_to(index_cache_file_dir).name)
-    file_md5 = file_md5_with_extension.split('.')[0]
-    return file_md5 + '.json'
+    answer = index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=prompt)
+    total_llm_model_tokens = llm_predictor.last_token_usage
+    total_embedding_model_tokens = index.embed_model.last_token_usage
+    return answer, total_llm_model_tokens, total_embedding_model_tokens
 
 def get_answer_from_llama_file(messages, file):
     dialog_messages = format_dialog_messages(messages)
@@ -153,7 +157,10 @@ def get_answer_from_llama_file(messages, file):
     logging.info(dialog_messages)
     logging.info('=====> text_qa_template')
     logging.info(prompt)
-    return index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=prompt)
+    answer = index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=prompt)
+    total_llm_model_tokens = llm_predictor.last_token_usage
+    total_embedding_model_tokens = index.embed_model.last_token_usage
+    return answer, total_llm_model_tokens, total_embedding_model_tokens
 
 def get_text_from_whisper(voice_file_path):
     with open(voice_file_path, "rb") as f:
