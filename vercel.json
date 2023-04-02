@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "name": "my-gpt-reader",
+  "builds": [
+    {
+      "src": "app/server.py",
+      "use": "@vercel/python",
+      "config": {
+        "pythonVersion": "3.9"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/slack/events",
+      "dest": "app/server.slack_events",
+      "methods": ["POST"]
+    }
+  ],
+  "env": {
+    "PORT": "8080"
+  },
+  "regions": ["all"],
+  "cleanUrls": true
+}
