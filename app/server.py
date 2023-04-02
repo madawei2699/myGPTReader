@@ -10,7 +10,6 @@ from slack_bolt import App, BoltResponse
 from slack_bolt.adapter.flask import SlackRequestHandler
 from slack_bolt.error import BoltUnhandledRequestError
 import concurrent.futures
-from app.daily_hot_news import build_all_news_block
 from app.gpt import get_answer_from_chatGPT, get_answer_from_llama_file, get_answer_from_llama_web, get_text_from_whisper, get_voice_file_from_text, index_cache_file_dir
 from app.rate_limiter import RateLimiter
 from app.slash_command import register_slack_slash_commands
@@ -21,8 +20,6 @@ class Config:
     SCHEDULER_API_ENABLED = True
 
 executor = concurrent.futures.ThreadPoolExecutor(max_workers=20)
-
-schedule_channel = "#daily-news"
 
 app = Flask(__name__)
 
@@ -43,26 +40,6 @@ def handle_errors(error):
 scheduler = APScheduler()
 scheduler.api_enabled = True
 scheduler.init_app(app)
-
-def send_daily_news(client, news):
-    for news_item in news:
-        try:
-            r = client.chat_postMessage(
-                channel=schedule_channel,
-                text="🔥🔥🔥 Daily Hot News 🔥🔥🔥",
-                blocks=news_item,
-                reply_broadcast=True,
-                unfurl_links=False,
-            )
-            logging.info(r)
-        except Exception as e:
-            logging.error(e)
-
-@scheduler.task('cron', id='daily_news_task', hour=1, minute=30)
-def schedule_news():
-    logging.info("=====> Start to send daily news!")
-    all_news_blocks = build_all_news_block()
-    send_daily_news(slack_app.client, all_news_blocks)
 
 # This is the only route and method that should be used for Slack Event Subscriptions.
 @app.route("/slack/events", methods=["POST"])
