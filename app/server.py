@@ -347,5 +347,6 @@ def update_home_tab(client, event, logger):
 register_slack_slash_commands(slack_app)
 scheduler.start()
 
+# will add more routes later.
 if __name__ == '__main__':
     app.run(debug=True)
