@@ -64,6 +64,7 @@ def schedule_news():
     all_news_blocks = build_all_news_block()
     send_daily_news(slack_app.client, all_news_blocks)
 
+# This is the only route and method that should be used for Slack Event Subscriptions.
 @app.route("/slack/events", methods=["POST"])
 def slack_events():
     return slack_handler.handle(request)
