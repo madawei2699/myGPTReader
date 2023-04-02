@@ -11,9 +11,6 @@ import grpc
 import service_pb2
 import service_pb2_grpc
 
-CF_ACCESS_CLIENT_ID = os.environ.get('CF_ACCESS_CLIENT_ID')
-CF_ACCESS_CLIENT_SECRET = os.environ.get('CF_ACCESS_CLIENT_SECRET')
-
 PHANTOMJSCLOUD_API_KEY = os.environ.get('PHANTOMJSCLOUD_API_KEY')
 PHANTOMJSCLOUD_WEBSITES = ['https://twitter.com/', 'https://t.co/', 'https://medium.com/', 'https://app.mailbrew.com/', 'https://us12.campaign-archive.com', 'https://news.ycombinator.com', 'https://www.bloomberg.com', 'https://*.substack.com/*', 'https://*.1point3acres.com/*', 'https://www.v2ex.com', 'https://www.producthunt.com', 'http://xueqiu.com', 'https://www.jisilu.cn', 'https://www.163.com']
 
@@ -60,9 +57,13 @@ def scrape_website(url: str) -> str:
     result = response.result
     print(f'response 成功=>{response.status_code} ->> {response.status_code == 200}')
     if response.status_code == 200:
-        logging.info(f'scrape_website 成功{response.status_code}')
-        text_content = html2text.html2text(result)
-        return text_content
+        try:
+            logging.info(f'scrape_website 成功{response.status_code}')
+            text_content = html2text.html2text(result)
+            return text_content
+        except Exception as e:
+            logging.warning(f"html2text.html2text error: {e}")
+            return f"Error: {response.status_code} - {e}"
     else:
         print(f"请求失败，状态码：{response.status_code}")
         return f"Error: {response.status_code} - {result}"

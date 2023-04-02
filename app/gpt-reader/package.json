@@ -1,0 +1,24 @@
+{
+  "name": "gpt-reader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "rpc.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server-dev": "USER_ENV=development node index.js",
+    "server-prod": "USER_ENV=prod node index.js",
+    "ser-rpc-dev": "USER_ENV=development node rpc.js",
+    "ser-rpc-prod": "USER_ENV=prod node rpc.js"
+  },
+  "author": "lishoulong",
+  "dependencies": {
+    "@grpc/proto-loader": "^0.7.6",
+    "body-parser": "^1.20.2",
+    "cheerio": "1.0.0-rc.12",
+    "express": "^4.18.2",
+    "generic-pool": "^3.9.0",
+    "grpc": "^1.24.11",
+    "puppeteer": "^19.8.0"
+  },
+  "license": "ISC"
+}

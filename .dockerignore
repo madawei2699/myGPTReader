@@ -1,1 +1,7 @@
 fly.toml
+test
+app/gpt-bot/venv
+app/gpt-bot/.env
+app/gpt-bot/.env_product
+app/gpt-bot/.env_sample
+app/gpt-reader/node_modules

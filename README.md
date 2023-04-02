@@ -37,6 +37,9 @@ can extend the event processing functions of bot based on this example.
 
    The above parameters can be viewed in [Developer Console](https://open.feishu.cn/app/). Encrypt Key can be empty.
 
+5. 音频转换工具
+   > openai 支持的音频格式如下：['m4a', 'mp3', 'webm', 'mp4', 'mpga', 'wav', 'mpeg']。但是飞书语音的格式是 OGG 的。要将 OGG 文件转换为受支持的格式（如 MP3），您可以使用 Python 的 pydub 库。首先，您需要安装 pydub 库，以及处理音频文件所需的 ffmpeg 工具。
+
 ## server rpc
 
 - change service.proto

@@ -1,0 +1,41 @@
+# fly.toml file generated for gpt-reader-bot on 2023-04-01T17:34:18+08:00
+
+app = "gpt-reader-bot"
+kill_signal = "SIGINT"
+kill_timeout = 5
+primary_region = "hkg"
+
+[build]
+  image = ""
+  dockerfile = "Dockerfile"
+
+[build.settings]
+  pythonbase = "3.9-slim-buster"
+
+[env]
+  PORT = "8080"
+
+[mounts]
+  source = "/app/gpt-bot/data"
+  destination = "/app/data/myGPTReader"
+
+[[services]]
+  protocol = "tcp"
+  # Internal ports used by the Python and Node.js services
+  internal_port = 8080
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.tcp_checks]]
+    interval = "10s"
+    timeout = "2s"
+    restart_limit = 0

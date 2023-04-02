@@ -9,6 +9,7 @@ APP_SECRET = os.getenv("APP_SECRET")
 # const
 TENANT_ACCESS_TOKEN_URI = "/open-apis/auth/v3/tenant_access_token/internal"
 MESSAGE_URI = "/open-apis/im/v1/messages"
+FILE_URI = "/open-apis/im/v1/files"
 
 
 class MessageApiClient(object):
@@ -21,6 +22,38 @@ class MessageApiClient(object):
     @property
     def tenant_access_token(self):
         return self._tenant_access_token
+
+    def downLoadFile(self, message_id, file_key, type):
+        self._authorize_tenant_access_token()
+        url = "{}{}/{}/resources/{}?type={}".format(
+            self._lark_host, MESSAGE_URI, message_id, file_key, type
+        )
+        headers = {
+            "Authorization": "Bearer " + self.tenant_access_token,
+        }
+        resp = requests.get(url=url, headers=headers)
+        print(f'downLoadFile--------{resp}')
+        if resp.status_code != 200:
+            resp.raise_for_status()
+        return resp
+
+    def upload_file(self, file):
+        self._authorize_tenant_access_token()
+        url = "{}/{}".format(
+            self._lark_host, FILE_URI
+        )
+        headers = {
+            "Content-Type": "multipart/form-data; boundary=---7MA4YWxkTrZu0gW",
+            "Authorization": "Bearer " + self.tenant_access_token,
+        }
+        req_body = {
+            "file_type": content,
+            "file_name": msg_type,
+            "duration": uuid,
+            "file": files
+        }
+        resp = requests.post(url=url, headers=headers, json=req_body)
+        MessageApiClient._check_error_response(resp)
 
     def send_text_with_open_id(self, open_id, content, uuid):
         self.send("open_id", open_id, "text", content, uuid)
