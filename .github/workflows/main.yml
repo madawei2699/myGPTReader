@@ -34,7 +34,8 @@ jobs:
           fi
 
       - name: Print only_main_yml_changed value
-        run: echo "only_main_yml_changed: ${{ steps.check_files.outputs.only_main_yml_changed }}"
+        run: |
+          echo "only_main_yml_changed: ${{ steps.check_files.outputs.only_main_yml_changed }}"
 
       - name: Login to Docker Hub
         if: ${{ steps.check_files.outputs.only_main_yml_changed == 'false' }}
