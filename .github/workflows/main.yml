@@ -26,11 +26,12 @@ jobs:
         id: check_files
         run: |
           git fetch
-          CURRENT_COMMIT=$(git rev-parse HEAD)
-          PREVIOUS_COMMIT=$(git rev-parse HEAD~1)
-          LAST_COMMIT_FILES=$(git diff --name-only $PREVIOUS_COMMIT $CURRENT_COMMIT)
-          echo "Files changed in the last commit: $LAST_COMMIT_FILES"
-          if [[ "$LAST_COMMIT_FILES" == *".github/workflows/main.yml"* ]] && [[ "$(echo "$LAST_COMMIT_FILES" | wc -l)" == "1" ]]; then
+          COMMIT_HASHES=$(git rev-list -n 2 HEAD)
+          PREVIOUS_COMMIT=$(echo "$COMMIT_HASHES" | tail -n 1)
+          CURRENT_COMMIT=$(echo "$COMMIT_HASHES" | head -n 1)
+          FILES_CHANGED=$(git diff --name-only $PREVIOUS_COMMIT $CURRENT_COMMIT)
+          echo "Files changed between commits: $FILES_CHANGED"
+          if [[ "$FILES_CHANGED" == *".github/workflows/main.yml"* ]] && [[ "$(echo "$FILES_CHANGED" | wc -l)" == "1" ]]; then
             echo "only_main_yml_changed=true" >> $GITHUB_ENV
           else
             echo "only_main_yml_changed=false" >> $GITHUB_ENV
