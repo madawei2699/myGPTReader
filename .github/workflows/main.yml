@@ -53,8 +53,9 @@ jobs:
         run: |
           LATEST_TAG=$(curl -s https://registry.hub.docker.com/v2/repositories/lishoulong/gpt-reader-bot/tags | jq -r '.results[0].name')
           echo "Latest tag: $LATEST_TAG"
+          LATEST_TAG=$(echo $LATEST_TAG | tr -d 'v')
           NEW_VERSION=$(echo $LATEST_TAG | awk -F. '{OFS="."; $NF+=1; print substr($0, 2)}')
-          NEW_VERSION=$(echo ${LATEST_TAG:0:1}${NEW_VERSION})
+          NEW_VERSION=$(echo "v${NEW_VERSION}")
           echo "New version: $NEW_VERSION"
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
