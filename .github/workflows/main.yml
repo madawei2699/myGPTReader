@@ -68,7 +68,7 @@ jobs:
 
       - name: Print secrets
         run: |
-          echo "FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}"
+          echo "gpt_bot_auto_task: ${{ secrets.gpt_bot_auto_task }}"
           env
 
   deploy:
