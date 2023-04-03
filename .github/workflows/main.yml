@@ -36,9 +36,6 @@ jobs:
           push: true
           tags: lishoulong/gpt-reader-bot:v1.0.${{ github.run_number }}
 
-      - name: Install Flyctl
-        run: curl -L https://install.fly.dev | sh
-
       - name: Update fly.toml image version
         run: |
           sed -i "s|image = \"lishoulong/gpt-reader-bot:.*\"|image = \"lishoulong/gpt-reader-bot:v1.0.${{ github.run_number }}\"|g" fly.toml
