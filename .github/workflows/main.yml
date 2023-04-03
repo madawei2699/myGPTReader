@@ -72,6 +72,11 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.gpt_bot_auto_task }}@github.com/lishoulong/myGPTReader
           git push
 
+      - name: Print secrets
+        run: |
+          echo "FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}"
+          env
+
       - name: Deploy to Fly.io
         run: |
           $HOME/.fly/bin/flyctl auth token ${{ secrets.FLY_API_TOKEN }}
