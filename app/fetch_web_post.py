@@ -7,8 +7,8 @@ import feedparser
 import validators
 import fnmatch
 from youtube_transcript_api import YouTubeTranscriptApi
+from scrapers import _parse_url_or_html
 import grpc
-import service_pb2
 import service_pb2_grpc
 
 PHANTOMJSCLOUD_API_KEY = os.environ.get('PHANTOMJSCLOUD_API_KEY')
@@ -52,21 +52,14 @@ def format_text(text):
     return fix_chinese_split_chunk_size_error
 
 def scrape_website(url: str) -> str:
-    request = service_pb2.HelloRequest(url=url)
-    response = stub.webCrawl(request)
-    result = response.result
-    print(f'response 成功=>{response.status_code} ->> {response.status_code == 200}')
-    if response.status_code == 200:
-        try:
-            logging.info(f'scrape_website 成功{response.status_code}')
-            text_content = html2text.html2text(result)
-            return text_content
-        except Exception as e:
-            logging.warning(f"html2text.html2text error: {e}")
-            return f"Error: {response.status_code} - {e}"
-    else:
-        print(f"请求失败，状态码：{response.status_code}")
-        return f"Error: {response.status_code} - {result}"
+    result = _parse_url_or_html(url);
+    try:
+        text_content = html2text.html2text(result)
+        print(f'result 成功=>{text_content}')
+        return text_content
+    except Exception as e:
+        logging.warning(f"html2text.html2text error: {e}")
+        return f"Error: {e}"
     
 def scrape_website_by_phantomjscloud(url: str) -> str:
     endpoint_url = f"https://PhantomJsCloud.com/api/browser/v2/{PHANTOMJSCLOUD_API_KEY}/"

@@ -8,7 +8,7 @@ from utils import (extract_text_and_links_from_content, insert_space, setup_logg
                    update_thread_history, dialog_context_keep_latest)
 from gpt import (get_answer_from_chatGPT, get_answer_from_llama_web,
                  get_answer_from_llama_file, index_cache_file_dir,
-                 get_text_from_whisper, get_voice_file_from_text)
+                 get_text_from_whisper)
 from config import APP_ID, APP_SECRET, VERIFICATION_TOKEN, LARK_HOST
 
 logger = setup_logger('my_gpt_reader_server')
@@ -163,16 +163,17 @@ def handle_gpt_request(parent_thread_id, thread_id, create_time, voicemessage, o
         
         update_thread_history(thread_message_history, parent_thread_id, ['AI: %s' % insert_space(f'{gpt_response}')])
         logger.info(f"请求成功-接下来调用接口发送消息")
+        message_api_client.reply_text_with_message_id(thread_id, json.dumps({"text": f'{str(gpt_response)}'}), create_time)
         # 如果问题是通过语音问的，那么回话也可以使用语音，否则使用文字
-        if voicemessage is None:
-            message_api_client.reply_text_with_message_id(thread_id, json.dumps({"text": f'<at user_id={open_id}>名字</at>{str(gpt_response)}'}), create_time)
-        else:
-            voice_file_path = get_voice_file_from_text(str(gpt_response))
-            logger.info(f'=====> Voice file path is {voice_file_path}')
+        # if voicemessage is None:
+        #     message_api_client.reply_text_with_message_id(thread_id, json.dumps({"text": f'{str(gpt_response)}'}), create_time)
+        # else:
+        #     # voice_file_path = get_voice_file_from_text(str(gpt_response))
+        #     logger.info(f'=====> Voice file path is')
             # 把音频文件上传得到 file_key
-            file_key = message_api_client.upload_file(file=voice_file_path, duration, file_name, file_type)
+            # file_key = message_api_client.upload_file(file=voice_file_path, duration, file_name, file_type)
             # 回复消息内容体为 file_key
-            message_api_client.reply_text_with_message_id(thread_id, json.dumps({"file_key": file_key}), create_time)
+            # message_api_client.reply_text_with_message_id(thread_id, json.dumps({"file_key": file_key}), create_time)
     except Exception as e:
         err_msg = f'Task failed with error: {e}'
         print(err_msg)

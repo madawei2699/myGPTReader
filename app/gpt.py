@@ -2,16 +2,13 @@
 import os
 import hashlib
 import random
-import uuid
 import openai
 from pathlib import Path
 from langdetect import detect
-from llama_index import GPTSimpleVectorIndex, LLMPredictor, SimpleDirectoryReader, ServiceContext
+from llama_index import GPTSimpleVectorIndex, LLMPredictor, SimpleDirectoryReader
 from llama_index.prompts.prompts import QuestionAnswerPrompt
 from llama_index.readers.schema.base import Document
 from langchain.chat_models import ChatOpenAI
-from azure.cognitiveservices.speech import SpeechConfig, SpeechSynthesizer, ResultReason, CancellationReason, SpeechSynthesisOutputFormat
-from azure.cognitiveservices.speech.audio import AudioOutputConfig
 from dotenv import load_dotenv, find_dotenv
 from utils import setup_logger
 
@@ -35,7 +32,6 @@ llm_predictor = LLMPredictor(llm=ChatOpenAI(
     temperature=0.2, model_name="gpt-3.5-turbo"))
 # the "mock" llm predictor is our token counter
 # mock_llm_predictor = MockLLMPredictor(max_tokens=256)÷=
-service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
 
 index_cache_web_dir = Path('/tmp/myGPTReader/cache_web/')
 index_cache_voice_dir = Path('/tmp/myGPTReader/voice/')
@@ -133,12 +129,12 @@ def get_answer_from_llama_web(messages, urls):
     if index is None:
         logging.info(f"=====> Build index from web!")
         documents = get_documents_from_urls(combained_urls)
-        index = GPTSimpleVectorIndex.from_documents(documents, service_context=service_context)
+        index = GPTSimpleVectorIndex(documents)
         logging.info(
-            f"=====> Save index to disk path: {index_cache_web_dir / index_file_name}, get_answer_from_llama_web documents last_token_usage is {llm_predictor.last_token_usage}")
+            f"=====> Save index to disk path: {index_cache_web_dir / index_file_name}")
         
         index.save_to_disk(index_cache_web_dir / index_file_name)
-    answer = index.query(dialog_messages, text_qa_template=QUESTION_ANSWER_PROMPT)
+    answer = index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=QUESTION_ANSWER_PROMPT)
     logging.info(
             f"=====> get_answer_from_llama_web GPTSimpleVectorIndex query tokens: {llm_predictor.last_token_usage}")
     return answer
@@ -156,16 +152,14 @@ def get_answer_from_llama_file(messages, file):
     if index is None:
         logging.info(f"=====> Build index from file!")
         documents = SimpleDirectoryReader(input_files=[file]).load_data()
-        index = GPTSimpleVectorIndex.from_documents(documents, service_context=service_context)
+        index = GPTSimpleVectorIndex(documents)
         logging.info(
             f"=====> Save index to disk path: {index_cache_file_dir / index_name}, get_answer_from_llama_file documents last_token_usage is {llm_predictor.last_token_usage}")
         index.save_to_disk(index_cache_file_dir / index_name)
     if dialog_messages == '':
         logging.info(f"=====> dialog_messages is empty, just build file index!")
         return "没有输入内容，已经根据文件建立索引，请在此消息后回复对于文件的问题"
-    answer = index.query(dialog_messages, text_qa_template=QUESTION_ANSWER_PROMPT)
-    logging.info(
-            f"=====> get_answer_from_llama_file GPTSimpleVectorIndex query tokens: {llm_predictor.last_token_usage}")
+    answer = index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=QUESTION_ANSWER_PROMPT)
     return answer
 
 def get_text_from_whisper(voice_file_path):
@@ -199,26 +193,3 @@ def convert_to_ssml(text, voice_name=None):
     ssml += '</speak>'
 
     return ssml
-
-def get_voice_file_from_text(text, voice_name=None):
-    speech_config = SpeechConfig(subscription=SPEECH_KEY, region=SPEECH_REGION)
-    speech_config.set_speech_synthesis_output_format(
-        SpeechSynthesisOutputFormat.Audio16Khz32KBitRateMonoMp3)
-    speech_config.speech_synthesis_language = "zh-CN"
-    file_name = f"{index_cache_voice_dir}{uuid.uuid4()}.mp3"
-    file_config = AudioOutputConfig(filename=file_name)
-    synthesizer = SpeechSynthesizer(
-        speech_config=speech_config, audio_config=file_config)
-    ssml = convert_to_ssml(text, voice_name)
-    result = synthesizer.speak_ssml_async(ssml).get()
-    if result.reason == ResultReason.SynthesizingAudioCompleted:
-        logging.info("Speech synthesized for text [{}], and the audio was saved to [{}]".format(
-            text, file_name))
-    elif result.reason == ResultReason.Canceled:
-        cancellation_details = result.cancellation_details
-        logging.info("Speech synthesis canceled: {}".format(
-            cancellation_details.reason))
-        if cancellation_details.reason == CancellationReason.Error:
-            logging.error("Error details: {}".format(
-                cancellation_details.error_details))
-    return file_name

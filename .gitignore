@@ -1,5 +1,5 @@
 # Environments
-app/gpt-bot/.env
-app/gpt-bot/.env_product
-app/gpt-bot/venv
-app/gpt-reader/node_modules
+app/.env
+app/.env_product
+app/venv
+temp/node_modules
