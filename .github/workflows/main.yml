@@ -69,7 +69,7 @@ jobs:
           git add fly.toml
           git commit -m "Update fly.toml image version"
           git remote set-url origin https://${{ secrets.gpt_bot_auto_task }}@github.com/lishoulong/myGPTReader.git
-          git push origin HEAD:feat/noservicecontext
+          git push origin feat/noservicecontext
 
   deploy:
     needs: build_and_deploy
