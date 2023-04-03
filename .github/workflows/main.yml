@@ -59,17 +59,32 @@ jobs:
           echo "gpt_bot_auto_task: ${{ secrets.gpt_bot_auto_task }}"
           env
 
-      - name: Update fly.toml image version and push
+      # - name: Update fly.toml image version and push
+      #   if: ${{ env.only_main_yml_changed == 'false' }}
+      #   run: |
+      #     sed -i "s|image = \"lishoulong/gpt-reader-bot:.*\"|image = \"lishoulong/gpt-reader-bot:v1.0.11\"|g" fly.toml
+      #     cat fly.toml
+      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      #     git config --global user.name "GitHub Actions"
+      #     git add fly.toml
+      #     git commit -m "Update fly.toml image version"
+      #     git remote set-url origin https://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@github.com/lishoulong/myGPTReader.git
+      #     git push origin feat/noservicecontext
+      - name: Update fly.toml image version
         if: ${{ env.only_main_yml_changed == 'false' }}
         run: |
           sed -i "s|image = \"lishoulong/gpt-reader-bot:.*\"|image = \"lishoulong/gpt-reader-bot:v1.0.11\"|g" fly.toml
-          cat fly.toml
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "GitHub Actions"
           git add fly.toml
           git commit -m "Update fly.toml image version"
-          git remote set-url origin https://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@github.com/lishoulong/myGPTReader.git
-          git push origin feat/noservicecontext
+
+      - name: Push changes using ad-m/github-push-action
+        if: ${{ env.only_main_yml_changed == 'false' }}
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.gpt_bot_auto_task }}
+          branch: feat/noservicecontext
 
   deploy:
     needs: build_and_deploy
