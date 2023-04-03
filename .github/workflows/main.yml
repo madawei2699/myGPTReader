@@ -26,9 +26,9 @@ jobs:
         id: check_files
         run: |
           git fetch
-          FILES_CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
-          echo "Files changed: $FILES_CHANGED"  # Add this line for debugging
-          if [ "$FILES_CHANGED" == ".github/workflows/main.yml" ]; then
+          LAST_COMMIT_FILES=$(git log -1 --name-only --pretty=format:'' --oneline)
+          echo "Files changed in the last commit: $LAST_COMMIT_FILES"
+          if [[ "$LAST_COMMIT_FILES" == *".github/workflows/main.yml"* ]] && [[ "$(echo "$LAST_COMMIT_FILES" | wc -l)" == "1" ]]; then
             echo "::set-output name=only_main_yml_changed::true"
           else
             echo "::set-output name=only_main_yml_changed::false"
