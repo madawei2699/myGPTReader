@@ -83,7 +83,7 @@ jobs:
         if: ${{ env.only_main_yml_changed == 'false' }}
         uses: ad-m/github-push-action@master
         with:
-          github_token: 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
+          github_token: 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
           branch: feat/noservicecontext
 
   deploy:
