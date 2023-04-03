@@ -6,7 +6,7 @@ kill_timeout = 5
 primary_region = "hkg"
 
 [build]
-  image = "lishoulong/gpt-reader-bot:v1.0.0"
+  image = "lishoulong/gpt-reader-bot:v1.0.11"
   dockerfile = "Dockerfile"
 
 [build.settings]
