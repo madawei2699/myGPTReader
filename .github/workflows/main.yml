@@ -26,7 +26,9 @@ jobs:
         id: check_files
         run: |
           git fetch
-          LAST_COMMIT_FILES=$(git log -1 --name-only --pretty=format:'' --oneline)
+          CURRENT_COMMIT=$(git rev-parse HEAD)
+          PREVIOUS_COMMIT=$(git rev-parse HEAD~1)
+          LAST_COMMIT_FILES=$(git diff --name-only $PREVIOUS_COMMIT $CURRENT_COMMIT)
           echo "Files changed in the last commit: $LAST_COMMIT_FILES"
           if [[ "$LAST_COMMIT_FILES" == *".github/workflows/main.yml"* ]] && [[ "$(echo "$LAST_COMMIT_FILES" | wc -l)" == "1" ]]; then
             echo "only_main_yml_changed=true" >> $GITHUB_ENV
