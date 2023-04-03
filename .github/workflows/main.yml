@@ -17,12 +17,13 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      # - name: Install flyctl
-      #   run: |
-      #     for i in {1..5}; do
-      #       curl -sL https://install.fly.io/flyctl.sh | sh && break || sleep 15
-      #     done
-      #     echo "PATH=$HOME/.fly/bin:$PATH" >> $GITHUB_PATH
+      - name: Install flyctl
+        run: |
+          for i in {1..5}; do
+            curl -sL https://install.fly.io/flyctl.sh | sh && break || sleep 15
+          done
+          ls $HOME/.fly/bin  # Add this line to check the installation path
+          echo "PATH=$HOME/.fly/bin:$PATH" >> $GITHUB_PATH
 
       - name: Check if only main.yml was changed
         id: check_files
@@ -65,15 +66,7 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.gpt_bot_auto_task }}@github.com/lishoulong/myGPTReader
           git push
 
-      - name: Install flyctl and deploy
+      - name: Deploy to Fly.io
         run: |
-          for i in {1..5}; do
-            curl -sL https://install.fly.io/flyctl.sh | sh && break || sleep 15
-          done
-          export PATH=$HOME/.fly/bin:$PATH
-          flyctl auth token ${{ secrets.FLY_API_TOKEN }}
-          flyctl deploy
-      # - name: Deploy to Fly.io
-      #   run: |
-      #     $HOME/.fly/bin/flyctl auth token ${{ secrets.FLY_API_TOKEN }}
-      #     $HOME/.fly/bin/flyctl deploy
+          $HOME/.fly/bin/flyctl auth token ${{ secrets.FLY_API_TOKEN }}
+          $HOME/.fly/bin/flyctl deploy
