@@ -3,6 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
+      - main
       - feat/noservicecontext
 
 jobs:
@@ -17,18 +18,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      # - name: Install flyctl
-      #   run: |
-      #     for i in {1..5}; do
-      #       curl -sL https://fly.io/install.sh | sh | sh && break || sleep 15
-      #     done
-      #     ls $HOME/.fly/bin  # Add this line to check the installation path
-      #     echo "PATH=$HOME/.fly/bin:$PATH" >> $GITHUB_PATH
-
       - name: Install flyctl
         run: |
           curl -sL https://fly.io/install.sh | sh
-          ls $HOME/.fly/bin  # Add this line to check the installation path
+          ls $HOME/.fly/bin
           echo "PATH=$HOME/.fly/bin:$PATH" >> $GITHUB_PATH
 
       - name: Check if only main.yml was changed
@@ -77,7 +70,12 @@ jobs:
           echo "FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}"
           env
 
-      - name: Deploy to Fly.io
-        run: |
-          $HOME/.fly/bin/flyctl auth token ${{ secrets.FLY_API_TOKEN }}
-          $HOME/.fly/bin/flyctl deploy
+  deploy:
+    name: Deploy app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
