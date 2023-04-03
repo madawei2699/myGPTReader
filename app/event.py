@@ -6,6 +6,7 @@ import hashlib
 import typing as t
 from utils import dict_2_obj
 from flask import request
+from decrypt import AESCipher
 
 
 class Event(object):
@@ -124,9 +125,9 @@ class EventManager(object):
             return data
         if encrypt_key == "":
             raise Exception("ENCRYPT_KEY is necessary")
-        # cipher = AESCipher(encrypt_key)
+        cipher = AESCipher(encrypt_key)
 
-        # return json.loads(cipher.decrypt_string(encrypt_data))
+        return json.loads(cipher.decrypt_string(encrypt_data))
 
 
 class InvalidEventException(Exception):
