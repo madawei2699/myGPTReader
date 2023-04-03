@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 2
-          token: ${{ secrets.gpt_bot_auto_task }}
+          token: ${{ secrets.GPT_BOT_AUTO_TASK }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -57,7 +57,7 @@ jobs:
 
       - name: Print secrets
         run: |
-          echo "gpt_bot_auto_task: ${{ secrets.gpt_bot_auto_task }}"
+          echo "GPT_BOT_AUTO_TASK: ${{ secrets.GPT_BOT_AUTO_TASK }}"
           env
 
       # - name: Update fly.toml image version and push
@@ -84,7 +84,7 @@ jobs:
         if: ${{ env.only_main_yml_changed == 'false' }}
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.gpt_bot_auto_task }}
+          github_token: ${{ secrets.GPT_BOT_AUTO_TASK }}
           branch: feat/noservicecontext
 
   deploy:
