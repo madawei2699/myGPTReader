@@ -68,7 +68,7 @@ jobs:
           git config --global user.name "GitHub Actions"
           git add fly.toml
           git commit -m "Update fly.toml image version"
-          git remote set-url origin https://x-access-token:${{ secrets.gpt_bot_auto_task }}@github.com/lishoulong/myGPTReader
+          git remote set-url origin https://${{ secrets.gpt_bot_auto_task }}@github.com/lishoulong/myGPTReader.git
           git push origin HEAD:feat/noservicecontext
 
   deploy:
