@@ -14,4 +14,4 @@ grpcio-tools==1.53.0
 protobuf==4.22.1
 pydub
 lxml
-AES
+Crypto
