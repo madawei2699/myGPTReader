@@ -26,7 +26,7 @@ jobs:
         id: check_files
         run: |
           git fetch
-          FILES_CHANGED=$(git diff --name-only HEAD..FETCH_HEAD)
+          FILES_CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
           echo "Files changed: $FILES_CHANGED"  # Add this line for debugging
           if [ "$FILES_CHANGED" == ".github/workflows/main.yml" ]; then
             echo "::set-output name=only_main_yml_changed::true"
