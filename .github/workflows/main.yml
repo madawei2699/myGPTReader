@@ -58,12 +58,13 @@ jobs:
         if: ${{ env.only_main_yml_changed == 'false' }}
         run: |
           sed -i "s|image = \"lishoulong/gpt-reader-bot:.*\"|image = \"lishoulong/gpt-reader-bot:v1.0.11\"|g" fly.toml
+          cat fly.toml
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "GitHub Actions"
           git add fly.toml
           git commit -m "Update fly.toml image version"
           git remote set-url origin https://x-access-token:${{ secrets.gpt_bot_auto_task }}@github.com/lishoulong/myGPTReader
-          git push
+          git push origin HEAD:feat/noservicecontext
 
       - name: Print secrets
         run: |
