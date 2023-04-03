@@ -25,7 +25,7 @@ jobs:
       - name: Check if only main.yml was changed
         id: check_files
         run: |
-          FILES_CHANGED=$(git diff --name-only HEAD^ HEAD)
+          FILES_CHANGED=$(git diff --name-only ${{ github.sha }}^ ${{ github.sha }})
           if [ "$FILES_CHANGED" == ".github/workflows/main.yml" ]; then
             echo "::set-output name=only_main_yml_changed::true"
           else
