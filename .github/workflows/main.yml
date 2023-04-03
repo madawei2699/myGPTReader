@@ -17,11 +17,17 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
+      # - name: Install flyctl
+      #   run: |
+      #     for i in {1..5}; do
+      #       curl -sL https://fly.io/install.sh | sh | sh && break || sleep 15
+      #     done
+      #     ls $HOME/.fly/bin  # Add this line to check the installation path
+      #     echo "PATH=$HOME/.fly/bin:$PATH" >> $GITHUB_PATH
+
       - name: Install flyctl
         run: |
-          for i in {1..5}; do
-            curl -sL https://fly.io/install.sh | sh | sh && break || sleep 15
-          done
+          curl -sL https://fly.io/install.sh | sh | sh
           ls $HOME/.fly/bin  # Add this line to check the installation path
           echo "PATH=$HOME/.fly/bin:$PATH" >> $GITHUB_PATH
 
