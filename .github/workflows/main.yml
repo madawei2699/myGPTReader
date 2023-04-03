@@ -18,7 +18,9 @@ jobs:
       # Add this step to install flyctl
       - name: Install flyctl
         run: |
-          curl -sL https://install.fly.io/flyctl.sh | sh
+          for i in {1..5}; do
+            curl -sL https://install.fly.io/flyctl.sh | sh && break || sleep 15
+          done
           echo "$HOME/.fly/bin" >> $GITHUB_PATH
 
       - name: Login to Docker Hub
