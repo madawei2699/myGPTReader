@@ -54,6 +54,11 @@ jobs:
           push: true
           tags: lishoulong/gpt-reader-bot:v1.0.${{ github.run_number }}
 
+      - name: Print secrets
+        run: |
+          echo "gpt_bot_auto_task: ${{ secrets.gpt_bot_auto_task }}"
+          env
+
       - name: Update fly.toml image version and push
         if: ${{ env.only_main_yml_changed == 'false' }}
         run: |
@@ -66,12 +71,8 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.gpt_bot_auto_task }}@github.com/lishoulong/myGPTReader
           git push origin HEAD:feat/noservicecontext
 
-      - name: Print secrets
-        run: |
-          echo "gpt_bot_auto_task: ${{ secrets.gpt_bot_auto_task }}"
-          env
-
   deploy:
+    needs: build_and_deploy
     name: Deploy app
     runs-on: ubuntu-latest
     steps:
