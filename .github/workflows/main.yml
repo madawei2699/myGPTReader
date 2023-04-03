@@ -51,7 +51,7 @@ jobs:
         if: ${{ env.only_main_yml_changed == 'false' }}
         id: get_latest_tag
         run: |
-          LATEST_TAG=$(docker run --rm -e GH_TOKEN=${{ secrets.GPT_BOT_AUTO_TASK }} ghcr.io/cli/cli gh repo view lishoulong/gpt-reader-bot --json tags -q '.tags[0].name')
+          LATEST_TAG=$(curl -s https://registry.hub.docker.com/v2/repositories/lishoulong/gpt-reader-bot/tags | jq -r '.results[0].name')
           echo "Latest tag: $LATEST_TAG"
           NEW_VERSION=$(echo $LATEST_TAG | awk -F. '{$NF+=1; OFS="."; print $0}')
           echo "New version: $NEW_VERSION"
