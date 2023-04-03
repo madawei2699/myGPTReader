@@ -33,6 +33,9 @@ jobs:
             echo "::set-output name=only_main_yml_changed::false"
           fi
 
+      - name: Print only_main_yml_changed value
+        run: echo "only_main_yml_changed: ${{ steps.check_files.outputs.only_main_yml_changed }}"
+
       - name: Login to Docker Hub
         if: ${{ steps.check_files.outputs.only_main_yml_changed == 'false' }}
         uses: docker/login-action@v1
@@ -48,14 +51,15 @@ jobs:
           push: true
           tags: lishoulong/gpt-reader-bot:v1.0.${{ github.run_number }}
 
-      - name: Update fly.toml image version
+      - name: Update fly.toml image version and push
         if: ${{ steps.check_files.outputs.only_main_yml_changed == 'false' }}
         run: |
-          sed -i "s|image = \"lishoulong/gpt-reader-bot:.*\"|image = \"lishoulong/gpt-reader-bot:v1.0.${{ github.run_number }}\"|g" fly.toml
-          git config --global user.email "github-actions@github.com"
+          sed -i "s|image = \"***/gpt-reader-bot:.*\"|image = \"***/gpt-reader-bot:v1.0.11\"|g" fly.toml
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "GitHub Actions"
           git add fly.toml
           git commit -m "Update fly.toml image version"
+          git remote set-url origin https://x-access-token:${{ secrets.gpt_bot_auto_task }}@github.com/lishoulong/myGPTReader
           git push
 
       - name: Deploy to Fly.io
