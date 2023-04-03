@@ -22,7 +22,7 @@ jobs:
           for i in {1..5}; do
             curl -sL https://install.fly.io/flyctl.sh | sh && break || sleep 15
           done
-          echo "PATH=$HOME/.fly/bin:$PATH" >> $GITHUB_ENV
+          echo "PATH=$HOME/.fly/bin:$PATH" >> $GITHUB_PATH
 
       - name: Check if only main.yml was changed
         id: check_files
@@ -38,10 +38,6 @@ jobs:
           else
             echo "only_main_yml_changed=false" >> $GITHUB_ENV
           fi
-
-      - name: Print only_main_yml_changed value
-        run: |
-          echo "only_main_yml_changed: ${{ env.only_main_yml_changed }}"
 
       - name: Login to Docker Hub
         if: ${{ env.only_main_yml_changed == 'false' }}
