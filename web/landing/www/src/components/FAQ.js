@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const FAQ = () => {
   const faqList = [
-    { question: "What limitations are there in the FREE version?", answer: "Currently, the free version only allows partial functionality such as reading web pages and sending up to 25 messages every three hours. There are no such limitations in the paid version." },
+    { question: "What limitations are there in the FREE version?", answer: "Currently, the free version only allows partial functionality such as reading web pages and sending up to 15 messages every three hours. There are no such limitations in the paid version." },
     { question: "What are the limitations of the PREMIUM version?", answer: "The paid version has no limit on the number of messages, but there is a temporary limit when parsing documents that should not exceed 3MB in size. If you have special needs, you can contact us for customization." },
     { question: "What is <Bot for you> of the PREMIUM version?", answer: "To ask questions, you don't have to mention the bot in the channel. You can directly communicate with the bot on Slack." }
   ];

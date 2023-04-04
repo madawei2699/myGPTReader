@@ -21,7 +21,9 @@ const Pricing = () => {
           <h2 className="font-extrabold">Free</h2>
           <p className="price font-normal">$0/m</p>
           <ul className="benefits">
-            <li>Web read with myGPTReader</li>
+            <li>Web read</li>
+            <li>Document read</li>
+            <li>Voice chat</li>
             <li>Ask myGPTReader anything</li>
             <li>Today Hot News</li>
           </ul>
@@ -31,13 +33,10 @@ const Pricing = () => {
         </div>
         <div className="pricing__item premium">
           <h2 className="font-extrabold">Premium</h2>
-          <p className="price font-normal">$?/m</p>
+          <p className="price font-normal">$5/m</p>
           <ul className="benefits">
-            <li>Web read with myGPTReader</li>
-            <li>Ask myGPTReader anything</li>
-            <li>Today Hot News</li>
-            <li className="font-bold text-indigo-600 text-lg">Document read with myGPTReader</li>
-            <li className="font-bold text-purple-600 text-lg">Voice chat with myGPTReader</li>
+            <li className="">All FREE version features</li>
+            <li>But no any limit</li>
             <li className="font-bold text-pink-600 text-lg">Bot for you</li>
             <li className="italic">More in the future</li>
           </ul>

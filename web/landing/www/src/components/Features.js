@@ -56,28 +56,33 @@ const Features = () => {
             <Feature
               title="Web read with myGPTReader"
               text="Use myGPTReader to quickly read and understand any web content through conversations, even videos (currently only YouTube videos with subtitles are supported)."
-              videoUrl="https://img.bmpi.dev/my-gpt-reader-web-page-show-1.mp4"
+              videoUrl="https://img.bmpi.dev/myGPTReader/1-ffmpeg.mp4"
+            />
+            <Feature
+              title="Web read with myGPTReader (YouTube)"
+              text="Use myGPTReader to quickly read and understand any web content through conversations, even videos (currently only YouTube videos with subtitles are supported)."
+              videoUrl="https://img.bmpi.dev/myGPTReader/2-ffmpeg.mp4"
             />
           </div>
           <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
             <Feature
               title="Document read with myGPTReader"
               text="Use myGPTReader to quickly read the content of any file, supporting eBooks, PDF, DOCX, TXT, and Markdown."
-              videoUrl="https://img.bmpi.dev/my-gpt-reader-documents-show-1.mp4"
+              videoUrl="https://img.bmpi.dev/myGPTReader/3-ffmpeg.mp4"
             />
           </div>
           <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
             <Feature
               title="Voice chat with myGPTReader"
               text="Practice your foreign language by speaking with your voice to myGPTReader, which can be your personal tutor and supports Chinese, English, German, and Japanese."
-              videoUrl="https://img.bmpi.dev/my-gpt-reader-voice-show-1.mp4"
+              videoUrl="https://img.bmpi.dev/myGPTReader/4-ffmpeg.mp4"
             />
           </div>
           <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
             <Feature
               title="Ask myGPTReader anything"
               text="A large number of prompt templates are built in, use them for better conversations with chatGPT."
-              videoUrl="https://img.bmpi.dev/my-gpt-reader-prompt-show-1.mp4"
+              videoUrl="https://img.bmpi.dev/myGPTReader/5-ffmpeg.mp4"
             />
           </div>
           <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
