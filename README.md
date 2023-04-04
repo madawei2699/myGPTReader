@@ -108,7 +108,13 @@ See also the list of [contributors](https://github.com/madawei2699/myGPTReader/c
 
 ## Reference Links <a name = "reference_links"></a>
 
-YouTube Live video for in-depth walkthrough of the project: [![myGPTReader Live Share](http://img.youtube.com/vi/XZIogwFU7jE/0.jpg)](https://www.youtube.com/live/XZIogwFU7jE?feature=share "myGPTReader Live Share")
+- YouTube video for myGPTReader main features showcase
+  
+  [![myGPTReader showcase](http://img.youtube.com/vi/qKS5Wwhrf5E/0.jpg)](https://youtu.be/qKS5Wwhrf5E)
+
+- YouTube Live video for in-depth walkthrough of the project.
+  
+  [![myGPTReader Live Share](http://img.youtube.com/vi/XZIogwFU7jE/0.jpg)](https://www.youtube.com/live/XZIogwFU7jE?feature=share "myGPTReader Live Share")
 
 Blog post: [我的 AI 阅读助手](https://www.bmpi.dev/self/my-gpt-reader/)
 
