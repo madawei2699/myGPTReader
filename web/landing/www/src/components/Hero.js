@@ -29,7 +29,8 @@ const Hero = () => {
           Join Now
         </a>
         <p className="mt-4 italic text-gray-400">with more than 4000+ members to experience all these features for free.</p>
-        <img className="mt-12 mx-auto w-4/5" src="/hero.jpg" alt="Hero" />
+        {/* <img className="mt-12 mx-auto w-4/5" src="/hero.jpg" alt="Hero" /> */}
+        <img className="mt-12 mx-auto w-4/5" src="https://api.star-history.com/svg?repos=madawei2699/myGPTReader&type=Date" alt="myGPTReader" />
       </div>
     </section>
   );
