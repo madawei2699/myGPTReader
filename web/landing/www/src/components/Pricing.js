@@ -17,7 +17,7 @@ const Pricing = () => {
     <section id="pricing">
       <h2 className="text-4xl mb-4 text-center font-black">Choose Your Plan</h2>
       <div className="pricing px-4">
-        <div className="pricing__item free">
+        <div className="pricing__item free w-full sm:w-1/4">
           <h2 className="font-extrabold">Free</h2>
           <p className="price font-normal">$0/m</p>
           <ul className="benefits">
@@ -31,7 +31,7 @@ const Pricing = () => {
             Get Started
           </button>
         </div>
-        <div className="pricing__item premium">
+        <div className="pricing__item premium w-full sm:w-1/4">
           <h2 className="font-extrabold">Premium</h2>
           <p className="price font-normal">$5/m</p>
           <ul className="benefits">
