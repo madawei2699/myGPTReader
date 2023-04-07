@@ -270,74 +270,111 @@ def update_home_tab(client, event, logger):
         if user_info is not None:
             user_type = user_info['user_type']
             premium_end_date = user_info['premium_end_date']
-            llm_token_usage = user_info['llm_token_usage']
-            embedding_token_usage = user_info['embedding_token_usage']
-            message_count = user_info['message_count']
+            llm_token_month_usage = user_info['llm_token_month_usage']
+            embedding_token_month_usage = user_info['embedding_token_month_usage']
+            message_month_count = user_info['message_month_count']
+            llm_token_today_usage = user_info['llm_token_today_usage']
+            embedding_token_today_usage = user_info['embedding_token_today_usage']
+            message_today_count = user_info['message_today_count']
         else:
             user_type = None
             premium_end_date = None
-            llm_token_usage = None
-            embedding_token_usage = None
-            message_count = None
-        blocks = [
-                    {
-                        "type": "header",
-                        "text": {
-                            "type": "plain_text",
-                            "text": "This month's usage",
-                        }
-                    },
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": f"*User ID:* {event['user'] or ''}"
-                        }
-                    },
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": f"*User Type:* {user_type or ''}"
-                        }
-                    },
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": f"*User llm token usage:* {llm_token_usage or ''}"
-                        }
-                    },
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": f"*User embedding token usage:* {embedding_token_usage or ''}"
-                        }
-                    },
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": f"*User message count:* {message_count or ''}"
-                        }
-                    }
-                ]
+            llm_token_month_usage = None
+            embedding_token_month_usage = None
+            message_month_count = None
+            llm_token_today_usage = None
+            embedding_token_today_usage = None
+            message_today_count = None
+        user_block_info = [
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"*User ID:* {event['user'] or ''}"
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"*User Type:* {user_type or ''}"
+                }
+            }
+        ]
         if premium_end_date is not None:
             dt_object = datetime.utcfromtimestamp(int(premium_end_date))
             date_string = dt_object.strftime("%m/%d/%Y")
-            blocks.append({
+            user_block_info.append({
                         "type": "section",
                         "text": {
                             "type": "mrkdwn",
                             "text": f"*Premium End Date:* {date_string}(UTC)"
                         }
                     })
+        blocks = [
+            {
+                "type": "header",
+                "text": {
+                    "type": "plain_text",
+                    "text": "Today's usage",
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"*User llm token usage:* {llm_token_today_usage or ''}"
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"*User embedding token usage:* {embedding_token_today_usage or ''}"
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"*User message count:* {message_today_count or ''}"
+                }
+            },
+            {
+                "type": "header",
+                "text": {
+                    "type": "plain_text",
+                    "text": "This month's usage",
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"*User llm token usage:* {llm_token_month_usage or ''}"
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"*User embedding token usage:* {embedding_token_month_usage or ''}"
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"*User message count:* {message_month_count or ''}"
+                }
+            }
+        ]
+        user_block_info.extend(blocks)
         client.views_publish(
             user_id=event["user"],
             view={
                 "type": "home",
-                "blocks": blocks
+                "blocks": user_block_info
             }
         )
     except Exception as e:
