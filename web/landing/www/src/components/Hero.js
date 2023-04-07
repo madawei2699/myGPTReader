@@ -13,7 +13,7 @@ const Hero = () => {
       <div className="container mx-auto py-20">
         <ProductHuntBadge />
         <h1 className="text-5xl mb-6 font-black">myGPTReader</h1>
-        <h2 className="text-4xl mb-6 font-black">
+        <h2 className="text-4xl mb-6 font-black m-4">
           A community-driven way to read and chat with AI bots
         </h2>
         <p className="text-gray-600 leading-normal mb-8 max-w-2xl mx-auto">
@@ -29,8 +29,8 @@ const Hero = () => {
         >
           Join free now!
         </a>
-        <p className="mt-4 italic">Get started in minutes, no credit card required!</p>
-        <p className="text-center italic mb-8 text-lg font-bold">
+        <p className="mt-4 italic ml-4 mr-4">Get started in minutes, no credit card required!</p>
+        <p className="text-center italic mb-8 text-lg font-bold ml-4 mr-4">
          Join our 4,000+ member community for <span className="text-blue-500">Free</span> and experience all the features now!
         </p>
 

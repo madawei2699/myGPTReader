@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const Feature = ({ title, text, videoUrl }) => {
   return (
-    <div className="mb-16">
+    <div className="mb-4">
       <div
         style={{
           paddingBottom: "56.25%",
@@ -52,7 +52,7 @@ const Features = () => {
       </h2>
       <div className="container mx-auto px-4 my-4">
         <div className="flex flex-wrap -mx-4">
-          <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
+          <div className="w-full mx-auto lg:w-4/5 px-4">
             <Feature
               title="Web read with myGPTReader"
               text="Use myGPTReader to quickly read and understand any web content through conversations, even videos (currently only YouTube videos with subtitles are supported)."
@@ -64,28 +64,28 @@ const Features = () => {
               videoUrl="https://img.bmpi.dev/myGPTReader/2-ffmpeg.mp4"
             />
           </div>
-          <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
+          <div className="w-full mx-auto lg:w-4/5 px-4">
             <Feature
               title="Document read with myGPTReader"
               text="Use myGPTReader to quickly read the content of any file, supporting eBooks, PDF, DOCX, TXT, and Markdown."
               videoUrl="https://img.bmpi.dev/myGPTReader/3-ffmpeg.mp4"
             />
           </div>
-          <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
+          <div className="w-full mx-auto lg:w-4/5 px-4">
             <Feature
               title="Voice chat with myGPTReader"
               text="Practice your foreign language by speaking with your voice to myGPTReader, which can be your personal tutor and supports Chinese, English, German, and Japanese."
               videoUrl="https://img.bmpi.dev/myGPTReader/4-ffmpeg.mp4"
             />
           </div>
-          <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
+          <div className="w-full mx-auto lg:w-4/5 px-4">
             <Feature
               title="Ask myGPTReader anything"
               text="A large number of prompt templates are built in, use them for better conversations with chatGPT."
               videoUrl="https://img.bmpi.dev/myGPTReader/5-ffmpeg.mp4"
             />
           </div>
-          <div className="w-full mx-auto lg:w-4/5 px-4 mb-8">
+          <div className="w-full mx-auto lg:w-4/5 px-4">
             <Feature
               title="Hot News Today"
               text="Every day myGPTReader sends out the latest hot news and automatically generates a summary, so you can quickly learn what's hot today."
