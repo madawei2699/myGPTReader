@@ -8,6 +8,7 @@ import Features from "./components/Features";
 import Pricing from "./components/Pricing";
 import Footer from "./components/Footer";
 import FAQ from "./components/FAQ";
+import Highlight from "./components/Highlight";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
       <Header />
       <Hero />
       <Features />
+      <Highlight />
       <Pricing />
       <FAQ />
       <Footer />

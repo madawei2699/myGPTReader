@@ -10,6 +10,13 @@ const Header = () => {
     });
   };
 
+  const scrollToHighlights = () => {
+    document.getElementById("highlights").scrollIntoView({
+      block: "start",
+      behavior: "smooth",
+    });
+  };
+
   const scrollToPricing = () => {
     document.getElementById("pricing").scrollIntoView({
       block: "start",
@@ -40,6 +47,13 @@ const Header = () => {
             Features
           </Link>
           <Link
+            onClick={scrollToHighlights}
+            to="#"
+            className="hidden md:block py-2 px-4 bg-gray-800 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+          >
+            Highlights
+          </Link>
+          <Link
             onClick={scrollToPricing}
             to="#"
             className="py-2 px-4 bg-gray-800 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
@@ -49,7 +63,7 @@ const Header = () => {
           <a
             href="#"
             onClick={goToGitHub}
-            className="github-link ml-4 flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-white font-semibold shadow-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+            className="hidden md:flex github-link ml-4 items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-white font-semibold shadow-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
           >
             <svg
               className="w-6 h-6"
