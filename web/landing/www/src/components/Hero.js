@@ -14,7 +14,7 @@ const Hero = () => {
         <ProductHuntBadge />
         <h1 className="text-5xl mb-6 font-black">myGPTReader</h1>
         <h2 className="text-4xl mb-6 font-black">
-          A new way to read with AI bot
+          A community-driven way to read and chat with AI bots
         </h2>
         <p className="text-gray-600 leading-normal mb-8 max-w-2xl mx-auto">
           myGPTReader is a bot on Slack that can read and summarize any webpage,
