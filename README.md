@@ -12,7 +12,7 @@
     <br> English | <a href="README-CN.md">中文</a>
 </p>
 <p align="center">
-    <em>A new way to read with AI bot - powered by chatGPT.</em>
+    <em>A community-driven way to read and chat with AI bots - powered by chatGPT.</em>
 </p>
 
 > 💡 The exciting part is that the development of this project is also paired with chatGPT. I document the development process in this [CDDR](docs/CDDR.md) file.
