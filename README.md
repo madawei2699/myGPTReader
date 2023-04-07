@@ -116,7 +116,10 @@ See also the list of [contributors](https://github.com/madawei2699/myGPTReader/c
   
   [![myGPTReader Live Share](http://img.youtube.com/vi/XZIogwFU7jE/0.jpg)](https://www.youtube.com/live/XZIogwFU7jE?feature=share "myGPTReader Live Share")
 
-Blog post: [我的 AI 阅读助手](https://www.bmpi.dev/self/my-gpt-reader/)
+Blog post:
+
+- [我的 AI 阅读助手](https://www.bmpi.dev/self/my-gpt-reader/)
+- [ChatGPT应用开发小记](https://www.bmpi.dev/dev/chatgpt-development-notes/my-gpt-reader/)
 
 ## Star History <a name = "star_history"></a>
 

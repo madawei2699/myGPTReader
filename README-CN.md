@@ -95,6 +95,7 @@
 - 目前，如果你想快速了解这个项目，可以参考以下 YouTube 我录制的介绍视频：
   [![myGPTReader Live Share](http://img.youtube.com/vi/XZIogwFU7jE/0.jpg)](https://www.youtube.com/live/XZIogwFU7jE?feature=share "myGPTReader介绍视频")
 - 博文：[我的 AI 阅读助手](https://www.bmpi.dev/self/my-gpt-reader/)
+- 博文：[ChatGPT应用开发小记](https://www.bmpi.dev/dev/chatgpt-development-notes/my-gpt-reader/)
 
 ## ✍️ 作者 <a name = "authors"></a>
 
