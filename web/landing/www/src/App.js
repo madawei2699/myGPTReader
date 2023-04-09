@@ -24,7 +24,7 @@ function App() {
         <link rel='canonical' href='https://www.myreader.io/' />
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
-        <meta property="og:title" content="A new way to read with AI bot - myGPTReader" />
+        <meta property="og:title" content="A community-driven way to read and chat with AI bots - myGPTReader" />
         <meta property="og:description" content="myGPTReader is a Slack bot that can read and summarize any webpage, documents including ebooks, or even videos from YouTube. It also can communicate with you via voice." />
         <meta property="og:image" content="/logo.png" />
         <meta property="og:url" content="https://www.myreader.io/" />
