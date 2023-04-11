@@ -236,10 +236,11 @@ def handle_mentions(event, say, logger):
     logger.info(event)
 
     user = event["user"]
+    thread_ts = event["ts"]
 
     if not limiter.allow_request(user):
         if not is_premium_user(user):
-            say(f'<@{user}>, you have reached the limit of {limiter_message_per_user} messages {limiter_time_period / 3600} hour, please try again later or contact the <@U051JKES6Q1>.', thread_ts=thread_ts)
+            say(f'<@{user}>, you have reached the limit of {limiter_message_per_user} messages {limiter_time_period / 3600} hour, please subscribe to our Premium plan to support our service. You can find the payment link by clicking on the bot and selecting the Home tab.', thread_ts=thread_ts)
             return
     
     bot_process(event, say, logger)
@@ -259,7 +260,7 @@ def log_message(logger, event, say):
         if is_premium_user(event["user"]):
             bot_process(event, say, logger)
         else:
-            say(f'This feature is for PREMIUM user only, if you want to talk with the bot directly, please contact the <@U051JKES6Q1>.', thread_ts=event["ts"])
+            say(f'This feature is exclusive to Premium users. To chat with the bot directly, please subscribe to our Premium plan to support our service. You can find the payment link by clicking on the bot and selecting the Home tab.', thread_ts=event["ts"])
     except Exception as e:
         logger.error(f"Error responding to direct message: {e}")
 
