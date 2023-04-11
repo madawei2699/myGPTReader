@@ -276,6 +276,7 @@ def update_home_tab(client, event, logger):
             llm_token_today_usage = user_info['llm_token_today_usage']
             embedding_token_today_usage = user_info['embedding_token_today_usage']
             message_today_count = user_info['message_today_count']
+            payment_link = user_info['payment_link']
         else:
             user_type = None
             premium_end_date = None
@@ -285,6 +286,7 @@ def update_home_tab(client, event, logger):
             llm_token_today_usage = None
             embedding_token_today_usage = None
             message_today_count = None
+            payment_link = None
         user_block_info = [
             {
                 "type": "section",
@@ -311,6 +313,39 @@ def update_home_tab(client, event, logger):
                             "text": f"*Premium End Date:* {date_string}(UTC)"
                         }
                     })
+        if payment_link is not None:
+            if user_type == 'premium':
+                user_block_info.append({
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Premium Membership*"
+                    },
+                    "accessory": {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Manage Subscription"
+                        },
+                        "url": f"{payment_link}"
+                    }
+                })
+            else:
+                user_block_info.append({
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Premium Membership*"
+                    },
+                    "accessory": {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Subscribe Now"
+                        },
+                        "url": f"{payment_link}"
+                    }
+                })
         blocks = [
             {
                 "type": "header",
