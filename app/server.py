@@ -263,18 +263,18 @@ def log_message(logger, event, say):
     except Exception as e:
         logger.error(f"Error responding to direct message: {e}")
 
-@slack_app.event(event="member_joined_channel")
+@slack_app.event(event="team_join")
 def send_welcome_message(logger, event):
     try:
         logger.info(f"Welcome new user: {event}")
-        user_id = event["user"]
+        user_id = event["user"]["id"]
         user_info = get_user(user_id)
         welcome_message_block = [
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Hi <@{user}>, welcome to myreader.io, a community-driven way to read and chat with AI bots! In this community, you can read articles and documents with the AI bots, and chat with the AI bots to get answers to your questions. You can also share what you read with the community and learn how to communicate with the AI bots using the best `prompt`."
+                    "text": f"Hi <@{user_id}>, welcome to myreader.io, a community-driven way to read and chat with AI bots! In this community, you can read articles and documents with the AI bots, and chat with the AI bots to get answers to your questions. You can also share what you read with the community and learn how to communicate with the AI bots using the best `prompt`."
                 }
             },
             {
@@ -326,7 +326,7 @@ def send_welcome_message(logger, event):
                         "type": "plain_text",
                         "text": "Subscribe Now"
                     },
-                    "url": f"{user_info.payment_link}"
+                    "url": f"{user_info['payment_link']}"
                 }
             },
             {
@@ -347,7 +347,7 @@ def send_welcome_message(logger, event):
                 }
             }
         ]
-        r = slack_app.client.chat_postMessage(blocks=welcome_message_block, channel=user_id)
+        r = slack_app.client.chat_postMessage(text='Welcome to myreader.io!', blocks=welcome_message_block, channel=user_id)
         logger.info(r)
     except Exception as e:
         logger.error(f"Error sending welcome message: {e}")
