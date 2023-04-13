@@ -13,7 +13,6 @@ import concurrent.futures
 from app.daily_hot_news import build_all_news_block
 from app.gpt import get_answer_from_chatGPT, get_answer_from_llama_file, get_answer_from_llama_web, get_text_from_whisper, get_voice_file_from_text, index_cache_file_dir
 from app.rate_limiter import RateLimiter
-from app.slash_command import register_slack_slash_commands
 from app.user import get_user, is_premium_user, update_message_token_usage
 from app.util import md5
 
@@ -264,6 +263,91 @@ def log_message(logger, event, say):
     except Exception as e:
         logger.error(f"Error responding to direct message: {e}")
 
+@slack_app.event(event="team_join")
+def send_welcome_message(logger, event, say):
+    logger.info(f"Welcome new user: {event}")
+    user = event["user"]
+    user_info = get_user(user)
+    welcome_message_block = [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Hi <@{user}>, welcome to myreader.io, a community-driven way to read and chat with AI bots! In this community, you can read articles and documents with the AI bots, and chat with the AI bots to get answers to your questions. You can also share what you read with the community and learn how to communicate with the AI bots using the best `prompt`."
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "header",
+			"text": {
+				"type": "plain_text",
+				"text": "How to use myreader.io"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "1. Go to the channel #general and mention the bot with the command `@my-gpt-reader-bot` to get started.\n 2. You can post a link to an article or document with your question, and the bot will give your answer based the article or document.\n 3. You can also talk to the bot with any question, and the bot will give your answer based on the context of the conversation.\n 4. You can talk to the bot via voice message, and the bot also will respond with a voice message. We think it is a good way to practice your second language."
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Free plan limitation* \n 1. Free users can only talk to the bot in the public channel. If you want to a private conversation with the bot, please subscribe to our Premium plan to support our service.\n 2. There is a rate limit of {limiter_message_per_user} messages per {limiter_time_period / 3600} hour. If you want to send more messages, please subscribe to our Premium plan to support our service."
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "header",
+			"text": {
+				"type": "plain_text",
+				"text": "How to subscribe to our Premium plan"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Click the `Subscribe Now` to subscribe to our Premium plan."
+			},
+            "accessory": {
+				"type": "button",
+				"text": {
+					"type": "plain_text",
+					"text": "Subscribe Now"
+				},
+				"url": f"{user_info.payment_link}"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "header",
+			"text": {
+				"type": "plain_text",
+				"text": "Support our service"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "You can support our service by giving us a upvote on Product Hunt: https://www.producthunt.com/posts/mygptreader"
+			}
+		}
+	]
+    say(blocks=welcome_message_block, channel=user_info.user.id)
+
 @slack_app.event("app_home_opened")
 def update_home_tab(client, event, logger):
     try:
@@ -416,7 +500,6 @@ def update_home_tab(client, event, logger):
     except Exception as e:
         logger.error(f"Error publishing home tab: {e}")
 
-register_slack_slash_commands(slack_app)
 scheduler.start()
 
 if __name__ == '__main__':
