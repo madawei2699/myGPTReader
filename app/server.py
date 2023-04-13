@@ -263,11 +263,10 @@ def log_message(logger, event, say):
     except Exception as e:
         logger.error(f"Error responding to direct message: {e}")
 
-@slack_app.event(event="member_joined_channel")
+@slack_app.event(event="team_join")
 def send_welcome_message(logger, event, say):
     logger.info(f"Welcome new user: {event}")
     user = event["user"]
-    channel = event["channel"]
     user_info = get_user(user)
     welcome_message_block = [
 		{
@@ -347,8 +346,7 @@ def send_welcome_message(logger, event, say):
 			}
 		}
 	]
-    if channel == 'C02S9S07UKV': # general channel
-        say(blocks=welcome_message_block, channel=user_info.user.id)
+    say(blocks=welcome_message_block, channel=user_info.user.id)
 
 @slack_app.event("app_home_opened")
 def update_home_tab(client, event, logger):
