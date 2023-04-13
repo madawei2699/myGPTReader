@@ -266,8 +266,8 @@ def log_message(logger, event, say):
 @slack_app.event(event="team_join")
 def send_welcome_message(logger, event, say):
     logger.info(f"Welcome new user: {event}")
-    user = event["user"]
-    user_info = get_user(user)
+    user_id = event["user"]["id"]
+    user_info = get_user(user_id)
     welcome_message_block = [
 		{
 			"type": "section",
@@ -346,7 +346,7 @@ def send_welcome_message(logger, event, say):
 			}
 		}
 	]
-    say(blocks=welcome_message_block, channel=user_info.user.id)
+    say(blocks=welcome_message_block, channel=user_id)
 
 @slack_app.event("app_home_opened")
 def update_home_tab(client, event, logger):
