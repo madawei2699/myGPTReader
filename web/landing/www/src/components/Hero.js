@@ -31,7 +31,7 @@ const Hero = () => {
         </a>
         <p className="mt-4 italic ml-4 mr-4">Get started in minutes, no credit card required!</p>
         <p className="text-center italic mb-8 text-lg font-bold ml-4 mr-4">
-         Join our 4,000+ member community for <span className="text-blue-500">Free</span> and experience all the features now!
+         Join our 5,000+ member community for <span className="text-blue-500">Free</span> and experience all the features now!
         </p>
 
         <img className="mt-12 mx-auto w-4/5" src="https://camo.githubusercontent.com/b7b1868e5ab7f73ea6473d930c06b05cbb371a189c43dcf7edfbeb30dc67c464/68747470733a2f2f6170692e737461722d686973746f72792e636f6d2f7376673f7265706f733d6d616461776569323639392f6d7947505452656164657226747970653d44617465" alt="myGPTReader" />
