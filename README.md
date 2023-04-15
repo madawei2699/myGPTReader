@@ -53,7 +53,7 @@
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
-Please join this [Slack channel](https://slack-redirect.i365.tech/) with more than 3000+ members to experience all these features for free.
+Please join this [Slack channel](https://slack-redirect.i365.tech/) with more than 5000+ members to experience all these features for free.
 
 ## 🔥 Main Features <a name="main_features"></a>
 
