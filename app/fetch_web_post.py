@@ -90,11 +90,10 @@ def scrape_website_by_phantomjscloud(url: str) -> str:
     
 def get_youtube_transcript(video_id: str) -> str:
     try:
-        srt = YouTubeTranscriptApi.get_transcript(video_id)
-        transcript = ""
-        for chunk in srt:
-            transcript = transcript + chunk["text"] + "\n"
+        transcripts = YouTubeTranscriptApi.list_transcripts(video_id)
+        transcript = next((transcript.fetch() for transcript in transcripts if transcript), None)
+        if transcript:
+            return "\n".join(chunk["text"] for chunk in transcript)
     except Exception as e:
         logging.warning(f"Error: {e} - {video_id}")
-        transcript = None
-    return transcript
+    return None
