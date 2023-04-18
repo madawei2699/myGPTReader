@@ -307,7 +307,7 @@ def send_welcome_message(logger, event):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "1. Go to the channel #general and mention the bot with the command `@my-gpt-reader-bot` to get started.\n 2. You can post a link to an article or document with your question, and the bot will give your answer based the article or document.\n 3. You can also talk to the bot with any question, and the bot will give your answer based on the context of the conversation.\n 4. You can talk to the bot via voice message, and the bot also will respond with a voice message. We think it is a good way to practice your second language."
+                    "text": "0. Go to the channel #general to know the latest news about the product.\n 1. Go to the channel #temp and mention the bot with the command `@my-gpt-reader-bot` to get started.\n 2. You can post a link to an article or document with your question, and the bot will give your answer based the article or document.\n 3. You can also talk to the bot with any question, and the bot will give your answer based on the context of the conversation.\n 4. You can talk to the bot via voice message, and the bot also will respond with a voice message. We think it is a good way to practice your second language."
                 }
             },
             {
