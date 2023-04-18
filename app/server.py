@@ -129,8 +129,10 @@ def dialog_context_keep_latest(dialog_texts, max_length=1):
     return dialog_texts
 
 def remove_url_from_text(text, urls):
+    # only remove youtube url
     for url in urls:
-        text = text.replace('<' + url + '>', '')
+        if 'youtube.com' in url or 'youtu.be' in url:
+            text = text.replace('<' + url + '>', '')
     return text
 
 def format_dialog_text(text, voicemessage=None):
