@@ -200,7 +200,7 @@ def bot_process(event, say, logger):
         urls = extract_urls_from_event(event)
         logger.info(f'=====> Extracted urls from event: {urls}')
         try:
-            dialog = remove_url_from_text(format_dialog_text(event["text"], voicemessage))
+            dialog = remove_url_from_text(format_dialog_text(event["text"], voicemessage), urls)
             logger.info(f'=====> Formatted dialog: {dialog}')
             update_thread_history(parent_thread_ts, f'User: {dialog}', urls)
         except Exception as e:
