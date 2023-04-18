@@ -130,7 +130,7 @@ def dialog_context_keep_latest(dialog_texts, max_length=1):
 
 def remove_url_from_text(text, urls):
     for url in urls:
-        text = text.replace(url, '')
+        text = text.replace('<' + url + '>', '')
     return text
 
 def format_dialog_text(text, voicemessage=None):
@@ -201,7 +201,7 @@ def bot_process(event, say, logger):
         logger.info(f'=====> Extracted urls from event: {urls}')
         dialog = remove_url_from_text(format_dialog_text(event["text"], voicemessage))
         logger.info(f'=====> Formatted dialog: {dialog}')
-        update_thread_history(parent_thread_ts, f'User: {remove_url_from_text(format_dialog_text(event["text"], voicemessage))}', urls)
+        update_thread_history(parent_thread_ts, f'User: {dialog}', urls)
 
     if file_md5_name is not None:
         if not voicemessage:
