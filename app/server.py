@@ -317,7 +317,7 @@ def send_welcome_message(logger, event):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "*Free plan limitation* \n 1. Free users can only talk to the bot in the public channel. If you want to a private conversation with the bot, please subscribe to our Premium plan to support our service.\n 2. There is a rate limit of {limiter_message_per_user} messages per {limiter_time_period / 3600} hour. If you want to send more messages, please subscribe to our Premium plan to support our service."
+                    "text": f"*Free plan limitation* \n 1. Free users can only talk to the bot in the public channel. If you want to a private conversation with the bot, please subscribe to our Premium plan to support our service.\n 2. There is a rate limit of {limiter_message_per_user} messages per {limiter_time_period / 3600} hour. If you want to send more messages, please subscribe to our Premium plan to support our service."
                 }
             },
             {
