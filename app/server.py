@@ -198,6 +198,9 @@ def bot_process(event, say, logger):
 
     if "text" in event or voicemessage:
         urls = extract_urls_from_event(event)
+        logger.info(f'=====> Extracted urls from event: {urls}')
+        dialog = remove_url_from_text(format_dialog_text(event["text"], voicemessage))
+        logger.info(f'=====> Formatted dialog: {dialog}')
         update_thread_history(parent_thread_ts, f'User: {remove_url_from_text(format_dialog_text(event["text"], voicemessage))}', urls)
 
     if file_md5_name is not None:
