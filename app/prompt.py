@@ -6,7 +6,7 @@ QUESTION_ANSWER_PROMPT_TMPL_CN = (
     "---------------------\n"
     "{context_str}"
     "\n---------------------\n"
-    "无论我给你提供的上下文是什么语言，都请用中文回答我的问题。我的问题是：{query_str}\n"
+    "我的问题是：{query_str}\n"
 )
 
 QUESTION_ANSWER_PROMPT_TMPL_EN = (
@@ -18,8 +18,9 @@ QUESTION_ANSWER_PROMPT_TMPL_EN = (
 )
 
 def get_prompt_template(language='zh'):
-    logging.info(f"=====> Get prompt template with language: {language}")
     if language == 'en':
+        logging.info('=====> Use English prompt template!')
         return QuestionAnswerPrompt(QUESTION_ANSWER_PROMPT_TMPL_EN)
     else:
+        logging.info('=====> Use Chinese prompt template!')
         return QuestionAnswerPrompt(QUESTION_ANSWER_PROMPT_TMPL_CN)
