@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="bg-white px-4 md:px-20 mx-auto">
       <div className="container flex justify-between items-center py-3 lg:px-20">
-        <p>©2023 i365.tech All rights reserved.</p>
+        <p>©2023 myreader.io All rights reserved.</p>
         <a
           href="https://github.com/madawei2699/myGPTReader"
         >

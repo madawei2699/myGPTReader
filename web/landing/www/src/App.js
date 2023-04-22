@@ -9,6 +9,7 @@ import Pricing from "./components/Pricing";
 import Footer from "./components/Footer";
 import FAQ from "./components/FAQ";
 import Highlight from "./components/Highlight";
+import Refund from "./components/Refund";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
       <Highlight />
       <Pricing />
       <FAQ />
+      <Refund />
       <Footer />
     </Router>
   );
