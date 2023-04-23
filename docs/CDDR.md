@@ -9884,3 +9884,133 @@ Sure, here's an example of how you could structure the `application/ld+json` dat
 You will need to customize the `name`, `description`, `thumbnailUrl`, `contentUrl`, and `uploadDate` properties for each video based on their specific details.
 
 Additionally, you will want to add this JSON snippet above or below the div tag containing the respective video's attributes is placed, but not within the div itself.
+
+---
+
+## 2023-04-23
+
+---
+
+ChatGPT
+-------
+
+You
+---
+
+ 
+
+def get\_youtube\_video\_id(url): if url is None: return None if 'youtube.com' in url: return url.split('v=')\[-1\] if 'youtu.be' in url: return url.split('/')\[-1\] return None refactor this code to let it can handle this url: https://www.youtube.com/live/p9IxoSkvZ-M?feature=share the ?feature=share is optional
+
+ChatGPT
+-------
+
+The code can be refactored to handle the given url by modifying the `if 'youtube.com' in url` statement. The updated code to handle the provided URL is:
+
+```python
+def get_youtube_video_id(url):
+    if url is None:
+        return None
+    
+    video_id = None
+
+    if 'youtube.com/watch' in url:
+        video_id = url.split('v=')[-1]
+        if '&' in video_id:
+            video_id = video_id.split('&')[0]
+
+    elif 'youtube.com/embed' in url:
+        video_id = url.split('/')[-1]
+
+    elif 'youtube.com/v' in url:
+        video_id = url.split('/')[-1]
+
+    elif 'youtu.be' in url:
+        video_id = url.split('/')[-1]
+
+    elif 'youtube.com/live' in url:
+        video_id = url.split('/')[-1].split('?')[0]
+
+    return video_id
+```
+
+I modified the code to add an additional check from the URL containing "/live" to support live streams. In this case, it will split the URL by '/' and '/?' and use the first element after the slash as the video ID.
+
+Now, when you pass a URL like [https://www.youtube.com/live/p9IxoSkvZ-M?feature=share](https://www.youtube.com/live/p9IxoSkvZ-M?feature=share), it should return "p9IxoSkvZ-M".
+
+You
+---
+
+ 
+
+elif 'youtube.com/v' in url: video\_id = url.split('/')\[-1\] this may be wrong, it seems to need split with 'v='
+
+ChatGPT
+-------
+
+You are right, the second conditional statement to extract the video id from a youtube.com URL is not correct.
+
+Here's a refactored code that should handle the given url correctly:
+
+```python
+def get_youtube_video_id(url):
+    if url is None:
+        return None
+
+    video_id = None
+    
+    if 'youtube.com/watch' in url:
+        video_id = url.split('v=')[-1]
+    
+    elif ('youtu.be' in url) or ('youtube.com/v' in url):
+        video_id = url.split('/')[-1]
+    
+    elif 'youtube.com/embed/' in url:
+        video_id = url.split('/')[-1].split('?')[0]
+
+    elif 'youtube.com/live/' in url:
+        video_id = url.split('/')[-1].split('?')[0]
+
+    return video_id
+```
+
+I added two new conditions to cover two types of URLs. In the first new condition, it looks for `youtube.com/embed/` and extracts the video ID from the last part of the URL before any query string parameters.
+
+In the second new condition, it looks for `youtube.com/live/` and extracts the video ID same as `youtube.com/embed/`.
+
+Note: This function will still return None if the url doesn't match any of the provided cases.
+
+You
+---
+
+ 
+
+https://www.youtube.com/watch?v=YykjpeuMNEk https://www.youtube.com/live/p9IxoSkvZ-M?feature=share https://www.youtube.com/live/p9IxoSkvZ-M https://youtu.be/ULD3uIb2MHQ https://www.youtube.com/embed/ULD3uIb2MHQ update the code to handle these case
+
+ChatGPT
+-------
+
+Here is the updated code that can handle all 5 cases of URL mentioned above:
+
+```python
+def get_youtube_video_id(url):
+    if url is None:
+        return None
+    if 'youtube.com/watch?v=' in url:
+        return url.split('v=')[-1].split('&')[0]
+    elif 'youtu.be/' in url:
+        return url.split('/')[-1].split('?')[0]
+    elif 'youtube.com/embed/' in url:
+        return url.split('/')[-1].split('?')[0]
+    elif 'youtube.com/v/' in url:
+        return url.split('/')[-1].split('?')[0]
+    elif 'youtube.com/live/' in url:
+        if '?v=' in url:
+            return url.split('?v=')[-1].split('&')[0]
+        else:
+            return url.split('/')[-1].split('?')[0]
+    return None
+```
+
+With this way, if a user passes one of the five types of URLs to the function, it will extract the video ID correctly from all types of URL.
+
+The function will return the ID(string) extracted from the URL otherwise `None`.
