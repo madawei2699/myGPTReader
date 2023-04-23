@@ -43,7 +43,7 @@ Slack 应用可能大家比较少创建，因此本文将通过详细的图片�
 
 6、下拉到 Scopes 部分，点击 Add an OAuth Scope，添加下图所示的 Scope
 
-![Slack](../assets/images/slack_5.png?raw=true "Slack")
+![Slack](../assets/images/slack_10.png?raw=true "Slack")
 
 7、回到当前页面上方，点击 install to Workspace 按钮，按照提示安装。
 
@@ -126,6 +126,7 @@ services:
       SLACK_SIGNING_SECRET: ${SLACK_SIGNING_SECRET}
     ports:
       - ${PORT}:8080
+    network_mode: "host"
 ```
 
 以下是 `.env` 内容。
