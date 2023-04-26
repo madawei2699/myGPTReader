@@ -2,7 +2,7 @@ export const umamiEvent = (eventName, eventData) => {
     if (!Object.hasOwn(window, "umami")) {
       return
     }
-    window.umami.trackEvent(eventName, eventData)
+    window.umami.track(eventName, eventData)
   }
 
 export const gtagEvent = (action) => {
