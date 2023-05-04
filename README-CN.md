@@ -88,6 +88,7 @@
 ### 如何安装 <a name = "how_to_install"></a>
 
 - 可参考 [@nigdaemon](./docs/how-to-install/nigdaemon.md) 的安装记录。
+- 可参考[MyGPTReader 部署到 Fly.io 教程完整记录(全部功能) - GPT4AllPro](https://gpt4all.pro/chatgpt-in-slack-mygptreader-deployment-to-fly-io-tutorial-complete-documentation-all-features/)
 - 如果想使用 Docker 部署也可参考 [@polly3d](./docs/how-to-install/docker.md) 的安装记录。
 
 ## 相关链接 <a name = "reference_links"></a>
