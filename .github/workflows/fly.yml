@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - "app/**"
+      - "requirements.txt"
       - "!README.md"
 jobs:
   deploy:
