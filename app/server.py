@@ -119,8 +119,8 @@ filetype_extension_allowed = ['epub', 'pdf', 'text', 'docx', 'markdown', 'm4a', 
 filetype_voice_extension_allowed = ['m4a', 'webm', 'mp3', 'wav']
 max_file_size = 3 * 1024 * 1024
 
-limiter_message_per_user = 15
-limiter_time_period = 3 * 3600
+limiter_message_per_user = 10
+limiter_time_period = 8 * 3600
 limiter = RateLimiter(limit=limiter_message_per_user, period=limiter_time_period)
     
 def dialog_context_keep_latest(dialog_texts, max_length=1):
