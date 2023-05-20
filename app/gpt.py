@@ -6,7 +6,7 @@ import random
 import uuid
 import openai
 from pathlib import Path
-from llama_index import ServiceContext, GPTSimpleVectorIndex, LLMPredictor, RssReader, SimpleDirectoryReader
+from llama_index import ServiceContext, GPTVectorStoreIndex, LLMPredictor, RssReader, SimpleDirectoryReader
 from llama_index.readers.schema.base import Document
 from langchain.chat_models import ChatOpenAI
 from azure.cognitiveservices.speech import SpeechConfig, SpeechSynthesizer, ResultReason, CancellationReason, SpeechSynthesisOutputFormat
@@ -84,7 +84,7 @@ def get_index_from_web_cache(name):
     web_cache_file = index_cache_web_dir / name
     if not web_cache_file.is_file():
         return None
-    index = GPTSimpleVectorIndex.load_from_disk(web_cache_file)
+    index = GPTVectorStoreIndex.load_from_disk(web_cache_file)
     logging.info(
         f"=====> Get index from web cache: {web_cache_file}")
     return index
@@ -93,7 +93,7 @@ def get_index_from_file_cache(name):
     file_cache_file = index_cache_file_dir / name
     if not file_cache_file.is_file():
         return None
-    index = GPTSimpleVectorIndex.load_from_disk(file_cache_file)
+    index = GPTVectorStoreIndex.load_from_disk(file_cache_file)
     logging.info(
         f"=====> Get index from file cache: {file_cache_file}")
     return index
@@ -126,7 +126,7 @@ def get_answer_from_llama_web(messages, urls):
         logging.info(f"=====> Build index from web!")
         documents = get_documents_from_urls(combained_urls)
         logging.info(documents)
-        index = GPTSimpleVectorIndex.from_documents(documents, service_context=service_context)
+        index = GPTVectorStoreIndex.from_documents(documents, service_context=service_context)
         logging.info(
             f"=====> Save index to disk path: {index_cache_web_dir / index_file_name}")
         index.save_to_disk(index_cache_web_dir / index_file_name)
@@ -149,7 +149,7 @@ def get_answer_from_llama_file(messages, file):
     if index is None:
         logging.info(f"=====> Build index from file!")
         documents = SimpleDirectoryReader(input_files=[file]).load_data()
-        index = GPTSimpleVectorIndex.from_documents(documents, service_context=service_context)
+        index = GPTVectorStoreIndex.from_documents(documents, service_context=service_context)
         logging.info(
             f"=====> Save index to disk path: {index_cache_file_dir / index_name}")
         index.save_to_disk(index_cache_file_dir / index_name)
