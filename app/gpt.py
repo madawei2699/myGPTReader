@@ -39,8 +39,8 @@ llm_predictor = LLMPredictor(llm=ChatOpenAI(
 
 service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
 
-web_storage_context = StorageContext.from_defaults(persist_dir=str(index_cache_web_dir))
-file_storage_context = StorageContext.from_defaults(persist_dir=str(index_cache_file_dir))
+web_storage_context = StorageContext.from_defaults()
+file_storage_context = StorageContext.from_defaults()
 
 def get_unique_md5(urls):
     urls_str = ''.join(sorted(urls))
@@ -129,7 +129,7 @@ def get_answer_from_llama_web(messages, urls):
         logging.info(documents)
         index = GPTVectorStoreIndex.from_documents(documents, service_context=service_context)
         index.set_index_id(index_file_name)
-        index.storage_context.persist(persist_dir=str(index_cache_web_dir))
+        index.storage_context.persist()
         logging.info(
             f"=====> Save index to disk path: {index_cache_web_dir / index_file_name}")
     prompt = get_prompt_template(lang_code)
@@ -153,7 +153,7 @@ def get_answer_from_llama_file(messages, file):
         documents = SimpleDirectoryReader(input_files=[file]).load_data()
         index = GPTVectorStoreIndex.from_documents(documents, service_context=service_context)
         index.set_index_id(index_name)
-        index.storage_context.persist(persist_dir=str(index_cache_file_dir))
+        index.storage_context.persist()
         logging.info(
             f"=====> Save index to disk path: {index_cache_file_dir / index_name}")
     prompt = get_prompt_template(lang_code)
