@@ -136,9 +136,9 @@ def get_answer_from_llama_web(messages, urls):
     logging.info(dialog_messages)
     logging.info('=====> text_qa_template')
     logging.info(prompt.prompt)
-    answer = index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=prompt)
+    answer = index.as_query_engine(text_qa_template=prompt).query(dialog_messages)
     total_llm_model_tokens = llm_predictor.last_token_usage
-    total_embedding_model_tokens = index.embed_model.last_token_usage
+    total_embedding_model_tokens = service_context.embed_model.last_token_usage
     return answer, total_llm_model_tokens, total_embedding_model_tokens
 
 def get_answer_from_llama_file(messages, file):
@@ -159,9 +159,9 @@ def get_answer_from_llama_file(messages, file):
     logging.info(dialog_messages)
     logging.info('=====> text_qa_template')
     logging.info(prompt)
-    answer = index.query(dialog_messages, llm_predictor=llm_predictor, text_qa_template=prompt)
+    answer = answer = index.as_query_engine(text_qa_template=prompt).query(dialog_messages)
     total_llm_model_tokens = llm_predictor.last_token_usage
-    total_embedding_model_tokens = index.embed_model.last_token_usage
+    total_embedding_model_tokens = service_context.embed_model.last_token_usage
     return answer, total_llm_model_tokens, total_embedding_model_tokens
 
 def get_text_from_whisper(voice_file_path):
