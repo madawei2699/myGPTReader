@@ -25,14 +25,6 @@ index_cache_web_dir = Path('/tmp/myGPTReader/cache_web/')
 index_cache_file_dir = Path('/data/myGPTReader/file/')
 index_cache_voice_dir = Path('/tmp/myGPTReader/voice/')
 
-llm_predictor = LLMPredictor(llm=ChatOpenAI(
-    temperature=0, model_name="gpt-3.5-turbo"))
-
-service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
-
-web_storage_context = StorageContext.from_defaults(persist_dir=str(index_cache_web_dir))
-file_storage_context = StorageContext.from_defaults(persist_dir=str(index_cache_file_dir))
-
 if not index_cache_web_dir.is_dir():
     index_cache_web_dir.mkdir(parents=True, exist_ok=True)
 
@@ -41,6 +33,14 @@ if not index_cache_voice_dir.is_dir():
 
 if not index_cache_file_dir.is_dir():
     index_cache_file_dir.mkdir(parents=True, exist_ok=True)
+
+llm_predictor = LLMPredictor(llm=ChatOpenAI(
+    temperature=0, model_name="gpt-3.5-turbo"))
+
+service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
+
+web_storage_context = StorageContext.from_defaults(persist_dir=str(index_cache_web_dir))
+file_storage_context = StorageContext.from_defaults(persist_dir=str(index_cache_file_dir))
 
 def get_unique_md5(urls):
     urls_str = ''.join(sorted(urls))
