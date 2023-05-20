@@ -124,7 +124,7 @@ def get_answer_from_llama_web(messages, urls):
         logging.info(f"=====> Build index from web!")
         documents = get_documents_from_urls(combained_urls)
         logging.info(documents)
-        index = GPTSimpleVectorIndex(documents)
+        index = GPTSimpleVectorIndex.from_documents(documents)
         logging.info(
             f"=====> Save index to disk path: {index_cache_web_dir / index_file_name}")
         index.save_to_disk(index_cache_web_dir / index_file_name)
@@ -147,7 +147,7 @@ def get_answer_from_llama_file(messages, file):
     if index is None:
         logging.info(f"=====> Build index from file!")
         documents = SimpleDirectoryReader(input_files=[file]).load_data()
-        index = GPTSimpleVectorIndex(documents)
+        index = GPTSimpleVectorIndex.from_documents(documents)
         logging.info(
             f"=====> Save index to disk path: {index_cache_file_dir / index_name}")
         index.save_to_disk(index_cache_file_dir / index_name)
