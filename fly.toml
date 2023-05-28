@@ -8,6 +8,13 @@ primary_region = "sin"
 kill_signal = "SIGINT"
 kill_timeout = "5s"
 
+[build]
+  builder = "paketobuildpacks/builder:full"
+  builtin = "python"
+
+[build.settings]
+  pythonbase = "3.9-slim-buster"
+
 [env]
   PORT = "8080"
 
