@@ -6,6 +6,7 @@ on:
     paths:
       - "app/**"
       - "requirements.txt"
+      - "fly.toml"
       - "!README.md"
 jobs:
   deploy:
