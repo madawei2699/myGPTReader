@@ -5,6 +5,7 @@ import hashlib
 import random
 import uuid
 import openai
+import litellm
 from pathlib import Path
 from llama_index import ServiceContext, GPTVectorStoreIndex, LLMPredictor, RssReader, SimpleDirectoryReader, StorageContext, load_index_from_storage
 from llama_index.readers.schema.base import Document
@@ -104,11 +105,12 @@ def get_index_name_from_file(file: str):
     file_md5 = file_md5_with_extension.split('.')[0]
     return file_md5
 
+# use any of the models specified here: https://litellm.readthedocs.io/en/latest/supported/
 def get_answer_from_chatGPT(messages):
     dialog_messages = format_dialog_messages(messages)
     logging.info('=====> Use chatGPT to answer!')
     logging.info(dialog_messages)
-    completion = openai.ChatCompletion.create(
+    completion = litellm.completion(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": dialog_messages}]
     )
