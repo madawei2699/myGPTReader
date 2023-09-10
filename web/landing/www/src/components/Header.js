@@ -26,10 +26,10 @@ const Header = () => {
 
   const goToGitHub = () => {
     const referrer = document.referrer;
-    umamiEvent("GitHubFromMenu", { referrer })
-    gtagEvent("GitHubFromMenu")
+    umamiEvent("GitHubFromMenu", { referrer });
+    gtagEvent("GitHubFromMenu");
     window.location.href = "https://github.com/madawei2699/myGPTReader";
-  }
+  };
 
   return (
     <header className="bg-white shadow">
@@ -42,7 +42,7 @@ const Header = () => {
           <Link
             onClick={scrollToFeatures}
             to="#"
-            className="py-2 px-4 bg-gray-800 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+            className="hidden md:block py-2 px-4 bg-gray-800 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
           >
             Features
           </Link>
@@ -59,6 +59,12 @@ const Header = () => {
             className="py-2 px-4 bg-gray-800 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
           >
             Pricing
+          </Link>
+          <Link
+            to="https://www.chat2invest.com/"
+            className="py-2 px-4 bg-yellow-500 text-white font-semibold rounded-lg shadow-md hover:bg-yellow-800 focus:outline-none focus:bg-gray-700"
+          >
+            Chat2Invest
           </Link>
           <a
             href="#"
