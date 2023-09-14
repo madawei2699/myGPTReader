@@ -101,8 +101,7 @@
 ## ✍️ 作者 <a name = "authors"></a>
 
 - [@madawei2699](https://twitter.com/madawei2699)
-![i365_wechat](https://github.com/madawei2699/myGPTReader/assets/2446612/0a50a222-74cf-490f-a3ad-613cbc5ebf91)
-
+<img src="https://github.com/madawei2699/myGPTReader/assets/2446612/0a50a222-74cf-490f-a3ad-613cbc5ebf91" alt="improve365_cn" style="width:200px;"/>
 
 其他贡献者 [contributors](https://github.com/madawei2699/myGPTReader/contributors)
 
