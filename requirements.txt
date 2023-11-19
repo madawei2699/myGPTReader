@@ -21,3 +21,4 @@ azure-cognitiveservices-speech==1.26.0
 langdetect==1.0.9
 youtube-transcript-api==0.5.0
 pypdf==3.9.0
+Werkzeug==2.2.2
