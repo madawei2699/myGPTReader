@@ -507,6 +507,18 @@ def update_home_tab(client, event, logger):
                     "type": "mrkdwn",
                     "text": f"*User message count:* {message_month_count or ''}"
                 }
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "context",
+                "elements": [
+                    {
+                        "type": "mrkdwn",
+                        "text": "Powered by https://www.i365.tech/"
+                    }
+                ]
             }
         ]
         user_block_info.extend(blocks)
