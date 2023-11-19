@@ -254,7 +254,7 @@ def handle_mentions(event, say, logger):
     thread_ts = event["ts"]
 
     if not is_active_user(user):
-        say(f'<@{user}>, 你的账户未激活，请添加微信 improve365_cn 联系管理员激活你的账户后再试用。', thread_ts=thread_ts)
+        say(f'<@{user}>, 你的账户未激活，请添加微信 `improve365_cn` 联系管理员激活你的账户后再试用。', thread_ts=thread_ts)
         return
 
     if not limiter.allow_request(user):
