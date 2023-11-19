@@ -13,7 +13,7 @@ import concurrent.futures
 from app.daily_hot_news import build_all_news_block
 from app.gpt import get_answer_from_chatGPT, get_answer_from_llama_file, get_answer_from_llama_web, get_text_from_whisper, get_voice_file_from_text, index_cache_file_dir
 from app.rate_limiter import RateLimiter
-from app.user import get_user, is_premium_user, update_message_token_usage
+from app.user import get_user, is_premium_user, is_active_user, update_message_token_usage
 from app.util import md5
 
 class Config:
@@ -252,6 +252,10 @@ def handle_mentions(event, say, logger):
 
     user = event["user"]
     thread_ts = event["ts"]
+
+    if not is_active_user(user):
+        say(f'<@{user}>, 你的账户未激活，请添加微信 improve365_cn 联系管理员激活你的账户后再试用。', thread_ts=thread_ts)
+        return
 
     if not limiter.allow_request(user):
         if not is_premium_user(user):

@@ -55,6 +55,15 @@ def get_user(user_id):
             return "Error: Unable to parse JSON response"
     else:
         return f"Error: {response.status_code} - {response.reason}"
+    
+def is_active_user(user_id):
+    try:
+        user = get_user(user_id)
+        if user and user['is_active']:
+            return True
+    except Exception as e:
+        logging.error(f"Error while checking if user {user_id} is active: {e}")
+    return False
         
 def is_premium_user(user_id):
     try:
