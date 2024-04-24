@@ -4,10 +4,14 @@ import logging
 import feedparser
 import html2text
 import concurrent.futures
-
+import os
 from app.gpt import get_answer_from_llama_web
 
-with open("app/data/hot_news_rss.json", "r") as f:
+current_file_path = os.path.abspath(__file__)
+current_dir_path = os.path.dirname(current_file_path)
+hot_news_file_path = os.path.join(current_dir_path, "data", "hot_news_rss.json")
+
+with open(hot_news_file_path, "r") as f:
     rss_urls = json.load(f)
 
 TODAY = today = date.today()
