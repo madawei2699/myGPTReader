@@ -1,6 +1,12 @@
 import json
+import os
 
-with open("app/data/prompt.json", "r") as f:
+
+current_file_path = os.path.abspath(__file__)
+current_dir_path = os.path.dirname(current_file_path)
+slash_propmt_file_path = os.path.join(current_dir_path, "data", "prompt.json")
+
+with open(slash_propmt_file_path, "r") as f:
     prompt_data = json.load(f)
 
 def register_slack_slash_commands(slack_app):
